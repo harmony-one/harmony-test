@@ -41,3 +41,10 @@ make test
 docker run -v "$(go env GOPATH)/src/github.com/harmony-one/harmony:/go/src/github.com/harmony-one/harmony" harmonyone/node-test 
 ```
 > This will test whatever is in the main repo (following GO-PATH convention).
+
+## Requirements (dev testing - no docker)
+
+* python3 
+* pyhmy python3 library (20.5.16)
+* pytest python3 library (5.4.3)
+* go 1.14
