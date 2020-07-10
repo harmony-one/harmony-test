@@ -7,6 +7,10 @@ Tools wrapped in a Dockerfile to **build**, **deploy** and **test** a localnet.
 ```bash
 $(go env GOPATH)/src/github.com/harmony-one/harmony
 ```
+* This repo follows the GO-PATH convention. So the path to said repo must be:
+```bash
+$(go env GOPATH)/src/github.com/harmony-one/harmony-tests
+```
 * No extra transactions on the localnet are done prior to running the pytest in `./tests`
 * The localnet faucet address is `one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur` 
 

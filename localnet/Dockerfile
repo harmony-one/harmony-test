@@ -17,16 +17,25 @@ RUN git clone https://github.com/harmony-one/bls.git
 
 RUN git clone https://github.com/harmony-one/mcl.git
 
+# Build to fetch all dependencies for faster test builds
 RUN cd harmony && make
 
-RUN rm -rf harmony
+# Clear out lib builds for compatability
+RUN rm -rf harmony bls mcl
 
-WORKDIR /root
+RUN git clone https://github.com/harmony-one/bls.git
+
+RUN git clone https://github.com/harmony-one/mcl.git
+
+# Install testing tools
+WORKDIR $GOPATH/src/github.com/harmony-one/harmony-tests/localnet
 
 COPY scripts scripts
 
 COPY tests tests
 
-# TODO: add entrypoint for localnet launch and test...
+COPY configs configs
 
-RUN pwd && ls -a
+RUN chmod +x $GOPATH/src/github.com/harmony-one/harmony-tests/localnet/scripts/run.sh
+
+ENTRYPOINT ["/go/src/github.com/harmony-one/harmony-tests/localnet/scripts/run.sh"]
