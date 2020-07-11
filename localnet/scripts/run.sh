@@ -97,7 +97,7 @@ done
 setup
 build_and_start_localnet || exit 1 &
 sleep 20
-echo -e "\n=== \e[38;5;0;48;5;255mSTARTING TESTS\e[0m ===\n"
 wait_for_localnet_boot 100
+echo -e "\n=== \e[38;5;0;48;5;255mSTARTING TESTS\e[0m ===\n"
 sleep 5
-cd "$DIR/../" && python3 -u -m py.test -r s -s tests
+cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests
