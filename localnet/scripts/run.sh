@@ -98,4 +98,5 @@ build_and_start_localnet || exit 1 &
 sleep 30
 wait_for_localnet_boot 100
 
-# TODO: hook in tests...
+echo -e "== \e[38;5;0;48;5;255mSTARTING TESTS\e[0m =="
+cd "$DIR/../" && python3 -u -m py.test -r s -s tests
