@@ -20,12 +20,7 @@ RUN git clone https://github.com/harmony-one/mcl.git
 # Build to fetch all dependencies for faster test builds
 RUN cd harmony && make
 
-# Clear out lib builds for compatability
-RUN rm -rf harmony bls mcl
-
-RUN git clone https://github.com/harmony-one/bls.git
-
-RUN git clone https://github.com/harmony-one/mcl.git
+RUN rm -rf harmony
 
 # Install testing tools
 WORKDIR $GOPATH/src/github.com/harmony-one/harmony-tests/localnet
