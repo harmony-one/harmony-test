@@ -20,6 +20,23 @@ from utils import (
 )
 
 
+def test_net_peer_count():
+    """
+    Note that this is NOT a `hmy` RPC, however, there are 2 versions of it.
+
+    Note that v1 & v2 have DIFFERENT responses
+    """
+    # Check v1
+    raw_response = base_request("net_peerCount", endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert isinstance(response, str) and response.startswith("0x")  # Must be a hex string
+
+    # Check v2
+    raw_response = base_request("netv2_peerCount", endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert isinstance(response, int)  # Must be an integer in base 10
+
+
 def test_get_node_metadata():
     """
     Note that v1 & v2 have the same responses.
@@ -218,7 +235,7 @@ def test_get_block_number():
     # Check v2
     raw_response = base_request("hmyv2_blockNumber", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert isinstance(response, int) and int(response)  # Must be an integer in base 10
+    assert isinstance(response, int)  # Must be an integer in base 10
 
 
 def test_get_epoch():
@@ -248,7 +265,7 @@ def test_get_gas_price():
     # Check v2
     raw_response = base_request("hmyv2_gasPrice", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert isinstance(response, int) and int(response)  # Must be an integer in base 10
+    assert isinstance(response, int)  # Must be an integer in base 10
 
 
 def test_get_protocol_version():
@@ -263,7 +280,7 @@ def test_get_protocol_version():
     # Check v2
     raw_response = base_request("hmyv2_protocolVersion", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert isinstance(response, int) and int(response)  # Must be an integer in base 10
+    assert isinstance(response, int)  # Must be an integer in base 10
 
 
 def test_get_block_by_number_v1():
