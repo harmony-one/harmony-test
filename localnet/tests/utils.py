@@ -49,3 +49,16 @@ def assert_valid_dictionary_structure(reference, candidate):
         assert isinstance(candidate[key], reference_type), f"Expected type {reference_type} for key '{key}' in {json.dumps(candidate, indent=2)}, not {type(candidate[key])}"
         if reference_type == dict:
             assert_valid_dictionary_structure(reference[key], candidate[key])
+        elif reference_type == list and reference[key] and candidate[key]:
+            assert_valid_dictionary_structure(reference[key][0], candidate[key][0])
+
+
+def check_and_unpack_rpc_response(response, expect_error=False):
+    assert is_valid_json_rpc(response), f"Invalid JSON response: {response}"
+    response = json.loads(response)
+    if expect_error:
+        assert "error" in response.keys(), f"Expected error in RPC response: {json.dumps(response, indent=2)}"
+        return response["error"]
+    else:
+        assert "result" in response.keys(), f"Expected result in RPC response: {json.dumps(response, indent=2)}"
+        return response["result"]
