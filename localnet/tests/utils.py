@@ -37,20 +37,22 @@ def is_valid_json_rpc(response):
         return False
 
 
-def assert_valid_dictionary_structure(reference, candidate):
+def assert_valid_json_structure(reference, candidate):
     """
-    Asserts that the given `candidate` dict has the same keys and values as the `reference` dict.
+    Asserts that the given `candidate` dict (from JSON format) has the
+    same keys and values as the `reference` dict (from JSON format).
     """
-    assert isinstance(reference, dict), f"Sanity check, given reference type must be a dictionary, not {type(reference)}"
-    assert isinstance(candidate, dict), f"Sanity check, given reference type must be a dictionary, not {type(candidate)}"
-    for key in reference.keys():
-        assert key in candidate.keys(), f"Expected key '{key}' in {json.dumps(candidate, indent=2)}"
-        reference_type = type(reference[key])
-        assert isinstance(candidate[key], reference_type), f"Expected type {reference_type} for key '{key}' in {json.dumps(candidate, indent=2)}, not {type(candidate[key])}"
-        if reference_type == dict:
-            assert_valid_dictionary_structure(reference[key], candidate[key])
-        elif reference_type == list and reference[key] and candidate[key]:
-            assert_valid_dictionary_structure(reference[key][0], candidate[key][0])
+    assert type(reference) == type(candidate), f"Expected type {type(reference)} not {type(candidate)} in {candidate}"
+    if type(reference) == list and reference and candidate:  # If no element in list to check, ignore...
+        for i in range(min(len(reference), len(candidate))):
+            assert_valid_json_structure(reference[i], candidate[i])
+    elif type(reference) == dict:
+        for key in reference.keys():
+            assert key in candidate.keys(), f"Expected key '{key}' in {json.dumps(candidate, indent=2)}"
+            reference_type = type(reference[key])
+            assert isinstance(candidate[key], reference_type), f"Expected type {reference_type} for key '{key}' in {json.dumps(candidate, indent=2)}, not {type(candidate[key])}"
+            if reference_type == dict or reference_type == list:
+                assert_valid_json_structure(reference[key], candidate[key])
 
 
 def check_and_unpack_rpc_response(response, expect_error=False):

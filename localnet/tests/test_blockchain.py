@@ -15,7 +15,7 @@ from txs import (
     endpoints,
 )
 from utils import (
-    assert_valid_dictionary_structure,
+    assert_valid_json_structure,
     check_and_unpack_rpc_response
 )
 
@@ -59,7 +59,7 @@ def test_get_node_metadata():
     # Check v1
     raw_response = base_request("hmy_getNodeMetadata", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_dictionary_structure(reference_response, response)
+    assert_valid_json_structure(reference_response, response)
     assert response["shard-id"] == 0
     assert response["network"] == "localnet"
     assert response["chain-config"]["chain-id"] == 2
@@ -67,7 +67,7 @@ def test_get_node_metadata():
     # Check v2
     raw_response = base_request("hmyv2_getNodeMetadata", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_dictionary_structure(reference_response, response)
+    assert_valid_json_structure(reference_response, response)
     assert response["shard-id"] == 0
     assert response["network"] == "localnet"
     assert response["chain-config"]["chain-id"] == 2
@@ -90,7 +90,7 @@ def test_get_sharding_structure():
     assert isinstance(response, list), f"Expected response to be of type list, not {type(response)}"
     for d in response:
         assert isinstance(d, dict), f"Expected type dict in response elements, not {type(d)}"
-        assert_valid_dictionary_structure(reference_response, d)
+        assert_valid_json_structure(reference_response, d)
     assert response[0]["current"]
 
     # Check v2
@@ -99,7 +99,7 @@ def test_get_sharding_structure():
     assert isinstance(response, list), f"Expected response to be of type list, not {type(response)}"
     for d in response:
         assert isinstance(d, dict), f"Expected type dict in response elements, not {type(d)}"
-        assert_valid_dictionary_structure(reference_response, d)
+        assert_valid_json_structure(reference_response, d)
     assert response[0]["current"]
 
 
@@ -134,13 +134,13 @@ def test_get_latest_header():
     # Check v1
     raw_response = base_request("hmy_latestHeader", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_dictionary_structure(reference_response, response)
+    assert_valid_json_structure(reference_response, response)
     assert response["shardID"] == 0
 
     # Check v2
     raw_response = base_request("hmyv2_latestHeader", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_dictionary_structure(reference_response, response)
+    assert_valid_json_structure(reference_response, response)
     assert response["shardID"] == 0
 
 
@@ -168,14 +168,14 @@ def test_get_latest_chain_headers():
     # Check v1
     raw_response = base_request("hmy_getLatestChainHeaders", endpoint=endpoints[1])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_dictionary_structure(reference_response, response)
+    assert_valid_json_structure(reference_response, response)
     assert response["beacon-chain-header"]["shard-id"] == 0
     assert response["shard-chain-header"]["shard-id"] == 1
 
     # Check v2
     raw_response = base_request("hmyv2_getLatestChainHeaders", endpoint=endpoints[1])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_dictionary_structure(reference_response, response)
+    assert_valid_json_structure(reference_response, response)
     assert response["beacon-chain-header"]["shard-id"] == 0
     assert response["shard-chain-header"]["shard-id"] == 1
 
@@ -296,7 +296,7 @@ def test_get_block_by_number_v1():
 
     raw_response = base_request("hmy_getBlockByNumber", params=["0x1", True], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_dictionary_structure(reference_response, response)
+    assert_valid_json_structure(reference_response, response)
     for key in ["gasLimit", "gasLimit", "gasUsed", "size", "timestamp", "viewID"]:
         assert isinstance(response[key], str) and response[key].startswith(
             "0x"), f"Expect key '{key}' to be a hex string in {json.dumps(response, indent=2)}"
@@ -333,7 +333,7 @@ def test_get_block_by_number_v2():
     try:
         raw_response = base_request("hmyv2_getBlockByNumber", params=[1, {"InclStaking": True}], endpoint=endpoints[0])
         response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-        assert_valid_dictionary_structure(reference_response, response)
+        assert_valid_json_structure(reference_response, response)
         for key in ["gasLimit", "gasLimit", "gasUsed", "size", "timestamp", "viewID"]:
             assert isinstance(response[key],
                               int), f"Expect key '{key}' to be an integer in {json.dumps(response, indent=2)}"
@@ -365,11 +365,11 @@ def test_get_header_by_number():
     # Check v1
     raw_response = base_request("hmy_getHeaderByNumber", params=["0x1"], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_dictionary_structure(reference_response, response)
+    assert_valid_json_structure(reference_response, response)
     assert response["shardID"] == 0
 
     # Check v2
     raw_response = base_request("hmy_getHeaderByNumber", params=["0x1"], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_dictionary_structure(reference_response, response)
+    assert_valid_json_structure(reference_response, response)
     assert response["shardID"] == 0
