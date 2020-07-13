@@ -1,11 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import json
-import traceback
+"""
+Tests here do not require transaction or a feedback loop with the chain
+(other than the initial transactions) to validate functionality.
 
-import pytest
+As with all tests, there are 2 JSON-RPC versions/namespaces (v1 & v2) where their difference
+is only suppose to be in the types of their params & returns. v1 keeps everything in hex and
+v2 uses decimal when possible. However, there are some (legacy) discrepancies that some tests
+enforce. These tests are noted and should NOT be broken.
+"""
+
+from flaky import flaky
 from pyhmy import (
-    account
+    account,
+    transaction
 )
 from pyhmy.rpc.request import (
     base_request
@@ -13,11 +21,24 @@ from pyhmy.rpc.request import (
 
 from txs import (
     endpoints,
+    initial_funding
 )
 from utils import (
     assert_valid_json_structure,
     check_and_unpack_rpc_response
 )
+
+
+def test_invalid_method():
+    reference_response = {
+        "code": -32601,
+        "message": "The method test_ does not exist/is not available"
+    }
+
+    raw_response = base_request(f"invalid_{hash('method')}", endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=True)
+    assert_valid_json_structure(reference_response, response)
+    assert response["code"] == reference_response["code"]
 
 
 def test_net_peer_count():
@@ -223,6 +244,31 @@ def test_get_leader_address():
         assert ref_len == len(response.replace("0x", "")), f"Leader address hash is not of length {ref_len}"
 
 
+def test_get_block_signer_keys():
+    """
+    Note that v1 & v2 have the same responses.
+    """
+    reference_response = [
+        "65f55eb3052f9e9f632b2923be594ba77c55543f5c58ee1454b9cfd658d25e06373b0f7d42a19c84768139ea294f6204",
+        "02c8ff0b88f313717bc3a627d2f8bb172ba3ad3bb9ba3ecb8eed4b7c878653d3d4faf769876c528b73f343967f74a917",
+        "e751ec995defe4931273aaebcb2cd14bf37e629c554a57d3f334c37881a34a6188a93e76113c55ef3481da23b7d7ab09",
+        "2d61379e44a772e5757e27ee2b3874254f56073e6bd226eb8b160371cc3c18b8c4977bd3dcb71fd57dc62bf0e143fd08",
+        "86dc2fdc2ceec18f6923b99fd86a68405c132e1005cf1df72dca75db0adfaeb53d201d66af37916d61f079f34f21fb96",
+        "52ecce5f64db21cbe374c9268188f5d2cdd5bec1a3112276a350349860e35fb81f8cfe447a311e0550d961cf25cb988d",
+        "678ec9670899bf6af85b877058bea4fc1301a5a3a376987e826e3ca150b80e3eaadffedad0fedfa111576fa76ded980c"
+    ]
+
+    # Check v1
+    raw_response = base_request("hmy_getBlockSignerKeys", params=["0x0"], endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
+
+    # Check v2
+    raw_response = base_request("hmyv2_getBlockSignerKeys", params=[0], endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
+
+
 def test_get_block_number():
     """
     Note that v1 & v2 have DIFFERENT responses
@@ -284,9 +330,6 @@ def test_get_protocol_version():
 
 
 def test_get_block_by_number_v1():
-    """
-    Enforce v1 (error if wrong).
-    """
     reference_response = {
         "difficulty": 0,
         "epoch": "0x0",
@@ -311,17 +354,14 @@ def test_get_block_by_number_v1():
         "viewID": "0x1"
     }
 
-    raw_response = base_request("hmy_getBlockByNumber", params=["0x1", True], endpoint=endpoints[0])
+    raw_response = base_request("hmy_getBlockByNumber", params=["0x0", True], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
-    for key in ["gasLimit", "gasLimit", "gasUsed", "size", "timestamp", "viewID"]:
-        assert isinstance(response[key], str) and response[key].startswith(
-            "0x"), f"Expect key '{key}' to be a hex string in {json.dumps(response, indent=2)}"
 
 
 def test_get_block_by_number_v2():
     """
-    Don't enforce v2 (for now), skip if not correct since input & output format could change.
+    Note the use of a JSON object in the param. This is different from v1.
     """
     reference_response = {
         "difficulty": 0,
@@ -347,22 +387,13 @@ def test_get_block_by_number_v2():
         "viewID": 1
     }
 
-    try:
-        raw_response = base_request("hmyv2_getBlockByNumber", params=[1, {"InclStaking": True}], endpoint=endpoints[0])
-        response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-        assert_valid_json_structure(reference_response, response)
-        for key in ["gasLimit", "gasLimit", "gasUsed", "size", "timestamp", "viewID"]:
-            assert isinstance(response[key],
-                              int), f"Expect key '{key}' to be an integer in {json.dumps(response, indent=2)}"
-    except Exception as e:
-        print()
-        print(traceback.format_exc())
-        pytest.skip(f"Exception: {e}")
+    raw_response = base_request("hmyv2_getBlockByNumber", params=[0, {"InclStaking": True}], endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
 
 
 def test_get_header_by_number():
     """
-    Enforce v1 AND v2 (error if wrong) -- current behavior of v2 is correct.
     Only difference is param of RPC is hex string in v1 and decimal in v2
     """
     reference_response = {
@@ -380,13 +411,282 @@ def test_get_header_by_number():
     }
 
     # Check v1
-    raw_response = base_request("hmy_getHeaderByNumber", params=["0x1"], endpoint=endpoints[0])
+    raw_response = base_request("hmy_getHeaderByNumber", params=["0x0"], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
     assert response["shardID"] == 0
 
     # Check v2
-    raw_response = base_request("hmy_getHeaderByNumber", params=["0x1"], endpoint=endpoints[0])
+    raw_response = base_request("hmy_getHeaderByNumber", params=["0x0"], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
     assert response["shardID"] == 0
+
+
+@flaky(max_runs=3)
+def test_get_blocks_v1():
+    """
+    Note: param options for 'withSigners' will NOT return any sensical data
+    in staking epoch (since it returns ONE addresses) and is subject to removal, thus is not tested here.
+    """
+    reference_response_blk = {
+        "difficulty": 0,
+        "epoch": "0x0",
+        "extraData": "0x",
+        "gasLimit": "0x4c4b400",
+        "gasUsed": "0x19a28",
+        "hash": "0xf14c18213b1845ee09c41c5ecd321be5b745ef42e80d8e8a6bfd116452781465",
+        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "miner": "0x0b585f8daefbc68a311fbd4cb20d9174ad174016",
+        "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "nonce": 0,
+        "number": "0x3",
+        "parentHash": "0xe4fe8484b94d3498acc183a8bcf9e0bef6d30b1a81d5628fbc67f9a7328651e8",
+        "receiptsRoot": "0x100f3336862d22706bbe26d67e5abf90f8f25ec5a22c4446835b6beaa6b59536",
+        "size": "0x4d7",
+        "stakingTransactions": [],
+        "stateRoot": "0x1dc641cf516efe9ff2250f9c8db069ba4b9954160bf70cbe376ed11904b4edf5",
+        "timestamp": "0x5f0c8592",
+        "transactions": [
+            {
+                "blockHash": "0xf14c18213b1845ee09c41c5ecd321be5b745ef42e80d8e8a6bfd116452781465",
+                "blockNumber": "0x3",
+                "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+                "timestamp": "0x5f0c8592",
+                "gas": "0x5208",
+                "gasPrice": "0x3b9aca00",
+                "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+                "input": "0x",
+                "nonce": "0x0",
+                "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
+                "transactionIndex": "0x0",
+                "value": "0x152d02c7e14af6800000",
+                "shardID": 0,
+                "toShardID": 0,
+                "v": "0x28",
+                "r": "0x76b6130bc018cedb9f8891343fd8982e0d7f923d57ea5250b8bfec9129d4ae22",
+                "s": "0xfbc01c988d72235b4c71b21ce033d4fc5f82c96710b84685de0578cff075a0a"
+            },
+        ],
+        "transactionsRoot": "0x8954e7b3ec6ef4b04dcaf2829d9ce8ed764f636445fe77d2f4e5ef157e69dbbd",
+        "uncles": [],
+        "viewID": "0x3"
+    }
+
+    init_tx_record = initial_funding[0]
+    init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
+    start_blk, end_blk = hex(max(0, int(init_tx["blockNumber"], 16) - 2)), init_tx["blockNumber"]
+    raw_response = base_request("hmy_getBlocks",
+                                params=[start_blk, end_blk, {
+                                    "fullTx": True,
+                                    "inclStaking": True
+                                }],
+                                endpoint=endpoints[init_tx_record["from-shard"]])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    for blk in response:
+        assert_valid_json_structure(reference_response_blk, blk)
+    assert len(response[-1]["transactions"]) > 0, "Expected transaction on last block due to setup"
+    start_num, end_num = int(start_blk, 16), int(end_blk, 16)
+    for blk in response:
+        blk_num = int(blk["number"], 16)
+        assert start_num <= blk_num <= end_num, f"Got block number {blk_num}, which is not in range [{start_num},{end_num}]"
+
+
+@flaky(max_runs=3)
+def test_get_blocks_v2():
+    """
+    Only difference in param of RPC is hex string in v1 and decimal in v2.
+
+    Note: param options for 'withSigners' will NOT return any sensical data
+    in staking epoch (since it returns ONE addresses) and is subject to removal, thus is not tested here.
+    """
+    reference_response_blk = {
+        "difficulty": 0,
+        "epoch": 0,
+        "extraData": "0x",
+        "gasLimit": 80000000,
+        "gasUsed": 105000,
+        "hash": "0xf14c18213b1845ee09c41c5ecd321be5b745ef42e80d8e8a6bfd116452781465",
+        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "miner": "0x0b585f8daefbc68a311fbd4cb20d9174ad174016",
+        "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "nonce": 0,
+        "number": 3,
+        "parentHash": "0xe4fe8484b94d3498acc183a8bcf9e0bef6d30b1a81d5628fbc67f9a7328651e8",
+        "receiptsRoot": "0x100f3336862d22706bbe26d67e5abf90f8f25ec5a22c4446835b6beaa6b59536",
+        "size": 1239,
+        "stakingTransactions": [],
+        "stateRoot": "0x1dc641cf516efe9ff2250f9c8db069ba4b9954160bf70cbe376ed11904b4edf5",
+        "timestamp": 1594656146,
+        "transactions": [
+            {
+                "blockHash": "0xf14c18213b1845ee09c41c5ecd321be5b745ef42e80d8e8a6bfd116452781465",
+                "blockNumber": 3,
+                "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+                "timestamp": 1594656146,
+                "gas": 21000,
+                "gasPrice": 1000000000,
+                "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+                "input": "0x",
+                "nonce": 0,
+                "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
+                "transactionIndex": 0,
+                "value": 100000000000000000000000,
+                "shardID": 0,
+                "toShardID": 0,
+                "v": "0x28",
+                "r": "0x76b6130bc018cedb9f8891343fd8982e0d7f923d57ea5250b8bfec9129d4ae22",
+                "s": "0xfbc01c988d72235b4c71b21ce033d4fc5f82c96710b84685de0578cff075a0a"
+            },
+        ],
+        "transactionsRoot": "0x8954e7b3ec6ef4b04dcaf2829d9ce8ed764f636445fe77d2f4e5ef157e69dbbd",
+        "uncles": [],
+        "viewID": 3
+    }
+
+    init_tx_record = initial_funding[0]
+    init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
+    start_blk, end_blk = max(0, int(init_tx["blockNumber"], 16) - 2), int(init_tx["blockNumber"], 16)
+    raw_response = base_request("hmyv2_getBlocks",
+                                params=[start_blk, end_blk, {
+                                    "fullTx": True,
+                                    "inclStaking": True
+                                }],
+                                endpoint=endpoints[init_tx_record["from-shard"]])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    for blk in response:
+        assert_valid_json_structure(reference_response_blk, blk)
+    assert len(response[-1]["transactions"]) > 0, "Expected transaction on last block due to setup"
+    for blk in response:
+        assert start_blk <= blk[
+            "number"] <= end_blk, f"Got block number {blk['number']}, which is not in range [{start_blk},{end_blk}]"
+
+
+@flaky(max_runs=3)
+def test_get_block_by_hash_v1():
+    reference_response = {
+        "difficulty": 0,
+        "epoch": "0x0",
+        "extraData": "0x",
+        "gasLimit": "0x4c4b400",
+        "gasUsed": "0x19a28",
+        "hash": "0x8e0ca00640ea70afe078d02fd571085f14d5953dca7be8ef4efc6a02db090156",
+        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "miner": "0x0b585f8daefbc68a311fbd4cb20d9174ad174016",
+        "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "nonce": 0,
+        "number": "0x9",
+        "parentHash": "0xd5d0e786f1a0c6d8d2ea038ef5f8272bb4e4def1838d61b7e1c395f4b763c09d",
+        "receiptsRoot": "0x100f3336862d22706bbe26d67e5abf90f8f25ec5a22c4446835b6beaa6b59536",
+        "size": "0x96a",
+        "stakingTransactions": [],
+        "stateRoot": "0x8a39cac10f8d917564a4e6033dc303d6a47d9fc8768c220640de5bb89765e0cf",
+        "timestamp": "0x5f0c976e",
+        "transactions": [
+            {
+                "blockHash": "0x8e0ca00640ea70afe078d02fd571085f14d5953dca7be8ef4efc6a02db090156",
+                "blockNumber": "0x9",
+                "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+                "timestamp": "0x5f0c976e",
+                "gas": "0x5208",
+                "gasPrice": "0x3b9aca00",
+                "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+                "input": "0x",
+                "nonce": "0x0",
+                "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
+                "transactionIndex": "0x0",
+                "value": "0x152d02c7e14af6800000",
+                "shardID": 0,
+                "toShardID": 0,
+                "v": "0x28",
+                "r": "0x76b6130bc018cedb9f8891343fd8982e0d7f923d57ea5250b8bfec9129d4ae22",
+                "s": "0xfbc01c988d72235b4c71b21ce033d4fc5f82c96710b84685de0578cff075a0a"
+            },
+        ],
+        "transactionsRoot": "0x8954e7b3ec6ef4b04dcaf2829d9ce8ed764f636445fe77d2f4e5ef157e69dbbd",
+        "uncles": [],
+        "viewID": "0x9"
+    }
+
+    init_tx_record = initial_funding[0]
+    init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
+    raw_response = base_request("hmy_getBlockByHash",
+                                params=[init_tx["blockHash"], True],
+                                endpoint=endpoints[init_tx_record["from-shard"]])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
+    assert len(response["transactions"]) > 0, "Expected transaction on block due to setup"
+    for tx in response["transactions"]:
+        assert tx["blockHash"] == init_tx[
+            "blockHash"], f"Transaction in block {init_tx['blockHash']} does not have same block hash"
+        assert tx["shardID"] == init_tx_record[
+            "from-shard"], f"Transaction in block from shard {init_tx_record['from-shard']} does not have same from shard ({tx['shardID']})"
+
+
+@flaky(max_runs=3)
+def test_get_block_by_hash_v2():
+    """
+    Note the use of a JSON object in the param. This is different from v1.
+
+    Note: param options for 'withSigners' will NOT return any sensical data
+    in staking epoch (since it returns ONE addresses) and is subject to removal, thus is not tested here.
+    """
+    reference_response = {
+        "difficulty": 0,
+        "epoch": 0,
+        "extraData": "0x",
+        "gasLimit": 80000000,
+        "gasUsed": 105000,
+        "hash": "0x8e0ca00640ea70afe078d02fd571085f14d5953dca7be8ef4efc6a02db090156",
+        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "miner": "0x0b585f8daefbc68a311fbd4cb20d9174ad174016",
+        "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "nonce": 0,
+        "number": 9,
+        "parentHash": "0xd5d0e786f1a0c6d8d2ea038ef5f8272bb4e4def1838d61b7e1c395f4b763c09d",
+        "receiptsRoot": "0x100f3336862d22706bbe26d67e5abf90f8f25ec5a22c4446835b6beaa6b59536",
+        "size": 2410,
+        "stateRoot": "0x8a39cac10f8d917564a4e6033dc303d6a47d9fc8768c220640de5bb89765e0cf",
+        "timestamp": 1594660718,
+        "transactions": [
+            {
+                "blockHash": "0x8e0ca00640ea70afe078d02fd571085f14d5953dca7be8ef4efc6a02db090156",
+                "blockNumber": 9,
+                "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+                "timestamp": 1594660718,
+                "gas": 21000,
+                "gasPrice": 1000000000,
+                "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+                "input": "0x",
+                "nonce": 0,
+                "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
+                "transactionIndex": 0,
+                "value": 100000000000000000000000,
+                "shardID": 0,
+                "toShardID": 0,
+                "v": "0x28",
+                "r": "0x76b6130bc018cedb9f8891343fd8982e0d7f923d57ea5250b8bfec9129d4ae22",
+                "s": "0xfbc01c988d72235b4c71b21ce033d4fc5f82c96710b84685de0578cff075a0a"
+            },
+        ],
+        "transactionsRoot": "0x8954e7b3ec6ef4b04dcaf2829d9ce8ed764f636445fe77d2f4e5ef157e69dbbd",
+        "uncles": [],
+        "viewID": 9
+    }
+
+    init_tx_record = initial_funding[0]
+    init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
+    raw_response = base_request("hmyv2_getBlockByHash",
+                                params=[init_tx["blockHash"], {
+                                    "fullTx": True,
+                                    "inclTx": True
+                                }],
+                                endpoint=endpoints[init_tx_record["from-shard"]])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
+    assert len(response["transactions"]) > 0, "Expected transaction on block due to setup"
+    for tx in response["transactions"]:
+        assert tx["blockHash"] == init_tx[
+            "blockHash"], f"Transaction in block {init_tx['blockHash']} does not have same block hash"
+        assert tx["shardID"] == init_tx_record[
+            "from-shard"], f"Transaction in block from shard {init_tx_record['from-shard']} does not have same from shard ({tx['shardID']})"

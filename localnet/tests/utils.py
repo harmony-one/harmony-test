@@ -41,6 +41,8 @@ def assert_valid_json_structure(reference, candidate):
     """
     Asserts that the given `candidate` dict (from JSON format) has the
     same keys and values as the `reference` dict (from JSON format).
+
+    Note that if there is a list, the OVERLAPPING elements are the ONLY elements checked.
     """
     assert type(reference) == type(candidate), f"Expected type {type(reference)} not {type(candidate)} in {candidate}"
     if type(reference) == list and reference and candidate:  # If no element in list to check, ignore...
@@ -56,6 +58,8 @@ def assert_valid_json_structure(reference, candidate):
 
 
 def check_and_unpack_rpc_response(response, expect_error=False):
+    if not response:
+        raise AssertionError("No response...")
     assert is_valid_json_rpc(response), f"Invalid JSON response: {response}"
     response = json.loads(response)
     if expect_error:
