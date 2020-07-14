@@ -250,12 +250,6 @@ def test_get_block_signer_keys():
     """
     reference_response = [
         "65f55eb3052f9e9f632b2923be594ba77c55543f5c58ee1454b9cfd658d25e06373b0f7d42a19c84768139ea294f6204",
-        "02c8ff0b88f313717bc3a627d2f8bb172ba3ad3bb9ba3ecb8eed4b7c878653d3d4faf769876c528b73f343967f74a917",
-        "e751ec995defe4931273aaebcb2cd14bf37e629c554a57d3f334c37881a34a6188a93e76113c55ef3481da23b7d7ab09",
-        "2d61379e44a772e5757e27ee2b3874254f56073e6bd226eb8b160371cc3c18b8c4977bd3dcb71fd57dc62bf0e143fd08",
-        "86dc2fdc2ceec18f6923b99fd86a68405c132e1005cf1df72dca75db0adfaeb53d201d66af37916d61f079f34f21fb96",
-        "52ecce5f64db21cbe374c9268188f5d2cdd5bec1a3112276a350349860e35fb81f8cfe447a311e0550d961cf25cb988d",
-        "678ec9670899bf6af85b877058bea4fc1301a5a3a376987e826e3ca150b80e3eaadffedad0fedfa111576fa76ded980c"
     ]
 
     # Check v1
@@ -327,6 +321,50 @@ def test_get_protocol_version():
     raw_response = base_request("hmyv2_protocolVersion", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, int)  # Must be an integer in base 10
+
+
+def test_get_block_transaction_count_by_number():
+    """
+    Note that v1 & v2 have DIFFERENT responses
+    """
+    init_tx_record = initial_funding[0]
+    init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
+
+    # Check v1
+    raw_response = base_request("hmy_getBlockTransactionCountByNumber", params=[init_tx["blockNumber"]],
+                                endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert isinstance(response, str) and response.startswith("0x")  # Must be a hex string
+    assert int(response, 16) > 0, "Expected transaction count > 0 due to initial transactions"
+
+    # Check v2
+    raw_response = base_request("hmyv2_getBlockTransactionCountByNumber", params=[int(init_tx["blockNumber"], 16)],
+                                endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert isinstance(response, int)
+    assert response > 0, "Expected transaction count > 0 due to initial transactions"
+
+
+def test_get_block_transaction_count_by_hash():
+    """
+    Note that v1 & v2 have DIFFERENT responses
+    """
+    init_tx_record = initial_funding[0]
+    init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
+
+    # Check v1
+    raw_response = base_request("hmy_getBlockTransactionCountByHash", params=[init_tx["blockHash"]],
+                                endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert isinstance(response, str) and response.startswith("0x")  # Must be a hex string
+    assert int(response, 16) > 0, "Expected transaction count > 0 due to initial transactions"
+
+    # Check v2
+    raw_response = base_request("hmyv2_getBlockTransactionCountByHash", params=[init_tx["blockHash"]],
+                                endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert isinstance(response, int)
+    assert response > 0, "Expected transaction count > 0 due to initial transactions"
 
 
 def test_get_block_by_number_v1():
@@ -485,7 +523,7 @@ def test_get_blocks_v1():
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     for blk in response:
         assert_valid_json_structure(reference_response_blk, blk)
-    assert len(response[-1]["transactions"]) > 0, "Expected transaction on last block due to setup"
+    assert len(response[-1]["transactions"]) > 0, "Expected transaction on last block due to initial transactions"
     start_num, end_num = int(start_blk, 16), int(end_blk, 16)
     for blk in response:
         blk_num = int(blk["number"], 16)
@@ -556,7 +594,7 @@ def test_get_blocks_v2():
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     for blk in response:
         assert_valid_json_structure(reference_response_blk, blk)
-    assert len(response[-1]["transactions"]) > 0, "Expected transaction on last block due to setup"
+    assert len(response[-1]["transactions"]) > 0, "Expected transaction on last block due to initial transactions"
     for blk in response:
         assert start_blk <= blk[
             "number"] <= end_blk, f"Got block number {blk['number']}, which is not in range [{start_blk},{end_blk}]"
@@ -615,7 +653,7 @@ def test_get_block_by_hash_v1():
                                 endpoint=endpoints[init_tx_record["from-shard"]])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
-    assert len(response["transactions"]) > 0, "Expected transaction on block due to setup"
+    assert len(response["transactions"]) > 0, "Expected transaction on block due to initial transactions"
     for tx in response["transactions"]:
         assert tx["blockHash"] == init_tx[
             "blockHash"], f"Transaction in block {init_tx['blockHash']} does not have same block hash"
@@ -684,7 +722,7 @@ def test_get_block_by_hash_v2():
                                 endpoint=endpoints[init_tx_record["from-shard"]])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
-    assert len(response["transactions"]) > 0, "Expected transaction on block due to setup"
+    assert len(response["transactions"]) > 0, "Expected transaction on block due to initial transactions"
     for tx in response["transactions"]:
         assert tx["blockHash"] == init_tx[
             "blockHash"], f"Transaction in block {init_tx['blockHash']} does not have same block hash"
