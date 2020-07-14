@@ -15,7 +15,10 @@ from txs import (
     endpoints,
     initial_funding
 )
-from utils import is_valid_json_rpc
+from utils import (
+    is_valid_json_rpc,
+    check_and_unpack_rpc_response
+)
 
 
 def pytest_sessionstart(session):
@@ -30,18 +33,17 @@ def pytest_sessionstart(session):
     for tx in initial_funding:
         response = base_request('hmy_sendRawTransaction', params=[tx["signed-raw-tx"]], endpoint=endpoints[tx["from-shard"]])
         assert is_valid_json_rpc(response), f"Invalid JSON response: {response}"
+        # Do not check for errors since resending initial txs is fine & failed txs will be caught in confirm timeout.
 
-    # Confirm all txs within 2x timeout window (since all txs could be in 2 blocks).
+    # Confirm all txs within 2x timeout window (since all initial txs could be in 2 blocks).
     start_time = time.time()
     while time.time() - start_time <= 2 * tx_timeout:
         sent_txs = []
         for tx in initial_funding:
             response = base_request('hmy_getTransactionByHash', params=[tx["hash"]],
                                     endpoint=endpoints[tx["from-shard"]])
-            assert is_valid_json_rpc(response), f"Invalid JSON response: {response}"
-            tx_response = json.loads(response)
-            assert "error" not in tx_response.keys(), f"Tx fetch for {tx['hash']} contains errors: {json.dumps(tx_response, indent=2)}"
-            sent_txs.append(tx_response['result'] is not None)
+            tx_response = check_and_unpack_rpc_response(response, expect_error=False)
+            sent_txs.append(tx_response is not None)
         if all(sent_txs):
             return
     raise AssertionError("Could not confirm initial transactions on-chain.")

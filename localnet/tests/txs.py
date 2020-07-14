@@ -12,8 +12,8 @@ tx_timeout = 20  # In seconds
 
 # Endpoints sorted by shard
 endpoints = [
-    "http://localhost:9500/",  # shard 0
-    "http://localhost:9501/",  # shard 1
+    "http://localhost:9599/",  # shard 0
+    "http://localhost:9598/",  # shard 1
 ]
 
 # ORDER MATERS: tx n cannot be sent without tx n-1 being sent first due to nonce
