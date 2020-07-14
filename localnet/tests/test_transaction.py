@@ -16,6 +16,7 @@ import pytest
 from pyhmy.rpc.request import (
     base_request
 )
+from pyhmy import account
 
 import txs
 from txs import (
@@ -74,9 +75,14 @@ def cross_shard_txs():
 
     tx_response = get_transaction(s0_test_tx["hash"], s0_test_tx["from-shard"])
     txs[0] = send_and_confirm_transaction(s0_test_tx) if tx_response is None else tx_response
-    tx_response = get_transaction(s1_test_tx["hash"], s1_test_tx["from-shard"])
-    txs[1] = send_and_confirm_transaction(s1_test_tx) if tx_response is None else tx_response
-    return txs
+    start_time = time.time()
+    while time.time() - start_time < tx_timeout:
+        if account.get_balance(s1_test_tx["from"], endpoint=endpoints[s1_test_tx["from-shard"]]) >= 1e18:
+            tx_response = get_transaction(s1_test_tx["hash"], s1_test_tx["from-shard"])
+            txs[1] = send_and_confirm_transaction(s1_test_tx) if tx_response is None else tx_response
+            return txs
+    raise AssertionError(f"Could not confirm cross shard transaction on 'to-shard' "
+                         f"(balance not updated) for tx: {json.dumps(s0_test_tx, indent=2)}")
 
 
 def test_get_pool_stats():
@@ -131,11 +137,10 @@ def test_get_cx_receipt_by_hash_v1(cross_shard_txs):
         "value": "0x3635c9adc5dea00000"
     }
 
-    for tx in cross_shard_txs:
-        raw_response = base_request("hmy_getCXReceiptByHash", params=[tx["hash"]],
-                                    endpoint=endpoints[tx["toShardID"]])
-        response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-        assert_valid_json_structure(reference_response, response)
+    raw_response = base_request("hmy_getCXReceiptByHash", params=[cross_shard_txs[0]["hash"]],
+                                endpoint=endpoints[cross_shard_txs[0]["toShardID"]])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
 
 
 @txs.cross_shard
@@ -151,11 +156,10 @@ def test_get_cx_receipt_by_hash_v2(cross_shard_txs):
         "value": 1000000000000000000000
     }
 
-    for tx in cross_shard_txs:
-        raw_response = base_request("hmyv2_getCXReceiptByHash", params=[tx["hash"]],
-                                    endpoint=endpoints[tx["toShardID"]])
-        response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-        assert_valid_json_structure(reference_response, response)
+    raw_response = base_request("hmyv2_getCXReceiptByHash", params=[cross_shard_txs[0]["hash"]],
+                                endpoint=endpoints[cross_shard_txs[0]["toShardID"]])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
 
 
 @txs.cross_shard

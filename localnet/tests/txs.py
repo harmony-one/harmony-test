@@ -148,7 +148,7 @@ def send_and_confirm_transaction(tx_data):
         tx_response = get_transaction(tx_data["hash"], tx_data["from-shard"])
         if tx_response is not None:
             return tx_response
-    raise AssertionError("Could not confirm initial transactions on-chain.")
+    raise AssertionError("Could not confirm transactions on-chain.")
 
 
 def get_transaction(tx_hash, shard):
@@ -173,6 +173,6 @@ def assert_valid_test_from_address(address, shard, is_staking=False):
     assert isinstance(is_staking, bool), f"Sanity check: Expect is_staking {is_staking} as a bool."
     assert account.is_valid_address(address), f"{address} is an invalid ONE address"
     if not account.get_balance(address, endpoint=endpoints[shard]) >= 1e18:
-        raise AssertionError(f"Account{address} does not have at least 1 ONE on shard {shard}")
+        raise AssertionError(f"Account {address} does not have at least 1 ONE on shard {shard}")
     if not is_staking and account.get_transaction_count(address, endpoint=endpoints[shard]) != 0:
         raise AssertionError(f"Account {address} has already sent a transaction, breaking the txs invariant")
