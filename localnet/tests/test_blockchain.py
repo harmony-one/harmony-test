@@ -263,81 +263,100 @@ def test_get_block_signer_keys():
     assert_valid_json_structure(reference_response, response)
 
 
-def test_get_block_number():
+def test_get_header_by_number():
     """
-    Note that v1 & v2 have DIFFERENT responses
+    Note that v1 & v2 have the same responses.
     """
+    reference_response = {
+        "blockHash": "0xb718a66ef2b7764fa75b40bfe7047d015197a65ae4a9c4f2007501825025564c",
+        "blockNumber": 1,
+        "shardID": 0,
+        "leader": "one1pdv9lrdwl0rg5vglh4xtyrv3wjk3wsqket7zxy",
+        "viewID": 1,
+        "epoch": 0,
+        "timestamp": "2020-07-12 14:14:17 +0000 UTC",
+        "unixtime": 1594563257,
+        "lastCommitSig": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "lastCommitBitmap": "",
+        "crossLinks": []
+    }
+
     # Check v1
+    raw_response = base_request("hmy_getHeaderByNumber", params=["0x0"], endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
+    assert response["shardID"] == 0
+
+    # Check v2
+    raw_response = base_request("hmy_getHeaderByNumber", params=["0x0"], endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
+    assert response["shardID"] == 0
+
+
+def test_get_block_number_v1():
     raw_response = base_request("hmy_blockNumber", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, str) and response.startswith("0x")  # Must be a hex string
 
-    # Check v2
+
+def test_get_block_number_v2():
     raw_response = base_request("hmyv2_blockNumber", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, int)  # Must be an integer in base 10
 
 
-def test_get_epoch():
-    """
-    Note that v1 & v2 have DIFFERENT responses
-    """
-    # Check v1
+def test_get_epoch_v1():
     raw_response = base_request("hmy_getEpoch", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, str) and response.startswith("0x")  # Must be a hex string
 
-    # Check v2
+
+def test_get_epoch_v2():
     raw_response = base_request("hmyv2_getEpoch", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, int)  # Must be an integer
 
 
-def test_get_gas_price():
-    """
-    Note that v1 & v2 have DIFFERENT responses
-    """
-    # Check v1
+def test_get_gas_price_v1():
     raw_response = base_request("hmy_gasPrice", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, str) and response.startswith("0x")  # Must be a hex string
 
-    # Check v2
+
+def test_get_gas_price_v2():
     raw_response = base_request("hmyv2_gasPrice", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, int)  # Must be an integer in base 10
 
 
-def test_get_protocol_version():
-    """
-    Note that v1 & v2 have DIFFERENT responses
-    """
-    # Check v1
+def test_get_protocol_version_v1():
     raw_response = base_request("hmy_protocolVersion", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, str) and response.startswith("0x")  # Must be a hex string
 
-    # Check v2
+
+def test_get_protocol_version_v2():
     raw_response = base_request("hmyv2_protocolVersion", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, int)  # Must be an integer in base 10
 
 
-def test_get_block_transaction_count_by_number():
-    """
-    Note that v1 & v2 have DIFFERENT responses
-    """
+def test_get_block_transaction_count_by_number_v1():
     init_tx_record = initial_funding[0]
     init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
 
-    # Check v1
     raw_response = base_request("hmy_getBlockTransactionCountByNumber", params=[init_tx["blockNumber"]],
                                 endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, str) and response.startswith("0x")  # Must be a hex string
     assert int(response, 16) > 0, "Expected transaction count > 0 due to initial transactions"
 
-    # Check v2
+
+def test_get_block_transaction_count_by_number_v2():
+    init_tx_record = initial_funding[0]
+    init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
+
     raw_response = base_request("hmyv2_getBlockTransactionCountByNumber", params=[int(init_tx["blockNumber"], 16)],
                                 endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
@@ -345,21 +364,21 @@ def test_get_block_transaction_count_by_number():
     assert response > 0, "Expected transaction count > 0 due to initial transactions"
 
 
-def test_get_block_transaction_count_by_hash():
-    """
-    Note that v1 & v2 have DIFFERENT responses
-    """
+def test_get_block_transaction_count_by_hash_v1():
     init_tx_record = initial_funding[0]
     init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
 
-    # Check v1
     raw_response = base_request("hmy_getBlockTransactionCountByHash", params=[init_tx["blockHash"]],
                                 endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, str) and response.startswith("0x")  # Must be a hex string
     assert int(response, 16) > 0, "Expected transaction count > 0 due to initial transactions"
 
-    # Check v2
+
+def test_get_block_transaction_count_by_hash_v2():
+    init_tx_record = initial_funding[0]
+    init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
+
     raw_response = base_request("hmyv2_getBlockTransactionCountByHash", params=[init_tx["blockHash"]],
                                 endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
@@ -428,37 +447,6 @@ def test_get_block_by_number_v2():
     raw_response = base_request("hmyv2_getBlockByNumber", params=[0, {"InclStaking": True}], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
-
-
-def test_get_header_by_number():
-    """
-    Only difference is param of RPC is hex string in v1 and decimal in v2
-    """
-    reference_response = {
-        "blockHash": "0xb718a66ef2b7764fa75b40bfe7047d015197a65ae4a9c4f2007501825025564c",
-        "blockNumber": 1,
-        "shardID": 0,
-        "leader": "one1pdv9lrdwl0rg5vglh4xtyrv3wjk3wsqket7zxy",
-        "viewID": 1,
-        "epoch": 0,
-        "timestamp": "2020-07-12 14:14:17 +0000 UTC",
-        "unixtime": 1594563257,
-        "lastCommitSig": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-        "lastCommitBitmap": "",
-        "crossLinks": []
-    }
-
-    # Check v1
-    raw_response = base_request("hmy_getHeaderByNumber", params=["0x0"], endpoint=endpoints[0])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response, response)
-    assert response["shardID"] == 0
-
-    # Check v2
-    raw_response = base_request("hmy_getHeaderByNumber", params=["0x0"], endpoint=endpoints[0])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response, response)
-    assert response["shardID"] == 0
 
 
 @flaky(max_runs=3)

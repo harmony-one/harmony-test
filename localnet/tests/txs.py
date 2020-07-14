@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+Stores all the transaction information used in the test suite.
+
+INVARIANT: Each account only sends 1 plain transaction (per shard) except for initial transaction(s).
+"""
+
+from pyhmy import account
+
+tx_timeout = 20  # In seconds
 
 # Endpoints sorted by shard
 endpoints = [
@@ -8,7 +17,7 @@ endpoints = [
 ]
 
 # ORDER MATERS: tx n cannot be sent without tx n-1 being sent first due to nonce
-# INVARIANT: Each initially funded account only sends 1 transaction (per shard).
+# Only exception on invariant.
 initial_funding = [
     {
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
@@ -66,3 +75,18 @@ initial_funding = [
         "signed-raw-tx": "0xf86f04843b9aca00825208808094e53c3fb2803a9b99775972be5bb49eea22d74dd48a152d02c7e14af68000008028a0d2f061075852ee5b2572b18e8879d5656e8660113d88f2b806961b25312e5ae1a078004b6b332f09b1a53c3cbad6fd427fa57b0b368ae2126e458b9622d1668edf",
     }
 ]
+
+
+def assert_valid_test_from_address(address, shard, is_staking=False):
+    """
+    Asserts that the given address is a valid 'from' address for a test transaction.
+
+    Note that this considers the invariant for transactions.
+    """
+    assert isinstance(address, str), f"Sanity check: Expect address {address} as a string."
+    assert isinstance(shard, int), f"Sanity check: Expect shard {shard} as am int."
+    assert account.is_valid_address(address), f"{address} is an invalid ONE address"
+    if not account.get_balance(address, endpoint=endpoints[shard]) >= 1e18:
+        raise AssertionError(f"Account{address} does not have at least 1 ONE on shard {shard}")
+    if not is_staking and account.get_transaction_count(address, endpoint=endpoints[shard]) != 0:
+        raise AssertionError(f"Account {address} has already sent a transaction, breaking the txs invariant")
