@@ -5,8 +5,22 @@ Stores all the transaction information used in the test suite.
 
 INVARIANT: Each account only sends 1 plain transaction (per shard) except for initial transaction(s).
 """
+import functools
+import time
+import json
 
-from pyhmy import account
+from pyhmy import (
+    account,
+    blockchain
+)
+from pyhmy.rpc.request import (
+    base_request
+)
+
+from utils import (
+    check_and_unpack_rpc_response,
+    is_valid_json_rpc
+)
 
 tx_timeout = 20  # In seconds
 
@@ -20,6 +34,7 @@ endpoints = [
 # Only exception on invariant.
 initial_funding = [
     {
+        # Used by: `account_test_tx`
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
         # scissors matter runway reduce flush illegal ancient absurd scare young copper ticket direct wise person hobby tomato chest edge cost wine crucial vendor elevator
@@ -31,6 +46,7 @@ initial_funding = [
         "signed-raw-tx": "0xf86f80843b9aca0082520880809461544ab146a815e6088d49c40d285c2a1f2fe84f8a152d02c7e14af68000008028a076b6130bc018cedb9f8891343fd8982e0d7f923d57ea5250b8bfec9129d4ae22a00fbc01c988d72235b4c71b21ce033d4fc5f82c96710b84685de0578cff075a0a",
     },
     {
+        # Used by: `cross_shard_txs`
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "to": "one1ue25q6jk0xk3dth4pxur9e742vcqfwulhwqh45",
         # obey scissors fiscal hood chaos grit all piano armed change general attract balcony hair cat outside hour quiz unhappy tattoo awful offer toddler invest
@@ -42,6 +58,7 @@ initial_funding = [
         "signed-raw-tx": "0xf86f01843b9aca00825208808094e655406a5679ad16aef509b832e7d5533004bb9f8a152d02c7e14af68000008028a0c50737adb507870c2b6f3d9966f096526761730c6b80bd702c114e24aa094ac1a063c0463619123dbe7541687fba70952dab62ba639199750b04cd8902ccb6d615",
     },
     {
+        # Used by: `test_get_pending_cx_receipts`
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "to": "one19l4hghvh40fyldxfznn0a3ss7d5gk0dmytdql4",
         # judge damage safe field faculty piece salon gentle riot unfair symptom sun exclude agree fantasy fossil catalog tool bounce tomorrow churn join very number
@@ -77,6 +94,74 @@ initial_funding = [
 ]
 
 
+def cross_shard(fn):
+    """
+    Decorator for tests that requires a cross shard transaction
+    """
+    threshold_epoch = 1
+
+    @functools.wraps(fn)
+    def wrap(*args, **kwargs):
+        while not all(blockchain.get_current_epoch(e) >= threshold_epoch for e in endpoints):
+            time.sleep(1)
+        return fn(*args, **kwargs)
+
+    return wrap
+
+
+def staking(fn):
+    """
+    Decorator for tests that requires staking epoch
+    """
+    threshold_epoch = blockchain.get_staking_epoch(endpoints[0])
+
+    @functools.wraps(fn)
+    def wrap(*args, **kwargs):
+        while not all(blockchain.get_current_epoch(e) >= threshold_epoch for e in endpoints):
+            time.sleep(1)
+        return fn(*args, **kwargs)
+
+    return wrap
+
+
+def send_and_confirm_transaction(tx_data):
+    """
+    Send and confirm the given transaction (`tx_data`).
+    Node that tx_data follow the format of one of the entries in `initial_funding`
+    """
+    assert isinstance(tx_data, dict), f"Sanity check: expected tx_data to be of type dict not {type(tx_data)}"
+    for el in ["from", "from-shard", "signed-raw-tx", "hash"]:
+        assert el in tx_data.keys(), f"Expected {el} as a key in {json.dumps(tx_data, indent=2)}"
+
+    # Validate tx sender
+    assert_valid_test_from_address(tx_data["from"], tx_data["from-shard"], is_staking=False)
+
+    # Send tx
+    response = base_request('hmy_sendRawTransaction', params=[tx_data["signed-raw-tx"]],
+                            endpoint=endpoints[tx_data["from-shard"]])
+    assert is_valid_json_rpc(response), f"Invalid JSON response: {response}"
+    # Do not check for errors since resending initial txs is fine & failed txs will be caught in confirm timeout.
+
+    # Confirm tx within timeout window
+    start_time = time.time()
+    while time.time() - start_time <= tx_timeout:
+        tx_response = get_transaction(tx_data["hash"], tx_data["from-shard"])
+        if tx_response is not None:
+            return tx_response
+    raise AssertionError("Could not confirm initial transactions on-chain.")
+
+
+def get_transaction(tx_hash, shard):
+    """
+    Fetch the transaction for the given hash on the given shard.
+    It also checks that the RPC response is valid.
+    """
+    assert isinstance(tx_hash, str), f"Sanity check: expect tx hash to be of type str not {type(tx_hash)}"
+    assert isinstance(shard, int), f"Sanity check: expect shard to be of type int not {type(shard)}"
+    raw_response = base_request('hmy_getTransactionByHash', params=[tx_hash], endpoint=endpoints[shard])
+    return check_and_unpack_rpc_response(raw_response, expect_error=False)
+
+
 def assert_valid_test_from_address(address, shard, is_staking=False):
     """
     Asserts that the given address is a valid 'from' address for a test transaction.
@@ -85,6 +170,7 @@ def assert_valid_test_from_address(address, shard, is_staking=False):
     """
     assert isinstance(address, str), f"Sanity check: Expect address {address} as a string."
     assert isinstance(shard, int), f"Sanity check: Expect shard {shard} as am int."
+    assert isinstance(is_staking, bool), f"Sanity check: Expect is_staking {is_staking} as a bool."
     assert account.is_valid_address(address), f"{address} is an invalid ONE address"
     if not account.get_balance(address, endpoint=endpoints[shard]) >= 1e18:
         raise AssertionError(f"Account{address} does not have at least 1 ONE on shard {shard}")

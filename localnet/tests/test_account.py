@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import time
+"""
+Tests here are related to account information. Some tests require a
+feedback loop with the chain.
+
+As with all tests, there are 2 JSON-RPC versions/namespaces (v1 & v2) where their difference
+is only suppose to be in the types of their params & returns. v1 keeps everything in hex and
+v2 uses decimal when possible. However, there are some (legacy) discrepancies that some tests
+enforce. These tests are noted and should NOT be broken.
+"""
 import json
 import traceback
 
@@ -10,13 +18,12 @@ from pyhmy.rpc.request import (
 )
 
 from txs import (
-    tx_timeout,
     endpoints,
     initial_funding,
-    assert_valid_test_from_address
+    get_transaction,
+    send_and_confirm_transaction
 )
 from utils import (
-    is_valid_json_rpc,
     check_and_unpack_rpc_response,
     assert_valid_json_structure
 )
@@ -28,11 +35,6 @@ def account_test_tx():
     Fixture to send (if needed) and return a transaction to be
     used for all tests in this test module.
     """
-
-    def get_transaction():
-        raw_response = base_request('hmy_getTransactionByHash', params=[test_tx["hash"]],
-                                    endpoint=endpoints[test_tx["from-shard"]])
-        return check_and_unpack_rpc_response(raw_response, expect_error=False)
 
     test_tx = {
         "from": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -54,26 +56,8 @@ def account_test_tx():
         raise AssertionError(f"Test transaction from address {test_tx['from']} "
                              f"not found in set of initially funded accounts.")
 
-    tx_response = get_transaction()
-    if tx_response is not None:
-        return tx_response
-    else:
-        # Validate tx sender
-        assert_valid_test_from_address(test_tx["from"], test_tx["from-shard"], is_staking=False)
-
-        # Send tx
-        response = base_request('hmy_sendRawTransaction', params=[test_tx["signed-raw-tx"]],
-                                endpoint=endpoints[test_tx["from-shard"]])
-        assert is_valid_json_rpc(response), f"Invalid JSON response: {response}"
-        # Do not check for errors since resending initial txs is fine & failed txs will be caught in confirm timeout.
-
-        # Confirm tx within timeout window
-        start_time = time.time()
-        while time.time() - start_time <= tx_timeout:
-            tx_response = get_transaction()
-            if tx_response is not None:
-                return tx_response
-        raise AssertionError("Could not confirm initial transactions on-chain.")
+    tx_response = get_transaction(test_tx["hash"], test_tx["from-shard"])
+    return send_and_confirm_transaction(test_tx) if tx_response is None else tx_response
 
 
 def test_get_transactions_count(account_test_tx):

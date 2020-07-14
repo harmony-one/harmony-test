@@ -41,18 +41,19 @@ def test_invalid_method():
     assert response["code"] == reference_response["code"]
 
 
-def test_net_peer_count():
+def test_net_peer_count_v1():
     """
     Note that this is NOT a `hmy` RPC, however, there are 2 versions of it.
-
-    Note that v1 & v2 have DIFFERENT responses
     """
-    # Check v1
     raw_response = base_request("net_peerCount", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, str) and response.startswith("0x")  # Must be a hex string
 
-    # Check v2
+
+def test_net_peer_count_v2():
+    """
+    Note that this is NOT a `hmy` RPC, however, there are 2 versions of it.
+    """
     raw_response = base_request("netv2_peerCount", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, int)  # Must be an integer in base 10
@@ -288,7 +289,7 @@ def test_get_header_by_number():
     assert response["shardID"] == 0
 
     # Check v2
-    raw_response = base_request("hmy_getHeaderByNumber", params=["0x0"], endpoint=endpoints[0])
+    raw_response = base_request("hmyv2_getHeaderByNumber", params=[0], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
     assert response["shardID"] == 0

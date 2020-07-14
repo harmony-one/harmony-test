@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import json
 import time
 
 from pyhmy import (
@@ -13,11 +12,11 @@ from pyhmy.rpc.request import (
 from txs import (
     tx_timeout,
     endpoints,
-    initial_funding
+    initial_funding,
+    get_transaction
 )
 from utils import (
     is_valid_json_rpc,
-    check_and_unpack_rpc_response
 )
 
 
@@ -31,7 +30,8 @@ def pytest_sessionstart(session):
 
     # Send all txs. Note that this is the only place to break the txs invariant.
     for tx in initial_funding:
-        response = base_request('hmy_sendRawTransaction', params=[tx["signed-raw-tx"]], endpoint=endpoints[tx["from-shard"]])
+        response = base_request('hmy_sendRawTransaction', params=[tx["signed-raw-tx"]],
+                                endpoint=endpoints[tx["from-shard"]])
         assert is_valid_json_rpc(response), f"Invalid JSON response: {response}"
         # Do not check for errors since resending initial txs is fine & failed txs will be caught in confirm timeout.
 
@@ -40,9 +40,7 @@ def pytest_sessionstart(session):
     while time.time() - start_time <= 2 * tx_timeout:
         sent_txs = []
         for tx in initial_funding:
-            response = base_request('hmy_getTransactionByHash', params=[tx["hash"]],
-                                    endpoint=endpoints[tx["from-shard"]])
-            tx_response = check_and_unpack_rpc_response(response, expect_error=False)
+            tx_response = get_transaction(tx["hash"], tx["from-shard"])
             sent_txs.append(tx_response is not None)
         if all(sent_txs):
             return
