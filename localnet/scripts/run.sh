@@ -8,6 +8,7 @@ localnet_config=$(realpath "$DIR/../configs/localnet_deploy.config")
 function kill_localnet(){
   pushd "$(pwd)"
   cd "$harmony_dir" && bash ./test/kill_node.sh
+  killall -9 harmony || true
   popd
 }
 
