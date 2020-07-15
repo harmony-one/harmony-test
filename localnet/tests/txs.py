@@ -6,8 +6,8 @@ Stores all the transaction information used in the test suite.
 INVARIANT: Each account only sends 1 plain transaction (per shard) except for initial transaction(s).
 """
 import functools
-import time
 import json
+import time
 
 from pyhmy import (
     account,
@@ -193,7 +193,30 @@ def send_transaction(tx_data, confirm_submission=False):
                             endpoint=endpoints[tx_data["from-shard"]])
     if confirm_submission:
         tx_hash = check_and_unpack_rpc_response(response, expect_error=False)
-        assert tx_hash == tx_data["hash"], f"Expected submitted transaction to get tx hash of {tx_data['hash']}, got {tx_hash}"
+        assert tx_hash == tx_data["hash"], f"Expected submitted transaction to get tx hash of {tx_data['hash']}, " \
+                                           f"got {tx_hash}"
+    else:
+        assert is_valid_json_rpc(response), f"Invalid JSON response: {response}"
+
+
+def send_staking_transaction(tx_data, confirm_submission=False):
+    """
+    Send the given staking transaction (`tx_data`), and check that it got submitted
+    to tx pool if `confirm_submission` is enabled.
+
+    Node that tx_data follow the format of one of the entries in `initial_funding`
+    """
+    assert isinstance(tx_data, dict), f"Sanity check: expected tx_data to be of type dict not {type(tx_data)}"
+    for el in ["from", "signed-raw-tx", "hash"]:
+        assert el in tx_data.keys(), f"Expected {el} as a key in {json.dumps(tx_data, indent=2)}"
+
+    # Send tx
+    response = base_request('hmy_sendRawStakingTransaction', params=[tx_data["signed-raw-tx"]],
+                            endpoint=endpoints[0])
+    if confirm_submission:
+        tx_hash = check_and_unpack_rpc_response(response, expect_error=False)
+        assert tx_hash == tx_data["hash"], f"Expected submitted staking transaction to get tx hash " \
+                                           f"of {tx_data['hash']}, got {tx_hash}"
     else:
         assert is_valid_json_rpc(response), f"Invalid JSON response: {response}"
 
@@ -224,6 +247,32 @@ def send_and_confirm_transaction(tx_data, timeout=tx_timeout):
     raise AssertionError("Could not confirm transactions on-chain.")
 
 
+def send_and_confirm_staking_transaction(tx_data, timeout=tx_timeout):
+    """
+    Send and confirm the given staking transaction (`tx_data`) within the given `timeout`.
+
+    Node that tx_data follow the format of one of the entries in `initial_funding`.
+
+    Note that errored tx submission will not return an error early, instead, failed transactions will be
+    caught by timeout. This is done because it is possible to submit the same transaction multiple times,
+    thus causing the RPC to return an error, causing unwanted errors in tests that are ran in parallel.
+    """
+    assert isinstance(tx_data, dict), f"Sanity check: expected tx_data to be of type dict not {type(tx_data)}"
+    for el in ["from", "signed-raw-tx", "hash"]:
+        assert el in tx_data.keys(), f"Expected {el} as a key in {json.dumps(tx_data, indent=2)}"
+
+    send_staking_transaction(tx_data, confirm_submission=False)
+    # Do not check for errors since resending initial txs is fine & failed txs will be caught in confirm timeout.
+
+    # Confirm tx within timeout window
+    start_time = time.time()
+    while time.time() - start_time <= timeout:
+        tx_response = get_staking_transaction(tx_data["hash"])
+        if tx_response is not None:
+            return tx_response
+    raise AssertionError("Could not confirm staking transaction on-chain.")
+
+
 def get_transaction(tx_hash, shard):
     """
     Fetch the transaction for the given hash on the given shard.
@@ -232,6 +281,16 @@ def get_transaction(tx_hash, shard):
     assert isinstance(tx_hash, str), f"Sanity check: expect tx hash to be of type str not {type(tx_hash)}"
     assert isinstance(shard, int), f"Sanity check: expect shard to be of type int not {type(shard)}"
     raw_response = base_request('hmy_getTransactionByHash', params=[tx_hash], endpoint=endpoints[shard])
+    return check_and_unpack_rpc_response(raw_response, expect_error=False)
+
+
+def get_staking_transaction(tx_hash):
+    """
+    Fetch the staking transaction for the given hash on the given shard.
+    It also checks that the RPC response is valid.
+    """
+    assert isinstance(tx_hash, str), f"Sanity check: expect tx hash to be of type str not {type(tx_hash)}"
+    raw_response = base_request('hmy_getStakingTransactionByHash', params=[tx_hash], endpoint=endpoints[0])
     return check_and_unpack_rpc_response(raw_response, expect_error=False)
 
 

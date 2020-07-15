@@ -35,7 +35,6 @@ def account_test_tx():
     Fixture to send (if needed) and return a transaction to be
     used for all tests in this test module.
     """
-
     test_tx = {
         "from": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
         "to": "one1s92wjv7xeh962d4sfc06q0qauxak4k8hh74ep3",

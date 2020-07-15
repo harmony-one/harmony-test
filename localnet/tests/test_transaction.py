@@ -43,7 +43,7 @@ def cross_shard_txs():
     """
     Fixture for 2 cross shard transaction.
 
-    Returned list has cx from s0 -> s1 as element 0, cx from s1 -> s0 as element 1.
+    Returned tuple has cx from s0 -> s1 as element 0, cx from s1 -> s0 as element 1.
     """
     s0_test_tx = {
         "from": "one1ue25q6jk0xk3dth4pxur9e742vcqfwulhwqh45",
@@ -85,10 +85,10 @@ def cross_shard_txs():
         tx_response = get_transaction(s1_test_tx["hash"], s1_test_tx["from-shard"])
         if tx_response is not None:
             txs[1] = tx_response
-            return txs
+            return tuple(txs)
         elif account.get_balance(s1_test_tx["from"], endpoint=endpoints[s1_test_tx["from-shard"]]) >= 1e18:
             txs[1] = send_and_confirm_transaction(s1_test_tx)
-            return txs
+            return tuple(txs)
     raise AssertionError(f"Could not confirm cross shard transaction on 'to-shard' "
                          f"(balance not updated) for tx: {json.dumps(s0_test_tx, indent=2)}")
 
