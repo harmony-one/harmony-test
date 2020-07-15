@@ -70,6 +70,7 @@ initial_funding = [
         "signed-raw-tx": "0xf86f02843b9aca008252088080942feb745d97abd24fb4c914e6fec610f3688b3dbb8a152d02c7e14af68000008027a0abfa0480b878ca798a17e88251109761ed1d281f1da92faa21b6e456ad558774a016b460ec602b08f06a2845478269b1014b5491bdc0993988ca39f689b2405992",
     },
     {
+        # Used by: `test_pending_transactions_v1`
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "to": "one1twhzfc2wr4j5ka7gs9pmllpnrdyaskcl5lq8ye",
         # science swim absent horse gas wink switch section soup pair chuckle rug paddle lottery message veteran poverty alone current prize spoil dune super crumble
@@ -81,6 +82,7 @@ initial_funding = [
         "signed-raw-tx": "0xf86f03843b9aca008252088080945bae24e14e1d654b77c88143bffc331b49d85b1f8a152d02c7e14af68000008027a0356e6bfd8718c7102f0d94fdb8be1cba090daf44c71086f9817de3b264cb54c2a052c8781691dce63997ca4f765adec7b351a9a23a80a97bcf238ccbdf8a71f71f",
     },
     {
+        # Used by: `test_pending_transactions_v2`
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "to": "one1u57rlv5q82deja6ew2l9hdy7ag3dwnw57x8s9t",
         # noble must all evoke core grass goose describe latin left because awful gossip tuna broccoli tomorrow piece enable theme comic below avoid dove high
@@ -90,7 +92,44 @@ initial_funding = [
         "hash": "0xa8a678243fffcfc16ff8f35315094aafc029175b962ec595f7c71efce4a47c8a",
         "nonce": "0x4",
         "signed-raw-tx": "0xf86f04843b9aca00825208808094e53c3fb2803a9b99775972be5bb49eea22d74dd48a152d02c7e14af68000008028a0d2f061075852ee5b2572b18e8879d5656e8660113d88f2b806961b25312e5ae1a078004b6b332f09b1a53c3cbad6fd427fa57b0b368ae2126e458b9622d1668edf",
-    }
+    },
+    {
+        # Used by: `test_send_raw_transaction_v1`
+        "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+        "to": "one1p5x4t7mvd94jn5awxmhlvgqmlazx5egzz7rveg",
+        # mushroom penalty pulse blouse horror into color call grace observe famous bridge consider universe uncle horror people tank useless alley uncover emotion next ke
+        "amount": "100000",
+        "from-shard": 0,
+        "to-shard": 0,
+        "hash": "0x1d0d4111d9f5d2d28e85d5ebd1460944e8d328df45a2bbfae1de309c3a6cf632",
+        "nonce": "0x5",
+        "signed-raw-tx": "0xf86f05843b9aca008252088080940d0d55fb6c696b29d3ae36eff6201bff446a65028a152d02c7e14af68000008027a06dee240ff456073c11fd093e24ba29eda88e00cd710c05d83c855cce1aff47a2a06bf74d512215a2ec02fb5034a1e344901706387e72ce08b5a37a2f434717f859",
+    },
+    {
+        # Used by: `test_send_raw_transaction_v2`
+        "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+        "to": "one13lu674f3jkfk2qhsngfc2vhcf372wprctdjvgu",
+        # organ truly miss sell visual pulse maid element slab sugar bullet absorb digital space dance long another man cherry fruit effort pluck august flag
+        "amount": "100000",
+        "from-shard": 0,
+        "to-shard": 0,
+        "hash": "0x855e230866377e00a56ae6958c8acfe6f0d19f8e71a0c323d92794aeda5c6bc8",
+        "nonce": "0x6",
+        "signed-raw-tx": "0xf86f06843b9aca008252088080948ff9af553195936502f09a138532f84c7ca704788a152d02c7e14af68000008028a01a4c6dbc9177cf9057de09d4f654950a38aba83e98502d59b478f899b196c4aaa00652c34a53082aee876713954ce70a21288c3727c29fb9c729ce10f19d106370",
+    },
+    {
+        # Used by: `test_get_current_transaction_error_sink`
+        "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+        "to": "one1ujsjs4mhds75xnws0yx0v8l2rvyp67arwzqrvz",
+        # video mind cash involve kitten mobile multiply shine foam citizen minimum busy slab keen under food swamp fortune dumb slice beyond piano forest call
+        "amount": "100000",
+        "from-shard": 0,
+        "to-shard": 0,
+        "hash": "0x718a7299e1591bd2eb7bea7de6efc044de3d1a6ce2d96e85b17f892f118d2455",
+        "nonce": "0x7",
+        "signed-raw-tx": "0xf86f07843b9aca00825208808094e4a12857776c3d434dd0790cf61fea1b081d7ba38a152d02c7e14af68000008028a0cdb715640768dbdbaa06b98ca8c346717b3c753a2ad70de81330f52cd6a1cbc1a05ced9fe853996e05216783fdab83ca91b6010605ad68d0153596b0fc35e8c40b",
+    },
+
 ]
 
 
@@ -124,9 +163,11 @@ def staking(fn):
     return wrap
 
 
-def send_and_confirm_transaction(tx_data):
+def send_transaction(tx_data, confirm_submission=False):
     """
-    Send and confirm the given transaction (`tx_data`).
+    Send the given transaction (`tx_data`), and check that it got submitted
+    to tx pool if `confirm_submission` is enabled.
+
     Node that tx_data follow the format of one of the entries in `initial_funding`
     """
     assert isinstance(tx_data, dict), f"Sanity check: expected tx_data to be of type dict not {type(tx_data)}"
@@ -139,12 +180,28 @@ def send_and_confirm_transaction(tx_data):
     # Send tx
     response = base_request('hmy_sendRawTransaction', params=[tx_data["signed-raw-tx"]],
                             endpoint=endpoints[tx_data["from-shard"]])
-    assert is_valid_json_rpc(response), f"Invalid JSON response: {response}"
+    if confirm_submission:
+        tx_hash = check_and_unpack_rpc_response(response, expect_error=False)
+        assert tx_hash == tx_data["hash"], f"Expected submitted transaction to get tx hash of {tx_data['hash']}, got {tx_hash}"
+    else:
+        assert is_valid_json_rpc(response), f"Invalid JSON response: {response}"
+
+
+def send_and_confirm_transaction(tx_data, timeout=tx_timeout):
+    """
+    Send and confirm the given transaction (`tx_data`) within the given `timeout`.
+    Node that tx_data follow the format of one of the entries in `initial_funding`
+    """
+    assert isinstance(tx_data, dict), f"Sanity check: expected tx_data to be of type dict not {type(tx_data)}"
+    for el in ["from", "from-shard", "signed-raw-tx", "hash"]:
+        assert el in tx_data.keys(), f"Expected {el} as a key in {json.dumps(tx_data, indent=2)}"
+
+    send_transaction(tx_data, confirm_submission=False)
     # Do not check for errors since resending initial txs is fine & failed txs will be caught in confirm timeout.
 
     # Confirm tx within timeout window
     start_time = time.time()
-    while time.time() - start_time <= tx_timeout:
+    while time.time() - start_time <= timeout:
         tx_response = get_transaction(tx_data["hash"], tx_data["from-shard"])
         if tx_response is not None:
             return tx_response
