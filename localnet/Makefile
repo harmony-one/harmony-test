@@ -5,7 +5,8 @@ help:
 	@echo "build - build the docker image"
 	@echo "build-cached - build the docker image with cache"
 	@echo "upload - upload the docker image to dockerhub (require credentials)"
-	@echo "test - run the localnet tests without docker"
+	@echo "test - run the test suite"
+	@echo "run - run the localnet tests without docker"
 
 install:
 	python3 -m pip install -r requirements.txt
@@ -19,6 +20,9 @@ build-cached:
 upload:
 	docker push harmonyone/node-test
 
-test:
+run:
 	bash ./scripts/run.sh
+
+test:
+	python3 -u -m py.test -v -r s -s tests -n auto
 

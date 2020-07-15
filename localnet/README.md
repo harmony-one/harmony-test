@@ -30,11 +30,16 @@ docker build -t "$TAG_NAME" .
 make upload
 ```
 
-* To run the localnet tests outside of the docker image (for dev testing), do:
+* To run the test (start localnet, test, and teardown) outside of the docker image (for dev testing), do:
+```bash
+make run
+```
+> This will test whatever is in the main repo (following GO-PATH convention). 
+
+* If you already have a localnet running and want to run just the test suite, do:
 ```bash
 make test
 ```
-> This will test whatever is in the main repo (following GO-PATH convention). 
 
 * To run the localnet tests, do:
 ```bash
