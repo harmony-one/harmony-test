@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Tests here are related to send a plain transaction & require a
+Tests here are related to sending a plain transaction & require a
 feedback loop with the chain.
 
 As with all tests, there are 2 JSON-RPC versions/namespaces (v1 & v2) where their difference

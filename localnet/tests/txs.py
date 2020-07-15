@@ -129,7 +129,18 @@ initial_funding = [
         "nonce": "0x7",
         "signed-raw-tx": "0xf86f07843b9aca00825208808094e4a12857776c3d434dd0790cf61fea1b081d7ba38a152d02c7e14af68000008028a0cdb715640768dbdbaa06b98ca8c346717b3c753a2ad70de81330f52cd6a1cbc1a05ced9fe853996e05216783fdab83ca91b6010605ad68d0153596b0fc35e8c40b",
     },
-
+    {
+        # Used by: `deployed_contract`
+        "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+        "to": "one156wkx832t0nxnaq6hxawy4c3udmnpzzddds60a",
+        # dove turkey fitness brush drip page senior lemon other climb govern fantasy entry reflect when biology hunt victory turkey volcano casino movie shed valve
+        "amount": "100000",
+        "from-shard": 0,
+        "to-shard": 0,
+        "hash": "0x6674d1223fdff897d74b3483da2086f8370da747e93b6f6c32fe59f518c2b777",
+        "nonce": "0x8",
+        "signed-raw-tx": "0xf86f08843b9aca00825208808094a69d631e2a5be669f41ab9bae25711e37730884d8a152d02c7e14af68000008027a03f1c0d190eec991d407848227cc0f4f75ba157f187f539dfa6050dd1cfa253a4a00cbc0eb6f81f3a0049db90496c62598d267c5c82b203ab12e969e49012d32be8",
+    },
 ]
 
 
@@ -190,7 +201,12 @@ def send_transaction(tx_data, confirm_submission=False):
 def send_and_confirm_transaction(tx_data, timeout=tx_timeout):
     """
     Send and confirm the given transaction (`tx_data`) within the given `timeout`.
-    Node that tx_data follow the format of one of the entries in `initial_funding`
+
+    Node that tx_data follow the format of one of the entries in `initial_funding`.
+
+    Note that errored tx submission will not return an error early, instead, failed transactions will be
+    caught by timeout. This is done because it is possible to submit the same transaction multiple times,
+    thus causing the RPC to return an error, causing unwanted errors in tests that are ran in parallel.
     """
     assert isinstance(tx_data, dict), f"Sanity check: expected tx_data to be of type dict not {type(tx_data)}"
     for el in ["from", "from-shard", "signed-raw-tx", "hash"]:
