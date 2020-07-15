@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+import functools
 import json
+from threading import Lock
+
+_mutually_exclusive_lock = Lock()
 
 
 def is_valid_json_rpc(response):
@@ -68,3 +71,18 @@ def check_and_unpack_rpc_response(response, expect_error=False):
     else:
         assert "result" in response.keys(), f"Expected result in RPC response: {json.dumps(response, indent=2)}"
         return response["result"]
+
+
+def mutually_exclusive_test(fn):
+    """
+    Decorator for tests that cannot run in parallel together.
+    """
+    @functools.wraps(fn)
+    def wrap(*args, **kwargs):
+        _mutually_exclusive_lock.acquire()
+        try:
+            return fn(*args, **kwargs)
+        finally:
+            _mutually_exclusive_lock.release()
+
+    return wrap

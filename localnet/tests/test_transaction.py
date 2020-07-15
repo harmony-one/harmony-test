@@ -13,7 +13,6 @@ import json
 import time
 
 import pytest
-from flaky import flaky
 from pyhmy import (
     account,
     blockchain,
@@ -33,7 +32,8 @@ from txs import (
 )
 from utils import (
     check_and_unpack_rpc_response,
-    assert_valid_json_structure
+    assert_valid_json_structure,
+    mutually_exclusive_test
 )
 
 
@@ -167,8 +167,8 @@ def test_get_current_transaction_error_sink():
     assert found_errored_tx, f"Could not find errored transaction (hash {error_tx['hash']}) in {json.dumps(response, indent=2)}"
 
 
+@mutually_exclusive_test
 @txs.cross_shard
-@flaky(max_runs=3)
 def test_resend_cx(cross_shard_txs):
     """
     Note that v1 & v2 have the same responses.
@@ -272,8 +272,8 @@ def test_get_pending_cx_receipts():
     raise AssertionError(f"Timeout! Pending transaction not found for {json.dumps(cx)}")
 
 
+@mutually_exclusive_test
 @txs.cross_shard
-@flaky(max_runs=3)
 def test_get_cx_receipt_by_hash_v1(cross_shard_txs):
     reference_response = {
         "blockHash": "0xf12f3aefd7f189286b6da30871a47946c11f9c1673b3b693f9d37d659f69e018",
@@ -292,8 +292,8 @@ def test_get_cx_receipt_by_hash_v1(cross_shard_txs):
     assert_valid_json_structure(reference_response, response)
 
 
+@mutually_exclusive_test
 @txs.cross_shard
-@flaky(max_runs=3)
 def test_get_cx_receipt_by_hash_v2(cross_shard_txs):
     reference_response = {
         "blockHash": "0xf12f3aefd7f189286b6da30871a47946c11f9c1673b3b693f9d37d659f69e018",

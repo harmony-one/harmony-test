@@ -10,7 +10,6 @@ v2 uses decimal when possible. However, there are some (legacy) discrepancies th
 enforce. These tests are noted and should NOT be broken.
 """
 
-from flaky import flaky
 from pyhmy import (
     account,
     transaction
@@ -25,7 +24,8 @@ from txs import (
 )
 from utils import (
     assert_valid_json_structure,
-    check_and_unpack_rpc_response
+    check_and_unpack_rpc_response,
+    mutually_exclusive_test
 )
 
 
@@ -450,7 +450,7 @@ def test_get_block_by_number_v2():
     assert_valid_json_structure(reference_response, response)
 
 
-@flaky(max_runs=3)
+@mutually_exclusive_test
 def test_get_blocks_v1():
     """
     Note: param options for 'withSigners' will NOT return any sensical data
@@ -519,7 +519,7 @@ def test_get_blocks_v1():
         assert start_num <= blk_num <= end_num, f"Got block number {blk_num}, which is not in range [{start_num},{end_num}]"
 
 
-@flaky(max_runs=3)
+@mutually_exclusive_test
 def test_get_blocks_v2():
     """
     Only difference in param of RPC is hex string in v1 and decimal in v2.
@@ -589,7 +589,7 @@ def test_get_blocks_v2():
             "number"] <= end_blk, f"Got block number {blk['number']}, which is not in range [{start_blk},{end_blk}]"
 
 
-@flaky(max_runs=3)
+@mutually_exclusive_test
 def test_get_block_by_hash_v1():
     reference_response = {
         "difficulty": 0,
@@ -650,7 +650,7 @@ def test_get_block_by_hash_v1():
             "from-shard"], f"Transaction in block from shard {init_tx_record['from-shard']} does not have same from shard ({tx['shardID']})"
 
 
-@flaky(max_runs=3)
+@mutually_exclusive_test
 def test_get_block_by_hash_v2():
     """
     Note the use of a JSON object in the param. This is different from v1.
