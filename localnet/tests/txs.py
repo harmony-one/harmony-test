@@ -258,7 +258,7 @@ def send_and_confirm_transaction(tx_data, timeout=tx_timeout):
     thus causing the RPC to return an error, causing unwanted errors in tests that are ran in parallel.
     """
     assert isinstance(tx_data, dict), f"Sanity check: expected tx_data to be of type dict not {type(tx_data)}"
-    for el in ["from-shard" "hash"]:
+    for el in ["from-shard", "hash"]:
         assert el in tx_data.keys(), f"Expected {el} as a key in {json.dumps(tx_data, indent=2)}"
 
     send_transaction(tx_data, confirm_submission=False)
