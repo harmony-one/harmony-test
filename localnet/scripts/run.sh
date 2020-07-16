@@ -105,7 +105,7 @@ echo -e "\n=== \e[38;5;0;48;5;255mSTARTING TESTS\e[0m ===\n"
 sleep 5
 proc_count=$(nproc)
 error=0
-cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -n $((proc_count < 8 ? 8 : proc_count)) || error=1
+cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -x -n $((proc_count < 8 ? 8 : proc_count)) || error=1
 
 if [ "$KEEP" == "true" ]; then
   tail -f /dev/null
