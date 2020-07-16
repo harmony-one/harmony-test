@@ -8,6 +8,7 @@ INVARIANT: Each account only sends 1 plain transaction (per shard) except for in
 import functools
 import json
 import time
+import random
 
 from pyhmy import (
     account,
@@ -23,6 +24,7 @@ from utils import (
 )
 
 tx_timeout = 20  # In seconds
+beacon_shard_id = 0
 
 # Endpoints sorted by shard
 endpoints = [
@@ -141,6 +143,30 @@ initial_funding = [
         "nonce": "0x8",
         "signed-raw-tx": "0xf86f08843b9aca00825208808094a69d631e2a5be669f41ab9bae25711e37730884d8a152d02c7e14af68000008027a03f1c0d190eec991d407848227cc0f4f75ba157f187f539dfa6050dd1cfa253a4a00cbc0eb6f81f3a0049db90496c62598d267c5c82b203ab12e969e49012d32be8",
     },
+    {
+        # Used by: `s0_validator`
+        "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+        "to": "one109r0tns7av5sjew7a7fkekg4fs3pw0h76pp45e",
+        # proud guide else desk renew leave fix post fat angle throw gain field approve year umbrella era axis horn unlock trip guide replace accident
+        "amount": "100000",
+        "from-shard": 0,
+        "to-shard": 0,
+        "hash": "0x5def784f5b9a8683e7c98b202a0e2ed303f84224900f95775d92be54e1bcb504",
+        "nonce": "0x9",
+        "signed-raw-tx": "0xf86f09843b9aca008252088080947946f5ce1eeb290965deef936cd9154c22173efe8a152d02c7e14af68000008027a0c991fab63ede6b83f7872020ac54fa9ba900cce8aa6b0dc07dbca1bfb840c97da029795861de7c6d839ce54903f960e3326f03a84c90deed384f7dcfc8d9703a16",
+    },
+    {
+        # Used by: `s1_validator`
+        "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+        "to": "one1nmy8quw0924fss4r9km640pldzqegjk4wv4wts",
+        # aisle aware spatial sausage vibrant tennis useful admit junior light calm wear caution snack seven spoon yellow crater giraffe mirror spare educate result album
+        "amount": "100000",
+        "from-shard": 0,
+        "to-shard": 0,
+        "hash": "0xf66f6cb67ad9e1622ca77d50ec52a25be37bcd601606d7530711e58aca891245",
+        "nonce": "0xa",
+        "signed-raw-tx": "0xf86f0a843b9aca008252088080949ec87071cf2aaa9842a32db7aabc3f6881944ad58a152d02c7e14af68000008027a0efa56eae2e0457010ad57e46cf4332158e670aadee8586c586f74047fb6e4211a038827d2e57a50ca7b311c06d90426ddad659d68e598342f94a1b430f2adb39da",
+    },
 ]
 
 
@@ -153,7 +179,7 @@ def cross_shard(fn):
     @functools.wraps(fn)
     def wrap(*args, **kwargs):
         while not all(blockchain.get_current_epoch(e) >= threshold_epoch for e in endpoints):
-            time.sleep(1)
+            time.sleep(random.uniform(0.5, 1))  # Random to stop burst spam of RPC calls.
         return fn(*args, **kwargs)
 
     return wrap
@@ -163,12 +189,12 @@ def staking(fn):
     """
     Decorator for tests that requires staking epoch
     """
-    threshold_epoch = blockchain.get_staking_epoch(endpoints[0])
+    threshold_epoch = blockchain.get_prestaking_epoch(endpoints[0])
 
     @functools.wraps(fn)
     def wrap(*args, **kwargs):
         while not all(blockchain.get_current_epoch(e) >= threshold_epoch for e in endpoints):
-            time.sleep(1)
+            time.sleep(random.uniform(0.5, 1))  # Random to stop burst spam of RPC calls.
         return fn(*args, **kwargs)
 
     return wrap
@@ -207,7 +233,7 @@ def send_staking_transaction(tx_data, confirm_submission=False):
     Node that tx_data follow the format of one of the entries in `initial_funding`
     """
     assert isinstance(tx_data, dict), f"Sanity check: expected tx_data to be of type dict not {type(tx_data)}"
-    for el in ["from", "signed-raw-tx", "hash"]:
+    for el in ["signed-raw-tx", "hash"]:
         assert el in tx_data.keys(), f"Expected {el} as a key in {json.dumps(tx_data, indent=2)}"
 
     # Send tx
@@ -232,7 +258,7 @@ def send_and_confirm_transaction(tx_data, timeout=tx_timeout):
     thus causing the RPC to return an error, causing unwanted errors in tests that are ran in parallel.
     """
     assert isinstance(tx_data, dict), f"Sanity check: expected tx_data to be of type dict not {type(tx_data)}"
-    for el in ["from", "from-shard", "signed-raw-tx", "hash"]:
+    for el in ["from-shard" "hash"]:
         assert el in tx_data.keys(), f"Expected {el} as a key in {json.dumps(tx_data, indent=2)}"
 
     send_transaction(tx_data, confirm_submission=False)
@@ -258,7 +284,7 @@ def send_and_confirm_staking_transaction(tx_data, timeout=tx_timeout):
     thus causing the RPC to return an error, causing unwanted errors in tests that are ran in parallel.
     """
     assert isinstance(tx_data, dict), f"Sanity check: expected tx_data to be of type dict not {type(tx_data)}"
-    for el in ["from", "signed-raw-tx", "hash"]:
+    for el in ["hash"]:
         assert el in tx_data.keys(), f"Expected {el} as a key in {json.dumps(tx_data, indent=2)}"
 
     send_staking_transaction(tx_data, confirm_submission=False)

@@ -20,6 +20,7 @@ from pyhmy.rpc.request import (
 )
 
 from txs import (
+    initial_funding,
     endpoints,
     send_and_confirm_transaction,
     get_transaction
@@ -61,10 +62,19 @@ def deployed_contract():
         "code": "0x608060405234801561001057600080fd5b50600436106100415760003560e01c8063445df0ac146100465780638da5cb5b14610064578063fdacd576146100ae575b600080fd5b61004e6100dc565b6040518082815260200191505060405180910390f35b61006c6100e2565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6100da600480360360208110156100c457600080fd5b8101908080359060200190929190505050610107565b005b60015481565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16141561016457806001819055505b5056fea265627a7a723158209b80813a158b44af65aee232b44c0ac06472c48f4abbe298852a39f0ff34a9f264736f6c63430005100032"
     }
 
+    in_initially_funded = False
+    for tx in initial_funding:
+        if tx["to"] == contract_tx["from"] and tx["to-shard"] == contract_tx["from-shard"]:
+            in_initially_funded = True
+            break
+    if not in_initially_funded:
+        raise AssertionError(f"Test transaction from address {contract_tx['from']} "
+                             f"not found in set of initially funded accounts.")
+
     if get_transaction(contract_tx["hash"], contract_tx["from-shard"]) is None:
         tx = send_and_confirm_transaction(contract_tx)
-        assert tx["hash"] == contract_tx["hash"], f"Expected contract transaction hash to be {tx['hash']}, " \
-                                                  f"got {contract_tx['hash']}"
+        assert tx["hash"] == contract_tx["hash"], f"Expected contract transaction hash to be {contract_tx['hash']}, " \
+                                                  f"got {tx['hash']}"
     return contract_tx
 
 
