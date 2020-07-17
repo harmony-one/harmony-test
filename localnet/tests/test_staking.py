@@ -102,7 +102,7 @@ def s0_validator():
 
     if get_staking_transaction(stx["hash"]) is None:
         tx = send_and_confirm_staking_transaction(stx)
-        assert tx["hash"] == stx["hash"], f"Expected contract transaction hash to be {stx['hash']}, " \
+        assert tx["hash"] == stx["hash"], f"Expected create validator transaction hash to be {stx['hash']}, " \
                                           f"got {tx['hash']}"
         assert get_staking_transaction(stx["hash"]) is not None, f"Transaction (hash {stx['hash']}) not found on chain."
 
@@ -148,7 +148,7 @@ def s1_validator():
 
     if get_staking_transaction(stx["hash"]) is None:
         tx = send_and_confirm_staking_transaction(stx)
-        assert tx["hash"] == stx["hash"], f"Expected contract transaction hash to be {stx['hash']}, " \
+        assert tx["hash"] == stx["hash"], f"Expected create validator transaction hash to be {stx['hash']}, " \
                                           f"got {tx['hash']}"
         assert get_staking_transaction(stx["hash"]) is not None, f"Transaction (hash {stx['hash']}) not found on chain."
 

@@ -73,6 +73,10 @@ def assert_valid_json_structure(reference, candidate):
 
 
 def check_and_unpack_rpc_response(response, expect_error=False):
+    """
+    Checks the given `response` to ensure its a valid JSON-RPC response, then returns
+    the 'usable' part of the response (`error` or `result` depending on given expectation).
+    """
     if not response:
         raise AssertionError("No response...")
     assert is_valid_json_rpc(response), f"Invalid JSON response: {response}"
