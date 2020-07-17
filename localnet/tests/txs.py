@@ -25,6 +25,8 @@ from utils import (
 
 tx_timeout = 20  # In seconds
 beacon_shard_id = 0
+_is_cross_shard_era = False
+_is_staking_era = False
 
 # Endpoints sorted by shard
 endpoints = [
@@ -167,34 +169,96 @@ initial_funding = [
         "nonce": "0xa",
         "signed-raw-tx": "0xf86f0a843b9aca008252088080949ec87071cf2aaa9842a32db7aabc3f6881944ad58a152d02c7e14af68000008027a0efa56eae2e0457010ad57e46cf4332158e670aadee8586c586f74047fb6e4211a038827d2e57a50ca7b311c06d90426ddad659d68e598342f94a1b430f2adb39da",
     },
+    {
+        # Used by: `test_delegation` & `test_undelegation`
+        "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+        "to": "one1v895jcvudcktswcmg2sldvmxvtvvdj2wuxj3hx",
+        # web topple now acid repeat inspire tomato inside nominee reflect latin salmon garbage negative liberty win royal faith hammer lawsuit west toddler payment coffee
+        "amount": "100000",
+        "from-shard": 0,
+        "to-shard": 0,
+        "hash": "0xb6d3a97d472a5b0259de0cd3ad0d41c6cc7e7b98ee0c314c29d09261a92e2354",
+        "nonce": "0xb",
+        "signed-raw-tx": "0xf86f0b843b9aca0082520880809461cb49619c6e2cb83b1b42a1f6b36662d8c6c94e8a152d02c7e14af68000008028a00e1b96e61e8bb4c4bad89ed40d6cc43fcf003251fa5e9ed1cdf63e2a38ca110ca0675a1964ad3c32a2946f9bc86984b8910f81f752e2ef0ef9b1eb4cf9aec1032d",
+    },
+    {
+        # Used by: `test_pending_staking_transactions_v1`
+        "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+        "to": "one13v9m45m6yk9qmmcgyq603ucy0wdw9lfsxzsj9d",
+        # grief comfort prefer wealth foam consider kingdom secret comfort brush kit cereal hello ripple choose follow mammal swap city pistol drip unfair glass jacket
+        "amount": "100000",
+        "from-shard": 0,
+        "to-shard": 0,
+        "hash": "0x85c7de662be7bbf0fd3be0bf8d0c5f910c4fd8d54ff8bc023725d09a9769fd6e",
+        "nonce": "0xc",
+        "signed-raw-tx": "0xf86f0c843b9aca008252088080948b0bbad37a258a0def082034f8f3047b9ae2fd308a152d02c7e14af68000008027a073fc972cfce2875a6ed11b9db264f4ceaf5ef87a073955f08af18d1d6c2a914ba07bcea61a65ad903a42ba06e369eedd784049b789058279c2b13a5c9065df2a76",
+    },
+    {
+        # Used by: `test_pending_staking_transactions_v2`
+        "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
+        "to": "one13muqj27fcd59gfrv7wzvuaupgkkwvwzlxun0ce",
+        # suit gate simple ship chicken labor twenty attend knee click quit emerge minimum veteran need group verify dish baby argue guard win tip swear
+        "amount": "100000",
+        "from-shard": 0,
+        "to-shard": 0,
+        "hash": "0xffe73340c5a6e411c74fb29875dcb84df3d9c36fbbdb16cd3c47a3399ff8b0b9",
+        "nonce": "0xd",
+        "signed-raw-tx": "0xf86f0d843b9aca008252088080948ef8092bc9c36854246cf384ce778145ace6385f8a152d02c7e14af68000008027a0269c69eef2be5633b297a93efa20bf6bf0e56c8dc9eb869a4af6864fcfc28c75a0188df392c87d1552cff6f54736cf6811efed7ea3464db4c0618de1bce6163be6",
+    },
 ]
+
+
+def is_cross_shard_era():
+    """
+    Returns if the network is in cross shard tx era...
+    """
+    global _is_cross_shard_era
+    if _is_cross_shard_era:
+        return True
+    time.sleep(random.uniform(0.5, 1.5))  # Random to stop burst spam of RPC calls.
+    if all(blockchain.get_current_epoch(e) >= 1 for e in endpoints):
+        _is_cross_shard_era = True
+        return True
+    return False
 
 
 def cross_shard(fn):
     """
     Decorator for tests that requires a cross shard transaction
     """
-    threshold_epoch = 1
 
     @functools.wraps(fn)
     def wrap(*args, **kwargs):
-        while not all(blockchain.get_current_epoch(e) >= threshold_epoch for e in endpoints):
-            time.sleep(random.uniform(0.5, 1))  # Random to stop burst spam of RPC calls.
+        while not is_cross_shard_era():
+            pass
         return fn(*args, **kwargs)
 
     return wrap
+
+
+def is_staking_era():
+    """
+    Returns if the network is in staking era...
+    """
+    global _is_staking_era
+    if _is_staking_era:
+        return True
+    time.sleep(random.uniform(0.5, 1.5))  # Random to stop burst spam of RPC calls.
+    threshold_epoch = blockchain.get_prestaking_epoch(endpoints[beacon_shard_id])
+    if all(blockchain.get_current_epoch(e) >= threshold_epoch for e in endpoints):
+        _is_staking_era = True
+    return False
 
 
 def staking(fn):
     """
     Decorator for tests that requires staking epoch
     """
-    threshold_epoch = blockchain.get_prestaking_epoch(endpoints[0])
 
     @functools.wraps(fn)
     def wrap(*args, **kwargs):
-        while not all(blockchain.get_current_epoch(e) >= threshold_epoch for e in endpoints):
-            time.sleep(random.uniform(0.5, 1))  # Random to stop burst spam of RPC calls.
+        while not is_staking_era():
+            pass
         return fn(*args, **kwargs)
 
     return wrap
@@ -270,10 +334,11 @@ def send_and_confirm_transaction(tx_data, timeout=tx_timeout):
         tx_response = get_transaction(tx_data["hash"], tx_data["from-shard"])
         if tx_response is not None:
             return tx_response
+        time.sleep(random.uniform(0.2, 0.5))  # Random to stop burst spam of RPC calls.
     raise AssertionError("Could not confirm transactions on-chain.")
 
 
-def send_and_confirm_staking_transaction(tx_data, timeout=tx_timeout):
+def send_and_confirm_staking_transaction(tx_data, timeout=tx_timeout * 2):
     """
     Send and confirm the given staking transaction (`tx_data`) within the given `timeout`.
 
@@ -296,6 +361,7 @@ def send_and_confirm_staking_transaction(tx_data, timeout=tx_timeout):
         tx_response = get_staking_transaction(tx_data["hash"])
         if tx_response is not None:
             return tx_response
+        time.sleep(random.uniform(0.2, 0.5))  # Random to stop burst spam of RPC calls.
     raise AssertionError("Could not confirm staking transaction on-chain.")
 
 

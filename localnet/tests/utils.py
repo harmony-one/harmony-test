@@ -2,9 +2,15 @@
 # -*- coding: utf-8 -*-
 import functools
 import json
+import time
+import random
 from threading import Lock
 
-_mutually_exclusive_lock = Lock()
+from pyhmy import (
+    account
+)
+
+_mutually_exclusive_locks = {}
 
 
 def is_valid_json_rpc(response):
@@ -45,8 +51,11 @@ def assert_valid_json_structure(reference, candidate):
     Asserts that the given `candidate` dict (from JSON format) has the
     same keys and values as the `reference` dict (from JSON format).
 
-    Note that if there is a list, the OVERLAPPING elements are the ONLY elements checked.
+    Note that if there is a list, the OVERLAPPING elements that are
+    non-null/non-None are the ONLY elements checked.
     """
+    if reference is None or candidate is None:
+        return
     assert type(reference) == type(candidate), f"Expected type {type(reference)} not {type(candidate)} in {candidate}"
     if type(reference) == list and reference and candidate:  # If no element in list to check, ignore...
         for i in range(min(len(reference), len(candidate))):
@@ -54,11 +63,16 @@ def assert_valid_json_structure(reference, candidate):
     elif type(reference) == dict:
         for key in reference.keys():
             assert key in candidate.keys(), f"Expected key '{key}' in {json.dumps(candidate, indent=2)}"
-            reference_type = type(reference[key])
-            assert isinstance(candidate[key], reference_type), f"Expected type {reference_type} for key '{key}' in {json.dumps(candidate, indent=2)}, not {type(candidate[key])}"
-            if reference_type == dict or reference_type == list:
-                assert_valid_json_structure(reference[key], candidate[key])
+            assert_valid_json_structure(reference[key], candidate[key])
+    elif type(reference) == str:
+        if reference.startswith("0x"):
+            assert candidate.startswith("0x"), f"Expected a hex string, reference: {reference}, got {candidate}"
+        if reference.startswith("one1") and account.is_valid_address(reference):
+            assert account.is_valid_address(
+                candidate), "Expected a valid ONE address, reference: {reference}, got {candidate} "
 
+
+# TODO: change repo name to test
 
 def check_and_unpack_rpc_response(response, expect_error=False):
     if not response:
@@ -73,16 +87,35 @@ def check_and_unpack_rpc_response(response, expect_error=False):
         return response["result"]
 
 
-def mutually_exclusive_test(fn):
+def rerun_delay_filter(delay=5):
+    """
+    A simple filter to rerun a test after a given delay
+    """
+
+    def wrap(err, *args):
+        time.sleep(delay)
+        return True
+
+    return wrap
+
+
+def mutually_exclusive_test(scope=""):
     """
     Decorator for tests that cannot run in parallel together.
     """
-    @functools.wraps(fn)
-    def wrap(*args, **kwargs):
-        _mutually_exclusive_lock.acquire()
-        try:
-            return fn(*args, **kwargs)
-        finally:
-            _mutually_exclusive_lock.release()
+    if scope not in _mutually_exclusive_locks.keys():
+        _mutually_exclusive_locks[scope] = Lock()
 
-    return wrap
+    def decorator(fn):
+        @functools.wraps(fn)
+        def wrap(*args, **kwargs):
+            _mutually_exclusive_locks[scope].acquire()
+            try:
+                return fn(*args, **kwargs)
+            finally:
+                time.sleep(random.uniform(0.5, 1))  # Random to stop burst spam of RPC calls.
+                _mutually_exclusive_locks[scope].release()
+
+        return wrap
+
+    return decorator

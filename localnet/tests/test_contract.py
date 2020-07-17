@@ -3,6 +3,8 @@
 """
 Tests here are related to smart contracts & require a feedback loop with the chain.
 
+TODO: negative test cases
+
 As with all tests, there are 2 JSON-RPC versions/namespaces (v1 & v2) where their difference
 is only suppose to be in the types of their params & returns. v1 keeps everything in hex and
 v2 uses decimal when possible. However, there are some (legacy) discrepancies that some tests
@@ -119,7 +121,8 @@ def test_estimate_gas_v2(deployed_contract):
     RPC currently returns a constant, subject to change in the future, so skip for any error.
     """
     try:
-        raw_response = base_request("hmyv2_estimateGas", params=[{}], endpoint=endpoints[deployed_contract["from-shard"]])
+        raw_response = base_request("hmyv2_estimateGas", params=[{}],
+                                    endpoint=endpoints[deployed_contract["from-shard"]])
         response = check_and_unpack_rpc_response(raw_response, expect_error=False)
         assert response == "0xcf08", f"Expected constant reply for estimate gas to be 0xcf08, got {response}"
     except Exception as e:

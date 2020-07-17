@@ -114,163 +114,6 @@ def test_get_transactions_count(account_test_tx):
     assert response == 1, f"Expected account  {account_test_tx['to']} to have 1 received transactions"
 
 
-def test_get_staking_transactions_count(account_test_tx):
-    """
-    Note that v1 & v2 have the same responses.
-    """
-    reference_response = 0
-
-    # Check v1, SENT
-    raw_response = base_request("hmy_getStakingTransactionsCount",
-                                params=[account_test_tx["to"], "SENT"],
-                                endpoint=endpoints[account_test_tx["shardID"]])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response, response)
-    assert response == 0, f"Expected account  {account_test_tx['to']} to have 0 sent transactions"
-
-    # Check v2, SENT
-    raw_response = base_request("hmyv2_getStakingTransactionsCount",
-                                params=[account_test_tx["to"], "SENT"],
-                                endpoint=endpoints[account_test_tx["shardID"]])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response, response)
-    assert response == 0, f"Expected account  {account_test_tx['to']} to have 0 sent transactions"
-
-    # Check v1, RECEIVED
-    raw_response = base_request("hmy_getStakingTransactionsCount",
-                                params=[account_test_tx["to"], "RECEIVED"],
-                                endpoint=endpoints[account_test_tx["shardID"]])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response, response)
-    assert response == 0, f"Expected account  {account_test_tx['to']} to have 1 received transactions"
-
-    # Check v2, RECEIVED
-    raw_response = base_request("hmyv2_getStakingTransactionsCount",
-                                params=[account_test_tx["to"], "RECEIVED"],
-                                endpoint=endpoints[account_test_tx["shardID"]])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response, response)
-    assert response == 0, f"Expected account  {account_test_tx['to']} to have 1 received transactions"
-
-    # Check v1, ALL
-    raw_response = base_request("hmy_getStakingTransactionsCount",
-                                params=[account_test_tx["to"], "ALL"],
-                                endpoint=endpoints[account_test_tx["shardID"]])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response, response)
-    assert response == 0, f"Expected account  {account_test_tx['to']} to have 1 received transactions"
-
-    # Check v2, ALL
-    raw_response = base_request("hmyv2_getStakingTransactionsCount",
-                                params=[account_test_tx["to"], "ALL"],
-                                endpoint=endpoints[account_test_tx["shardID"]])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response, response)
-    assert response == 0, f"Expected account  {account_test_tx['to']} to have 1 received transactions"
-
-
-def test_get_staking_transaction_history_v1(account_test_tx):
-    """
-    No staking transactions for the 'to' account of `account_test_tx`.
-
-    This method may not be implemented, skip if this is the case
-    """
-    reference_response = {
-        "staking_transactions": []
-    }
-
-    try:
-        raw_response = base_request("hmy_getStakingTransactionsHistory",
-                                    params=[{
-                                        "address": account_test_tx["from"],
-                                        "pageIndex": 0,
-                                        "pageSize": 1000,
-                                        "fullTx": False,
-                                        "txType": "ALL",
-                                        "order": "ASC"
-                                    }],
-                                    endpoint=endpoints[initial_funding[0]["from-shard"]])
-        response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-        assert_valid_json_structure(reference_response, response)
-
-        raw_response = base_request("hmy_getStakingTransactionsHistory",
-                                    params=[{
-                                        "address": account_test_tx["from"],
-                                        "pageIndex": 0,
-                                        "pageSize": 1000,
-                                        "fullTx": True,
-                                        "txType": "ALL",
-                                        "order": "ASC"
-                                    }],
-                                    endpoint=endpoints[initial_funding[0]["from-shard"]])
-        response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-        assert_valid_json_structure(reference_response, response)
-
-        raw_response = base_request("hmy_getStakingTransactionsHistory",
-                                    params=[{
-                                        "address": account_test_tx["from"],
-                                        "pageIndex": 0,
-                                        "pageSize": 1000,
-                                        "fullTx": True,
-                                        "txType": "ALL",
-                                        "order": "DSC"
-                                    }],
-                                    endpoint=endpoints[initial_funding[0]["from-shard"]])
-        response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-        assert_valid_json_structure(reference_response, response)
-    except Exception as e:
-        pytest.skip(traceback.format_exc())
-        pytest.skip(f"Exception: {e}")
-
-
-def test_get_staking_transaction_history_v2(account_test_tx):
-    """
-    No staking transactions for the 'to' account of `account_test_tx`.
-    """
-    reference_response = {
-        "staking_transactions": []
-    }
-
-    raw_response = base_request("hmyv2_getStakingTransactionsHistory",
-                                params=[{
-                                    "address": account_test_tx["from"],
-                                    "pageIndex": 0,
-                                    "pageSize": 1000,
-                                    "fullTx": False,
-                                    "txType": "ALL",
-                                    "order": "ASC"
-                                }],
-                                endpoint=endpoints[initial_funding[0]["from-shard"]])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response, response)
-
-    raw_response = base_request("hmyv2_getStakingTransactionsHistory",
-                                params=[{
-                                    "address": account_test_tx["from"],
-                                    "pageIndex": 0,
-                                    "pageSize": 1000,
-                                    "fullTx": True,
-                                    "txType": "ALL",
-                                    "order": "ASC"
-                                }],
-                                endpoint=endpoints[initial_funding[0]["from-shard"]])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response, response)
-
-    raw_response = base_request("hmyv2_getStakingTransactionsHistory",
-                                params=[{
-                                    "address": account_test_tx["from"],
-                                    "pageIndex": 0,
-                                    "pageSize": 1000,
-                                    "fullTx": True,
-                                    "txType": "ALL",
-                                    "order": "DSC"
-                                }],
-                                endpoint=endpoints[initial_funding[0]["from-shard"]])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response, response)
-
-
 def test_get_transactions_history_v1():
     reference_response_full = {
         "transactions": [
@@ -318,7 +161,7 @@ def test_get_transactions_history_v1():
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response_short, response)
 
-    # Check long tx, ASC
+    # Check long tx
     raw_response = base_request("hmy_getTransactionsHistory",
                                 params=[{
                                     "address": address,
@@ -331,30 +174,6 @@ def test_get_transactions_history_v1():
                                 endpoint=endpoints[initial_funding[0]["from-shard"]])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response_full, response)
-    transactions = response["transactions"]
-    if len(transactions) > 1:
-        for i in range(1, len(transactions)):
-            prev_time, curr_time = int(transactions[i-1]["timestamp"], 16), int(transactions[i]["timestamp"], 16)
-            assert prev_time >= curr_time, f"Transactions are not in ascending order for {json.dumps(response)}"
-
-    # Check long tx, DSC
-    raw_response = base_request("hmy_getTransactionsHistory",
-                                params=[{
-                                    "address": address,
-                                    "pageIndex": 0,
-                                    "pageSize": 1000,
-                                    "fullTx": True,
-                                    "txType": "ALL",
-                                    "order": "DSC"
-                                }],
-                                endpoint=endpoints[initial_funding[0]["from-shard"]])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response_full, response)
-    transactions = response["transactions"]
-    if len(transactions) > 1:
-        for i in range(1, len(transactions)):
-            prev_time, curr_time = int(transactions[i-1]["timestamp"], 16), int(transactions[i]["timestamp"], 16)
-            assert prev_time <= curr_time, f"Transactions are not in ascending order for {json.dumps(response)}"
 
 
 def test_get_transactions_history_v2():
@@ -404,7 +223,7 @@ def test_get_transactions_history_v2():
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response_short, response)
 
-    # Check long tx, ASC
+    # Check long tx
     raw_response = base_request("hmyv2_getTransactionsHistory",
                                 params=[{
                                     "address": address,
@@ -417,30 +236,6 @@ def test_get_transactions_history_v2():
                                 endpoint=endpoints[initial_funding[0]["from-shard"]])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response_full, response)
-    transactions = response["transactions"]
-    if len(transactions) > 1:
-        for i in range(1, len(transactions)):
-            prev_time, curr_time = transactions[i-1]["timestamp"], transactions[i]["timestamp"]
-            assert prev_time >= curr_time, f"Transactions are not in ascending order for {json.dumps(response)}"
-
-    # Check long tx, DSC
-    raw_response = base_request("hmyv2_getTransactionsHistory",
-                                params=[{
-                                    "address": address,
-                                    "pageIndex": 0,
-                                    "pageSize": 1000,
-                                    "fullTx": True,
-                                    "txType": "ALL",
-                                    "order": "DSC"
-                                }],
-                                endpoint=endpoints[initial_funding[0]["from-shard"]])
-    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    assert_valid_json_structure(reference_response_full, response)
-    transactions = response["transactions"]
-    if len(transactions) > 1:
-        for i in range(1, len(transactions)):
-            prev_time, curr_time = transactions[i-1]["timestamp"], transactions[i]["timestamp"]
-            assert prev_time <= curr_time, f"Transactions are not in ascending order for {json.dumps(response)}"
 
 
 def test_get_balances_by_block_number_v1(account_test_tx):

@@ -4,6 +4,8 @@
 Tests here are related to sending a plain transaction & require a
 feedback loop with the chain.
 
+TODO: negative test cases
+
 As with all tests, there are 2 JSON-RPC versions/namespaces (v1 & v2) where their difference
 is only suppose to be in the types of their params & returns. v1 keeps everything in hex and
 v2 uses decimal when possible. However, there are some (legacy) discrepancies that some tests
@@ -35,6 +37,9 @@ from utils import (
     assert_valid_json_structure,
     mutually_exclusive_test
 )
+
+
+_mutex_scope = "transaction"
 
 
 @pytest.fixture(scope="module")
@@ -102,13 +107,11 @@ def test_get_pool_stats():
         "non-executable-count": 0
     }
 
-    raw_response = base_request("hmy_getPoolStats", params=[],
-                                endpoint=endpoints[0])
+    raw_response = base_request("hmy_getPoolStats", params=[], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
 
-    raw_response = base_request("hmyv2_getPoolStats", params=[],
-                                endpoint=endpoints[0])
+    raw_response = base_request("hmyv2_getPoolStats", params=[], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
 
@@ -167,7 +170,7 @@ def test_get_current_transaction_error_sink():
     assert found_errored_tx, f"Could not find errored transaction (hash {error_tx['hash']}) in {json.dumps(response, indent=2)}"
 
 
-@mutually_exclusive_test
+@mutually_exclusive_test(scope=_mutex_scope)
 @txs.cross_shard
 def test_resend_cx(cross_shard_txs):
     """
@@ -272,7 +275,7 @@ def test_get_pending_cx_receipts():
     raise AssertionError(f"Timeout! Pending transaction not found for {json.dumps(cx)}")
 
 
-@mutually_exclusive_test
+@mutually_exclusive_test(scope=_mutex_scope)
 @txs.cross_shard
 def test_get_cx_receipt_by_hash_v1(cross_shard_txs):
     reference_response = {
@@ -292,7 +295,7 @@ def test_get_cx_receipt_by_hash_v1(cross_shard_txs):
     assert_valid_json_structure(reference_response, response)
 
 
-@mutually_exclusive_test
+@mutually_exclusive_test(scope=_mutex_scope)
 @txs.cross_shard
 def test_get_cx_receipt_by_hash_v2(cross_shard_txs):
     reference_response = {
@@ -549,6 +552,15 @@ def test_pending_transactions_v1():
             "s": "0x5c4f1e659b9d371c2e9994aee240b966e36b6dd609747d42c9d9c9f23371d808"
         }
     ]
+
+    in_initially_funded = False
+    for init_tx in initial_funding:
+        if init_tx["to"] == tx["from"] and init_tx["to-shard"] == tx["from-shard"]:
+            in_initially_funded = True
+            break
+    if not in_initially_funded:
+        raise AssertionError(f"Test transaction from address {tx['from']} "
+                             f"not found in set of initially funded accounts.")
 
     if get_transaction(tx["hash"], tx["from-shard"]) is not None:
         pytest.skip(f"Test transaction (hash {tx['hash']}) already present on chain...")
