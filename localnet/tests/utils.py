@@ -72,8 +72,6 @@ def assert_valid_json_structure(reference, candidate):
                 candidate), "Expected a valid ONE address, reference: {reference}, got {candidate} "
 
 
-# TODO: change repo name to test
-
 def check_and_unpack_rpc_response(response, expect_error=False):
     if not response:
         raise AssertionError("No response...")
