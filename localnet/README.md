@@ -49,7 +49,4 @@ docker run -v "$(go env GOPATH)/src/github.com/harmony-one/harmony:/go/src/githu
 
 ## Requirements (dev testing - no docker)
 
-* python3 
-* pyhmy python3 library (20.5.16)
-* pytest python3 library (5.4.3)
-* go 1.14
+* python 3.6+ 
