@@ -24,5 +24,5 @@ run:
 	bash ./scripts/run.sh
 
 test:
-	python3 -u -m py.test -v -r s -s tests -n auto
+	python3 -u -m py.test -v -r s -s tests -x -n 8
 

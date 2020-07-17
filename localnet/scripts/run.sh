@@ -103,9 +103,8 @@ wait_for_localnet_boot 100 # Timeout at ~300 seconds
 
 echo -e "\n=== \e[38;5;0;48;5;255mSTARTING TESTS\e[0m ===\n"
 sleep 5
-proc_count=$(nproc)
-error=0
-cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -x -n $((proc_count < 8 ? 8 : proc_count)) || error=1
+# Use 8 or less threads, high thread count can lead to burst RPC calls, which can lead to some RPC calls being rejected.
+cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -x -n 8 || error=1
 
 if [ "$KEEP" == "true" ]; then
   tail -f /dev/null
