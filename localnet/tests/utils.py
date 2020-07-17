@@ -69,7 +69,7 @@ def assert_valid_json_structure(reference, candidate):
             assert candidate.startswith("0x"), f"Expected a hex string, reference: {reference}, got {candidate}"
         if reference.startswith("one1") and account.is_valid_address(reference):
             assert account.is_valid_address(
-                candidate), "Expected a valid ONE address, reference: {reference}, got {candidate} "
+                candidate), f"Expected a valid ONE address, reference: {reference}, got {candidate} "
 
 
 def check_and_unpack_rpc_response(response, expect_error=False):
