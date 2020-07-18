@@ -21,7 +21,6 @@ function setup() {
     exit 1
   fi
   kill_localnet
-  error=0
 }
 
 function build_and_start_localnet() {
@@ -49,7 +48,7 @@ function go_tests() {
     bash ./scripts/go_executable_build.sh -S
     BUILD=False
   fi
-  bash ./scripts/travis_checker.sh || error=1
+  bash ./scripts/travis_checker.sh
   popd
 }
 
@@ -60,8 +59,14 @@ function rpc_tests() {
 
   echo -e "\n=== \e[38;5;0;48;5;255mSTARTING TESTS\e[0m ===\n"
   sleep 5
+  error=0
   # Use 8 or less threads, high thread count can lead to burst RPC calls, which can lead to some RPC calls being rejected.
   cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -x -n 8 || error=1
+
+  if [ "$KEEP" == "true" ]; then
+    tail -f /dev/null
+  fi
+  exit "$error"
 }
 
 function wait_for_localnet_boot() {
@@ -121,7 +126,7 @@ Integration tester for localnet
 
 Option:      Help:
 -B           Do NOT build binray before testing
--k           Keep localnet running after tests are finished
+-k           Keep localnet running after RPC tests are finished
 -g           ONLY run go tests & checks
 -r           ONLY run RPC tests
 "
@@ -139,9 +144,3 @@ fi
 if [ "$RPCTESTS" == "true" ]; then
   rpc_tests
 fi
-
-if [ "$KEEP" == "true" ]; then
-  tail -f /dev/null
-fi
-
-exit "$error"
