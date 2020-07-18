@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+Here are a collection of helper function, classes, and decorators used in all of the tests.
+
+TODO: make this a library.
+"""
 import functools
 import json
 import time

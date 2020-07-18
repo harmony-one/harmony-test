@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+Pytest config file. All functions here get ran before collecting all tests and executing them.
+"""
 import time
 
 from pyhmy import (
