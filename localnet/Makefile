@@ -18,10 +18,10 @@ build:
 build-cached:
 	docker build -t harmonyone/node-test .
 
-upload-test:
+upload-test: build
 	bash ./scripts/release_test.sh
 
-upload:
+upload: build
 	docker push harmonyone/node-test
 
 run:
