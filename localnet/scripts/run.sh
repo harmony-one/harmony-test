@@ -5,7 +5,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 harmony_dir="$(go env GOPATH)/src/github.com/harmony-one/harmony"
 localnet_config=$(realpath "$DIR/../configs/localnet_deploy.config")
 
-function kill_localnet(){
+function kill_localnet() {
   pushd "$(pwd)"
   cd "$harmony_dir" && bash ./test/kill_node.sh
   popd
@@ -34,9 +34,39 @@ function build_and_start_localnet() {
   if [ "$BUILD" == "true" ]; then
     # Dynamic for faster build iterations
     bash ./scripts/go_executable_build.sh -S
+    BUILD=False
   fi
-  bash ./test/deploy.sh -B -D 60000 "$localnet_config"  2>&1 | tee "$localnet_log"
+  bash ./test/deploy.sh -B -D 60000 "$localnet_config" 2>&1 | tee "$localnet_log"
   popd
+}
+
+function go_tests() {
+  cd "$harmony_dir"
+  pushd "$(pwd)"
+  if [ "$BUILD" == "true" ]; then
+    # Dynamic for faster build iterations
+    bash ./scripts/go_executable_build.sh -S
+    BUILD=False
+  fi
+  bash ./scripts/travis_checker.sh
+  popd
+}
+
+function rpc_tests() {
+  build_and_start_localnet || exit 1 &
+  sleep 20
+  wait_for_localnet_boot 100 # Timeout at ~300 seconds
+
+  echo -e "\n=== \e[38;5;0;48;5;255mSTARTING TESTS\e[0m ===\n"
+  sleep 5
+  error=0
+  # Use 8 or less threads, high thread count can lead to burst RPC calls, which can lead to some RPC calls being rejected.
+  cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -x -n 8 || error=1
+
+  if [ "$KEEP" == "true" ]; then
+    tail -f /dev/null
+  fi
+  exit "$error"
 }
 
 function wait_for_localnet_boot() {
@@ -49,7 +79,7 @@ function wait_for_localnet_boot() {
     --header "Content-Type: application/json" \
     --data '{"jsonrpc":"2.0","method":"net_version","params":[],"id":1}' >/dev/null; do
     echo "Trying to connect to localnet..."
-    if ((i > timeout )); then
+    if ((i > timeout)); then
       echo "TIMEOUT REACHED"
       exit 1
     fi
@@ -64,7 +94,7 @@ function wait_for_localnet_boot() {
       --data '{"jsonrpc":"2.0","method":"hmy_blockNumber","params":[],"id":1}' | jq '.result')
     if [ "$result" = "\"0x0\"" ]; then
       echo "Waiting for localnet to boot..."
-      if ((i > timeout )); then
+      if ((i > timeout)); then
         echo "TIMEOUT REACHED"
         exit 1
       fi
@@ -81,23 +111,36 @@ function wait_for_localnet_boot() {
 trap kill_localnet SIGINT SIGTERM EXIT
 
 BUILD=true
-while getopts "B" option; do
+KEEP=false
+GOTESTS=true
+RPCTESTS=true
+
+while getopts "Bkgr" option; do
   case ${option} in
-  B) BUILD=false;;
+  B) BUILD=false ;;
+  k) KEEP=true ;;
+  g) RPCTESTS=false ;;
+  r) GOTESTS=false ;;
   *) echo "
 Integration tester for localnet
 
 Option:      Help:
 -B           Do NOT build binray before testing
+-k           Keep localnet running after RPC tests are finished
+-g           ONLY run go tests & checks
+-r           ONLY run RPC tests
 "
+  exit 0
+  ;;
   esac
 done
 
-
 setup
-build_and_start_localnet || exit 1 &
-sleep 20
-wait_for_localnet_boot 100
-echo -e "\n=== \e[38;5;0;48;5;255mSTARTING TESTS\e[0m ===\n"
-sleep 5
-cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests
+
+if [ "$GOTESTS" == "true" ]; then
+  go_tests
+fi
+
+if [ "$RPCTESTS" == "true" ]; then
+  rpc_tests
+fi

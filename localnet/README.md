@@ -14,6 +14,15 @@ $(go env GOPATH)/src/github.com/harmony-one/harmony-tests
 * No extra transactions on the localnet are done prior to running the pytest in `./tests`
 * The localnet faucet address is `one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur` 
 
+## Requirements (dev testing - no docker)
+
+* python 3.6+ 
+* pip3
+* Requirements from 
+```bash
+make install
+```
+
 ## Build & run tests
 * To build the docker image locally, do:
 ```bash
@@ -30,21 +39,32 @@ docker build -t "$TAG_NAME" .
 make upload
 ```
 
-* To run the localnet tests outside of the docker image (for dev testing), do:
+* To run the test (start localnet, test, and teardown) outside of the docker image (for dev testing), do:
 ```bash
-make test
+make run
 ```
 > This will test whatever is in the main repo (following GO-PATH convention). 
 
+* If you already have a localnet running and want to run just the test suite, do:
+```bash
+make test
+```
+
 * To run the localnet tests, do:
 ```bash
-docker run -v "$(go env GOPATH)/src/github.com/harmony-one/harmony:/go/src/github.com/harmony-one/harmony" harmonyone/node-test 
+docker run -it -v "$(go env GOPATH)/src/github.com/harmony-one/harmony:/go/src/github.com/harmony-one/harmony" harmonyone/localnet
 ```
 > This will test whatever is in the main repo (following GO-PATH convention).
 
-## Requirements (dev testing - no docker)
+## Release
 
-* python3 
-* pyhmy python3 library (20.5.16)
-* pytest python3 library (5.4.3)
-* go 1.14
+To release the docker image (used by PR test & main repo), first make sure it passes the release test:
+```bash
+make upload-test
+```
+> This will run the tests, wrapped in a docker img, 10 times and expects all 10 times to be successful.
+
+Then upload with (assuming you have proper docker-hub credentials):
+```bash
+make upload
+```
