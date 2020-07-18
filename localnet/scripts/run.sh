@@ -119,12 +119,12 @@ KEEP=false
 GOTESTS=true
 NODEAPI=true
 
-while getopts "Bkga" option; do
+while getopts "Bkgn" option; do
   case ${option} in
   B) BUILD=false ;;
   k) KEEP=true ;;
   g) NODEAPI=false ;;
-  a) GOTESTS=false ;;
+  n) GOTESTS=false ;;
   *) echo "
 Integration tester for localnet
 
@@ -132,7 +132,7 @@ Option:      Help:
 -B           Do NOT build binray before testing
 -k           Keep localnet running after Node API tests are finished
 -g           ONLY run go tests & checks
--a           ONLY run the Node API tests
+-n           ONLY run the Node API tests
 "
   exit 0
   ;;
