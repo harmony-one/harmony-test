@@ -144,7 +144,7 @@ def test_get_transactions_history_v1():
         ]
     }
 
-    address = initial_funding[0]["from"]  # Assumption made that this account has MULTIPLE transactions (to test order)
+    address = initial_funding[0]["from"]
 
     # Check short tx
     raw_response = base_request("hmy_getTransactionsHistory",
@@ -206,7 +206,7 @@ def test_get_transactions_history_v2():
         ]
     }
 
-    address = initial_funding[0]["from"]  # Assumption made that this account has MULTIPLE transactions (to test order)
+    address = initial_funding[0]["from"]
 
     # Check short tx
     raw_response = base_request("hmyv2_getTransactionsHistory",
