@@ -23,7 +23,7 @@ RUN rm -rf harmony
 # Install testing tools
 WORKDIR $GOPATH/src/github.com/harmony-one/harmony-tests/localnet
 
-RUN mkdir -p /root/bin && cd /root/bin && curl -LO https://harmony.one/hmycli && mv hmycli hmy && chmod +x hmy
+RUN curl -L -o /go/bin/hmy https://harmony.one/hmycli && chmod +x /go/bin/hmy
 
 COPY scripts scripts
 
