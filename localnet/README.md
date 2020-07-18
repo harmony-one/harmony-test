@@ -17,6 +17,11 @@ $(go env GOPATH)/src/github.com/harmony-one/harmony-tests
 ## Requirements (dev testing - no docker)
 
 * python 3.6+ 
+* pip3
+* Requirements from 
+```bash
+make install
+```
 
 ## Build & run tests
 * To build the docker image locally, do:
