@@ -47,7 +47,7 @@ make test
 
 * To run the localnet tests, do:
 ```bash
-docker run -v "$(go env GOPATH)/src/github.com/harmony-one/harmony:/go/src/github.com/harmony-one/harmony" harmonyone/node-test 
+docker run -it -v "$(go env GOPATH)/src/github.com/harmony-one/harmony:/go/src/github.com/harmony-one/harmony" harmonyone/localnet
 ```
 > This will test whatever is in the main repo (following GO-PATH convention).
 

@@ -13,16 +13,16 @@ install:
 	python3 -m pip install -r requirements.txt
 
 build:
-	docker build -t harmonyone/node-test . --no-cache
+	docker build -t harmonyone/localnet-test . --no-cache
 
 build-cached:
-	docker build -t harmonyone/node-test .
+	docker build -t harmonyone/localnet-test .
 
 upload-test: build
 	bash ./scripts/release_test.sh
 
 upload: build
-	docker push harmonyone/node-test
+	docker push harmonyone/localnet-test
 
 run:
 	bash ./scripts/run.sh
