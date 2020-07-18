@@ -60,7 +60,8 @@ function api_tests() {
   sleep 20
   wait_for_localnet_boot 100 # Timeout at ~300 seconds
 
-  sleep 5
+  echo "Starting test suite..."
+  sleep 3
   error=0
   # Use 8 or less threads, high thread count can lead to burst RPC calls, which can lead to some RPC calls being rejected.
   cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -x -n 8 || error=1
