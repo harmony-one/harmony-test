@@ -41,27 +41,30 @@ function build_and_start_localnet() {
 }
 
 function go_tests() {
-  cd "$harmony_dir"
+  echo -e "\n=== \e[38;5;0;48;5;255mSTARTING GO TESTS\e[0m ===\n"
   pushd "$(pwd)"
+  cd "$harmony_dir"
   if [ "$BUILD" == "true" ]; then
     # Dynamic for faster build iterations
     bash ./scripts/go_executable_build.sh -S
     BUILD=False
   fi
   bash ./scripts/travis_checker.sh
+  echo -e "\n=== \e[38;5;0;48;5;255mFINISHED GO TESTS\e[0m ===\n"
   popd
 }
 
 function api_tests() {
+  echo -e "\n=== \e[38;5;0;48;5;255mSTARTING NODE API TESTS\e[0m ===\n"
   build_and_start_localnet || exit 1 &
   sleep 20
   wait_for_localnet_boot 100 # Timeout at ~300 seconds
 
-  echo -e "\n=== \e[38;5;0;48;5;255mSTARTING TESTS\e[0m ===\n"
   sleep 5
   error=0
   # Use 8 or less threads, high thread count can lead to burst RPC calls, which can lead to some RPC calls being rejected.
   cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -x -n 8 || error=1
+  echo -e "\n=== \e[38;5;0;48;5;255mFINISHED NODE API TESTS\e[0m ===\n"
 
   if [ "$KEEP" == "true" ]; then
     tail -f /dev/null
