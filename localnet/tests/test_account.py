@@ -4,14 +4,13 @@
 Tests here are related to account information. Some tests require a
 feedback loop with the chain.
 
+TODO: negative test cases
+
 As with all tests, there are 2 JSON-RPC versions/namespaces (v1 & v2) where their difference
 is only suppose to be in the types of their params & returns. v1 keeps everything in hex and
 v2 uses decimal when possible. However, there are some (legacy) discrepancies that some tests
 enforce. These tests are noted and should NOT be broken.
 """
-import json
-import traceback
-
 import pytest
 from pyhmy.rpc.request import (
     base_request
