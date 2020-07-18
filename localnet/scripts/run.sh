@@ -21,6 +21,7 @@ function setup() {
     exit 1
   fi
   kill_localnet
+  error=0
 }
 
 function build_and_start_localnet() {
@@ -34,9 +35,33 @@ function build_and_start_localnet() {
   if [ "$BUILD" == "true" ]; then
     # Dynamic for faster build iterations
     bash ./scripts/go_executable_build.sh -S
+    BUILD=False
   fi
   bash ./test/deploy.sh -B -D 60000 "$localnet_config" 2>&1 | tee "$localnet_log"
   popd
+}
+
+function go_tests() {
+  cd "$harmony_dir"
+  pushd "$(pwd)"
+  if [ "$BUILD" == "true" ]; then
+    # Dynamic for faster build iterations
+    bash ./scripts/go_executable_build.sh -S
+    BUILD=False
+  fi
+  bash ./scripts/travis_checker.sh || error=1
+  popd
+}
+
+function rpc_tests() {
+  build_and_start_localnet || exit 1 &
+  sleep 20
+  wait_for_localnet_boot 100 # Timeout at ~300 seconds
+
+  echo -e "\n=== \e[38;5;0;48;5;255mSTARTING TESTS\e[0m ===\n"
+  sleep 5
+  # Use 8 or less threads, high thread count can lead to burst RPC calls, which can lead to some RPC calls being rejected.
+  cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -x -n 8 || error=1
 }
 
 function wait_for_localnet_boot() {
@@ -82,32 +107,41 @@ trap kill_localnet SIGINT SIGTERM EXIT
 
 BUILD=true
 KEEP=false
-while getopts "Bk" option; do
+GOTESTS=true
+RPCTESTS=true
+
+while getopts "Bkgr" option; do
   case ${option} in
   B) BUILD=false ;;
   k) KEEP=true ;;
+  g) RPCTESTS=false ;;
+  r) GOTESTS=false ;;
   *) echo "
 Integration tester for localnet
 
 Option:      Help:
 -B           Do NOT build binray before testing
 -k           Keep localnet running after tests are finished
-" ;;
+-g           ONLY run go tests & checks
+-r           ONLY run RPC tests
+"
+  exit 0
+  ;;
   esac
 done
 
 setup
-build_and_start_localnet || exit 1 &
-sleep 20
-wait_for_localnet_boot 100 # Timeout at ~300 seconds
 
-echo -e "\n=== \e[38;5;0;48;5;255mSTARTING TESTS\e[0m ===\n"
-sleep 5
-error=0
-# Use 8 or less threads, high thread count can lead to burst RPC calls, which can lead to some RPC calls being rejected.
-cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -x -n 8 || error=1
+if [ "$GOTESTS" == "true" ]; then
+  go_tests
+fi
+
+if [ "$RPCTESTS" == "true" ]; then
+  rpc_tests
+fi
 
 if [ "$KEEP" == "true" ]; then
   tail -f /dev/null
 fi
+
 exit "$error"
