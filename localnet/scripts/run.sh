@@ -52,7 +52,7 @@ function go_tests() {
   popd
 }
 
-function rpc_tests() {
+function api_tests() {
   build_and_start_localnet || exit 1 &
   sleep 20
   wait_for_localnet_boot 100 # Timeout at ~300 seconds
@@ -113,22 +113,22 @@ trap kill_localnet SIGINT SIGTERM EXIT
 BUILD=true
 KEEP=false
 GOTESTS=true
-RPCTESTS=true
+NODEAPI=true
 
 while getopts "Bkgr" option; do
   case ${option} in
   B) BUILD=false ;;
   k) KEEP=true ;;
-  g) RPCTESTS=false ;;
+  g) NODEAPI=false ;;
   r) GOTESTS=false ;;
   *) echo "
 Integration tester for localnet
 
 Option:      Help:
 -B           Do NOT build binray before testing
--k           Keep localnet running after RPC tests are finished
+-k           Keep localnet running after Node API tests are finished
 -g           ONLY run go tests & checks
--r           ONLY run RPC tests
+-a           ONLY run the Node API tests
 "
   exit 0
   ;;
@@ -141,6 +141,6 @@ if [ "$GOTESTS" == "true" ]; then
   go_tests
 fi
 
-if [ "$RPCTESTS" == "true" ]; then
-  rpc_tests
+if [ "$NODEAPI" == "true" ]; then
+  api_tests
 fi
