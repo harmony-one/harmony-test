@@ -119,12 +119,12 @@ KEEP=false
 GOTESTS=true
 NODEAPI=true
 
-while getopts "Bkgr" option; do
+while getopts "Bkga" option; do
   case ${option} in
   B) BUILD=false ;;
   k) KEEP=true ;;
   g) NODEAPI=false ;;
-  r) GOTESTS=false ;;
+  a) GOTESTS=false ;;
   *) echo "
 Integration tester for localnet
 
