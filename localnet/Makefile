@@ -25,7 +25,7 @@ upload: build
 	docker push harmonyone/localnet-test
 
 run:
-	bash ./scripts/run.sh
+	bash ./scripts/run.sh -r
 
 test:
 	python3 -u -m py.test -v -r s -s tests -x -n 8
