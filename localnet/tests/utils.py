@@ -61,7 +61,10 @@ def assert_valid_json_structure(reference, candidate):
     """
     if reference is None or candidate is None:
         return
-    assert type(reference) == type(candidate), f"Expected type {type(reference)} not {type(candidate)} in {candidate}"
+    if isinstance(reference, (int, float)):
+        assert isinstance(candidate, (int, float)), f"Expected type a float or int not {type(candidate)} in {candidate}"
+    else:
+        assert type(reference) == type(candidate), f"Expected type {type(reference)} not {type(candidate)} in {candidate}"
     if type(reference) == list and reference and candidate:  # If no element in list to check, ignore...
         for i in range(min(len(reference), len(candidate))):
             assert_valid_json_structure(reference[i], candidate[i])
