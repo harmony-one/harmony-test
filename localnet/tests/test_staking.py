@@ -265,6 +265,58 @@ def test_get_all_validator_addresses(s0_validator, s1_validator):
 
 
 @txs.staking
+def test_get_transaction_receipt_v1(s0_validator):
+    reference_response = {
+        "blockHash": "0x5890ceb902713f4f32f80764359e5b2ffec1fd84ad6f0bf75d5c22a6f1530d1d",
+        "blockNumber": "0x7",
+        "contractAddress": None,
+        "cumulativeGasUsed": "0x5121c4",
+        "gasUsed": "0x5121c4",
+        "logs": [],
+        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "sender": "one109r0tns7av5sjew7a7fkekg4fs3pw0h76pp45e",
+        "status": "0x1",
+        "transactionHash": "0xf80460f1ad041a0a0e841da717fc5b7959b1a7e9a0ce9a25cd70c0ce40d5ff26",
+        "transactionIndex": "0x0",
+        "type": 0
+    }
+
+    raw_response = base_request("hmy_getTransactionReceipt",
+                                params=[s0_validator["hash"]],
+                                endpoint=endpoints[beacon_shard_id])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
+    assert response["transactionHash"] == s0_validator["hash"], f"Expected transaction {s0_validator['hash']}, " \
+                                                                f"got {response['transactionHash']}"
+
+
+@txs.staking
+def test_get_transaction_receipt_v2(s0_validator):
+    reference_response = {
+        "blockHash": "0x5890ceb902713f4f32f80764359e5b2ffec1fd84ad6f0bf75d5c22a6f1530d1d",
+        "blockNumber": 7,
+        "contractAddress": None,
+        "cumulativeGasUsed": 5317060,
+        "gasUsed": 5317060,
+        "logs": [],
+        "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "sender": "one109r0tns7av5sjew7a7fkekg4fs3pw0h76pp45e",
+        "status": 1,
+        "transactionHash": "0xf80460f1ad041a0a0e841da717fc5b7959b1a7e9a0ce9a25cd70c0ce40d5ff26",
+        "transactionIndex": 0,
+        "type": 0
+    }
+
+    raw_response = base_request("hmyv2_getTransactionReceipt",
+                                params=[s0_validator["hash"]],
+                                endpoint=endpoints[beacon_shard_id])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
+    assert response["transactionHash"] == s0_validator["hash"], f"Expected transaction {s0_validator['hash']}, " \
+                                                                f"got {response['transactionHash']}"
+
+
+@txs.staking
 def test_get_staking_transactions_count(s0_validator):
     """
     Note that v1 & v2 have the same responses.
