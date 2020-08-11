@@ -51,6 +51,11 @@ def is_valid_json_rpc(response):
         return False
 
 
+def assert_no_null_in_list(lst):
+    assert isinstance(lst, list), f"Sanity check: expected lst to of type list not {type(lst)}"
+    assert None not in lst, f"Expected no nulls in {lst}"
+
+
 def assert_valid_json_structure(reference, candidate):
     """
     Asserts that the given `candidate` dict (from JSON format) has the

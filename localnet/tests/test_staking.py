@@ -39,7 +39,8 @@ from utils import (
     check_and_unpack_rpc_response,
     assert_valid_json_structure,
     mutually_exclusive_test,
-    rerun_delay_filter
+    rerun_delay_filter,
+    assert_no_null_in_list
 )
 
 _mutex_scope = "staking"
@@ -444,6 +445,8 @@ def test_get_all_validator_information(s0_validator, s1_validator):
         elif validator["validator"]["address"] == s1_validator["validator-addr"]:
             found_s1 = True
             _assert_validator_info(s1_validator, validator)
+        for delegation in validator["validator"]["delegations"]:
+            assert_no_null_in_list(delegation["undelegations"])
     assert found_s0 and found_s1, f"Expected to find validator information for " \
                                   f"{s0_validator['validator-addr']} and {s1_validator['validator-addr']}"
 
@@ -459,6 +462,8 @@ def test_get_all_validator_information(s0_validator, s1_validator):
         elif validator["validator"]["address"] == s1_validator["validator-addr"]:
             found_s1 = True
             _assert_validator_info(s1_validator, validator)
+        for delegation in validator["validator"]["delegations"]:
+            assert_no_null_in_list(delegation["undelegations"])
     assert found_s0 and found_s1, f"Expected to found validator information for " \
                                   f"{s0_validator['validator-addr']} and {s1_validator['validator-addr']}"
 
@@ -527,6 +532,8 @@ def test_get_validator_information(s0_validator):
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
     _assert_validator_info(s0_validator, response)
+    for delegation in response["validator"]["delegations"]:
+        assert_no_null_in_list(delegation["undelegations"])
 
     # Check v2
     raw_response = base_request("hmyv2_getValidatorInformation", params=[s0_validator["validator-addr"]],
@@ -534,6 +541,8 @@ def test_get_validator_information(s0_validator):
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
     _assert_validator_info(s0_validator, response)
+    for delegation in response["validator"]["delegations"]:
+        assert_no_null_in_list(delegation["undelegations"])
 
 
 @txs.staking
@@ -773,8 +782,10 @@ def test_get_delegations_by_delegator(s1_validator):
                                     endpoint=endpoints[beacon_shard_id])
         response = check_and_unpack_rpc_response(raw_response, expect_error=False)
         assert_valid_json_structure(reference_response, response)
+        assert_no_null_in_list(response)
         found_validator = False
         for del_delegator in response:
+            assert_no_null_in_list(del_delegator["Undelegations"])
             if del_delegator["validator_address"] == val_addr:
                 found_validator = True
             assert del_addr == del_delegator["delegator_address"], f"Expected delegator address {del_addr}, " \
@@ -786,8 +797,10 @@ def test_get_delegations_by_delegator(s1_validator):
                                     endpoint=endpoints[beacon_shard_id])
         response = check_and_unpack_rpc_response(raw_response, expect_error=False)
         assert_valid_json_structure(reference_response, response)
+        assert_no_null_in_list(response)
         found_validator = False
         for del_delegator in response:
+            assert_no_null_in_list(del_delegator["Undelegations"])
             if del_delegator["validator_address"] == val_addr:
                 found_validator = True
             assert del_addr == del_delegator["delegator_address"], f"Expected delegator address {del_addr}, " \
@@ -822,8 +835,10 @@ def test_get_delegations_by_delegator_by_block_number(s1_validator):
                                     endpoint=endpoints[beacon_shard_id])
         response = check_and_unpack_rpc_response(raw_response, expect_error=False)
         assert_valid_json_structure(reference_response, response)
+        assert_no_null_in_list(response)
         found_validator = False
         for del_delegator in response:
+            assert_no_null_in_list(del_delegator["Undelegations"])
             if del_delegator["validator_address"] == val_addr:
                 found_validator = True
             assert del_addr == del_delegator["delegator_address"], f"Expected delegator address {del_addr}, " \
@@ -835,8 +850,10 @@ def test_get_delegations_by_delegator_by_block_number(s1_validator):
                                     endpoint=endpoints[beacon_shard_id])
         response = check_and_unpack_rpc_response(raw_response, expect_error=False)
         assert_valid_json_structure(reference_response, response)
+        assert_no_null_in_list(response)
         found_validator = False
         for del_delegator in response:
+            assert_no_null_in_list(del_delegator["Undelegations"])
             if del_delegator["validator_address"] == val_addr:
                 found_validator = True
             assert del_addr == del_delegator["delegator_address"], f"Expected delegator address {del_addr}, " \
@@ -869,7 +886,9 @@ def test_get_delegations_by_validator(s1_validator):
                                 endpoint=endpoints[beacon_shard_id])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
+    assert_no_null_in_list(response)
     for del_delegator in response:
+        assert_no_null_in_list(del_delegator["Undelegations"])
         del_val_addr, del_del_addr = del_delegator["validator_address"], del_delegator["delegator_address"]
         assert del_val_addr == val_addr, f"Expected validator addr {val_addr}, got {del_val_addr}"
         assert del_del_addr in val_del_addrs, f"Expected delegator addr {val_addr} in {val_del_addrs}"
