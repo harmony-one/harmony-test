@@ -52,7 +52,7 @@ def is_valid_json_rpc(response):
 
 
 def assert_no_null_in_list(lst):
-    assert isinstance(lst, list), f"Sanity check: expected lst to of type list not {type(lst)}"
+    assert isinstance(lst, list), f"Sanity check: expected lst to be of type list not {type(lst)}"
     assert None not in lst, f"Expected no nulls in {lst}"
 
 
