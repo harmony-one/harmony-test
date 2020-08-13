@@ -63,8 +63,8 @@ function api_tests() {
   echo "Starting test suite..."
   sleep 3
   error=0
-  # Use 8 or less threads, high thread count can lead to burst RPC calls, which can lead to some RPC calls being rejected.
-  cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -x -n 8 || error=1
+  # Use 4 or less threads, high thread count can lead to burst RPC calls, which can lead to some RPC calls being rejected.
+  cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -x -n 4 || error=1
   echo -e "\n=== \e[38;5;0;48;5;255mFINISHED NODE API TESTS\e[0m ===\n"
 
   if [ "$KEEP" == "true" ]; then
