@@ -301,6 +301,27 @@ def test_get_header_by_number():
     assert response["shardID"] == 0
 
 
+def test_get_block_signers():
+    """
+    Note that v1 & v2 have the same responses.
+    """
+    reference_response = [
+        "one1gh043zc95e6mtutwy5a2zhvsxv7lnlklkj42ux"
+    ]
+
+    # Check v1
+    raw_response = base_request("hmy_getBlockSigners", params=["0x1"], endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
+    assert len(response) > 0, "expect at least 1 signer"
+
+    # Check v2
+    raw_response = base_request("hmyv2_getBlockSigners", params=[1], endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
+    assert len(response) > 0, "expect at least 1 signer"
+
+
 def test_get_block_number_v1():
     raw_response = base_request("hmy_blockNumber", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
