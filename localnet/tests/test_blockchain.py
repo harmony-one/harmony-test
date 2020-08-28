@@ -21,6 +21,7 @@ from pyhmy.rpc.request import (
 )
 
 import txs
+from flaky import flaky
 from txs import (
     endpoints,
     initial_funding
@@ -28,7 +29,8 @@ from txs import (
 from utils import (
     assert_valid_json_structure,
     check_and_unpack_rpc_response,
-    mutually_exclusive_test
+    mutually_exclusive_test,
+    rerun_delay_filter
 )
 
 _mutex_scope = "blockchain"
@@ -251,6 +253,8 @@ def test_get_leader_address():
         assert ref_len == len(response.replace("0x", "")), f"Leader address hash is not of length {ref_len}"
 
 
+@flaky(max_runs=6, rerun_filter=rerun_delay_filter(delay=8))
+@txs.cross_shard
 def test_get_block_signer_keys():
     """
     Note that v1 & v2 have the same responses.
@@ -260,12 +264,12 @@ def test_get_block_signer_keys():
     ]
 
     # Check v1
-    raw_response = base_request("hmy_getBlockSignerKeys", params=["0x0"], endpoint=endpoints[0])
+    raw_response = base_request("hmy_getBlockSignerKeys", params=["0x2"], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
 
     # Check v2
-    raw_response = base_request("hmyv2_getBlockSignerKeys", params=[0], endpoint=endpoints[0])
+    raw_response = base_request("hmyv2_getBlockSignerKeys", params=[2], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
 
@@ -301,6 +305,8 @@ def test_get_header_by_number():
     assert response["shardID"] == 0
 
 
+@flaky(max_runs=6, rerun_filter=rerun_delay_filter(delay=8))
+@txs.cross_shard
 def test_get_block_signers():
     """
     Note that v1 & v2 have the same responses.
@@ -310,13 +316,13 @@ def test_get_block_signers():
     ]
 
     # Check v1
-    raw_response = base_request("hmy_getBlockSigners", params=["0x1"], endpoint=endpoints[0])
+    raw_response = base_request("hmy_getBlockSigners", params=["0x2"], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
     assert len(response) > 0, "expect at least 1 signer"
 
     # Check v2
-    raw_response = base_request("hmyv2_getBlockSigners", params=[1], endpoint=endpoints[0])
+    raw_response = base_request("hmyv2_getBlockSigners", params=[2], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
     assert len(response) > 0, "expect at least 1 signer"
