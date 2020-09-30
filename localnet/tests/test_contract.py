@@ -93,7 +93,7 @@ def test_call_v1(deployed_contract):
         response = check_and_unpack_rpc_response(raw_response, expect_error=False)
         assert isinstance(response, str) and response.startswith("0x")  # Must be a hex string
     except Exception as e:
-        pytest.skip(e)  # RPC format being reworked, fix when finished
+        pytest.skip("RPC format being reworked, fix when finished")
 
 
 def test_call_v2(deployed_contract):
@@ -109,7 +109,7 @@ def test_call_v2(deployed_contract):
         response = check_and_unpack_rpc_response(raw_response, expect_error=False)
         assert isinstance(response, str) and response.startswith("0x")  # Must be a hex string
     except Exception as e:
-        pytest.skip(e)  # RPC format being reworked, fix when finished
+        pytest.skip("RPC format being reworked, fix when finished")
 
 
 def test_estimate_gas_v1(deployed_contract):
