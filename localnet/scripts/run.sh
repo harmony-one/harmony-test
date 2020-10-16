@@ -109,6 +109,7 @@ function wait_for_localnet_boot() {
     fi
   done
 
+  sleep 15  # Give some slack to ensure localnet is booted...
   echo "Localnet booted."
 }
 
