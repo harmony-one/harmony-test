@@ -34,7 +34,7 @@
     "balance_tracking_disabled": false,
     "coin_tracking_disabled": false,
     "end_conditions": {
-      "duration": 60,
+      "duration": 30,
       "reconciliation_coverage": {
         "coverage": 0.95,
         "from_tip": true
@@ -102,7 +102,7 @@
       },
       {
         "name": "create_account",
-        "concurrency": 1,
+        "concurrency": 10,
         "scenarios": [
           {
             "name": "create_account",
@@ -132,7 +132,7 @@
       },
       {
         "name": "transfer",
-        "concurrency": 10,
+        "concurrency": 1,
         "scenarios": [
           {
             "name": "transfer",
@@ -310,10 +310,10 @@
       }
     ],
     "end_conditions": {
-      "create_account": 2,
-      "transfer": 10,
-      "cross_shard_transfer": 10,
-      "contract_creation": 10
+      "create_account": 1,
+      "transfer": 1,
+      "cross_shard_transfer": 1,
+      "contract_creation": 1
     }
   }
 }

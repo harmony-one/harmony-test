@@ -21,6 +21,7 @@ function setup() {
     exit 1
   fi
   kill_localnet
+  error=0  # reset error/exit code
 }
 
 function build_and_start_localnet() {
@@ -49,28 +50,38 @@ function go_tests() {
     bash ./scripts/go_executable_build.sh -S
     BUILD=False
   fi
-  bash ./scripts/travis_checker.sh
+  bash ./scripts/travis_checker.sh || error=1
   echo -e "\n=== \e[38;5;0;48;5;255mFINISHED GO TESTS\e[0m ===\n"
   popd
 }
 
-function api_tests() {
-  echo -e "\n=== \e[38;5;0;48;5;255mSTARTING NODE API TESTS\e[0m ===\n"
+function rpc_tests() {
+  echo -e "\n=== \e[38;5;0;48;5;255mSTARTING RPC TESTS\e[0m ===\n"
   build_and_start_localnet || exit 1 &
   sleep 20
   wait_for_localnet_boot 100 # Timeout at ~300 seconds
 
   echo "Starting test suite..."
   sleep 3
-  error=0
   # Use 4 or less threads, high thread count can lead to burst RPC calls, which can lead to some RPC calls being rejected.
-  cd "$DIR/../" && python3 -u -m py.test -v -r s -s tests -x -n 4 || error=1
-  echo -e "\n=== \e[38;5;0;48;5;255mFINISHED NODE API TESTS\e[0m ===\n"
+  cd "$DIR/../" && python3 -u -m py.test -v -r s -s rpc_tests -x -n 4 || error=1
+  echo -e "\n=== \e[38;5;0;48;5;255mFINISHED RPC TESTS\e[0m ===\n"
+}
 
-  if [ "$KEEP" == "true" ]; then
-    tail -f /dev/null
-  fi
-  exit "$error"
+function rosetta_tests() {
+  echo -e "\n=== \e[38;5;0;48;5;255mSTARTING ROSETTA API TESTS\e[0m ===\n"
+  build_and_start_localnet || exit 1 &
+  sleep 30
+  wait_for_localnet_boot 100 # Timeout at ~300 seconds
+
+  echo "Starting test suite..."
+  sleep 3
+  # Run tests sequentially for clear error tracing
+  rosetta-cli check:construction --configuration-file "$DIR/../configs/localnet_rosetta_test_s0.json" || error=1
+  rosetta-cli check:data --configuration-file "$DIR/../configs/localnet_rosetta_test_s0.json" || error=1
+  rosetta-cli check:construction --configuration-file "$DIR/../configs/localnet_rosetta_test_s1.json" || error=1
+  rosetta-cli check:data --configuration-file "$DIR/../configs/localnet_rosetta_test_s1.json" || error=1
+  echo -e "\n=== \e[38;5;0;48;5;255mFINISHED ROSETTA API TESTS\e[0m ===\n"
 }
 
 function wait_for_localnet_boot() {
@@ -117,15 +128,25 @@ trap kill_localnet SIGINT SIGTERM EXIT
 
 BUILD=true
 KEEP=false
-GOTESTS=true
-NODEAPI=true
+GO=true
+RPC=true
+ROSETTA=true
 
-while getopts "Bkgn" option; do
+while getopts "Bkgnr" option; do
   case ${option} in
   B) BUILD=false ;;
   k) KEEP=true ;;
-  g) NODEAPI=false ;;
-  n) GOTESTS=false ;;
+  g) RPC=false
+     ROSETTA=false
+  ;;
+  n)
+    GO=false
+    ROSETTA=false
+  ;;
+  r)
+    GO=false
+    RPC=false
+  ;;
   *) echo "
 Integration tester for localnet
 
@@ -133,7 +154,8 @@ Option:      Help:
 -B           Do NOT build binray before testing
 -k           Keep localnet running after Node API tests are finished
 -g           ONLY run go tests & checks
--n           ONLY run the Node API tests
+-n           ONLY run the RPC tests
+-r           ONLY run the rosetta API tests
 "
   exit 0
   ;;
@@ -142,10 +164,20 @@ done
 
 setup
 
-if [ "$GOTESTS" == "true" ]; then
+if [ "$GO" == "true" ]; then
   go_tests
 fi
 
-if [ "$NODEAPI" == "true" ]; then
-  api_tests
+if [ "$RPC" == "true" ]; then
+  rpc_tests
 fi
+
+if [ "$ROSETTA" == "true" ]; then
+  rosetta_tests
+fi
+
+if [ "$KEEP" == "true" ]; then
+  tail -f /dev/null
+fi
+
+exit "$error"
