@@ -26,10 +26,10 @@ upload: build
 	docker push harmonyone/localnet-test
 
 rosetta-test-run:
-	bash ./scripts/run.sh -r
+	bash ./scripts/run.sh -r -k
 
 rpc-test-run:
-	bash ./scripts/run.sh -n
+	bash ./scripts/run.sh -n -k
 
 rpc-test-debug:
 	python3 -u -m py.test -v -r s -s rpc_tests -x -n 8

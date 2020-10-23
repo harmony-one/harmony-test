@@ -5,6 +5,13 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 harmony_dir="$(go env GOPATH)/src/github.com/harmony-one/harmony"
 localnet_config=$(realpath "$DIR/../configs/localnet_deploy.config")
 
+function stop() {
+  if [ "$KEEP" == "true" ]; then
+    tail -f /dev/null
+  fi
+  kill_localnet
+}
+
 function kill_localnet() {
   pushd "$(pwd)"
   cd "$harmony_dir" && bash ./test/kill_node.sh
@@ -124,7 +131,7 @@ function wait_for_localnet_boot() {
   echo "Localnet booted."
 }
 
-trap kill_localnet SIGINT SIGTERM EXIT
+trap stop SIGINT SIGTERM EXIT
 
 BUILD=true
 KEEP=false
@@ -174,10 +181,6 @@ fi
 
 if [ "$ROSETTA" == "true" ]; then
   rosetta_tests
-fi
-
-if [ "$KEEP" == "true" ]; then
-  tail -f /dev/null
 fi
 
 exit "$error"
