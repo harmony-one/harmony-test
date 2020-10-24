@@ -59,6 +59,11 @@ function go_tests() {
   fi
   bash ./scripts/travis_checker.sh || error=1
   echo -e "\n=== \e[38;5;0;48;5;255mFINISHED GO TESTS\e[0m ===\n"
+  if ((error == 1)); then
+    echo "FAILED GO TESTS"
+  else
+    echo "Passed GO tests"
+  fi
   popd
 }
 
@@ -75,6 +80,8 @@ function rpc_tests() {
   echo -e "\n=== \e[38;5;0;48;5;255mFINISHED RPC TESTS\e[0m ===\n"
   if ((error == 1)); then
     echo "FAILED RPC TESTS"
+  else
+    echo "Passed RPC tests"
   fi
 }
 
@@ -94,6 +101,8 @@ function rosetta_tests() {
   echo -e "\n=== \e[38;5;0;48;5;255mFINISHED ROSETTA API TESTS\e[0m ===\n"
   if ((error == 1)); then
     echo "FAILED ROSETTA TESTS"
+  else
+    echo "Passed rosetta tests"
   fi
 }
 
