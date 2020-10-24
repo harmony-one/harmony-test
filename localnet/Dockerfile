@@ -15,13 +15,17 @@ RUN git clone https://github.com/harmony-one/harmony.git \
 RUN cd harmony && go get github.com/pborman/uuid && go get github.com/rjeczalik/notify \
     && go get github.com/cespare/cp && go get github.com/libp2p/go-libp2p-crypto && go get github.com/kr/pretty \
     && go get github.com/kr/text && go get gopkg.in/check.v1 && bash scripts/install_build_tools.sh && make
-
 RUN rm -rf harmony
 
 # Install testing tools
-WORKDIR $GOPATH/src/github.com/harmony-one/harmony-tests/localnet
-
 RUN curl -L -o /go/bin/hmy https://harmony.one/hmycli && chmod +x /go/bin/hmy
+
+WORKDIR $GOPATH/src/github.com/coinbase
+
+RUN git clone https://github.com/coinbase/rosetta-cli.git
+RUN cd rosetta-cli && make install
+
+WORKDIR $GOPATH/src/github.com/harmony-one/harmony-tests/localnet
 
 COPY scripts scripts
 COPY rpc_tests rpc_tests

@@ -73,6 +73,9 @@ function rpc_tests() {
   # Use 4 or less threads, high thread count can lead to burst RPC calls, which can lead to some RPC calls being rejected.
   cd "$DIR/../" && python3 -u -m py.test -v -r s -s rpc_tests -x -n 4 || error=1
   echo -e "\n=== \e[38;5;0;48;5;255mFINISHED RPC TESTS\e[0m ===\n"
+  if ((error == 1)); then
+    echo "FAILED RPC TESTS"
+  fi
 }
 
 function rosetta_tests() {
@@ -89,6 +92,9 @@ function rosetta_tests() {
   rosetta-cli check:construction --configuration-file "$DIR/../configs/localnet_rosetta_test_s1.json" || error=1
   rosetta-cli check:data --configuration-file "$DIR/../configs/localnet_rosetta_test_s1.json" || error=1
   echo -e "\n=== \e[38;5;0;48;5;255mFINISHED ROSETTA API TESTS\e[0m ===\n"
+  if ((error == 1)); then
+    echo "FAILED ROSETTA TESTS"
+  fi
 }
 
 function wait_for_localnet_boot() {
