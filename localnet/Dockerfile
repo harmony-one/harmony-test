@@ -25,7 +25,7 @@ WORKDIR $GOPATH/src/github.com/coinbase
 RUN git clone https://github.com/coinbase/rosetta-cli.git
 RUN cd rosetta-cli && make install
 
-WORKDIR $GOPATH/src/github.com/harmony-one/harmony-tests/localnet
+WORKDIR $GOPATH/src/github.com/harmony-one/harmony-test/localnet
 
 COPY scripts scripts
 COPY rpc_tests rpc_tests
@@ -33,7 +33,7 @@ COPY configs configs
 COPY requirements.txt requirements.txt
 
 RUN python3 -m pip install -r requirements.txt && rm requirements.txt
-RUN chmod +x $GOPATH/src/github.com/harmony-one/harmony-tests/localnet/scripts/run.sh
+RUN chmod +x $GOPATH/src/github.com/harmony-one/harmony-test/localnet/scripts/run.sh
 
 WORKDIR $GOPATH/src/github.com/harmony-one/harmony
-ENTRYPOINT ["/go/src/github.com/harmony-one/harmony-tests/localnet/scripts/run.sh"]
+ENTRYPOINT ["/go/src/github.com/harmony-one/harmony-test/localnet/scripts/run.sh"]
