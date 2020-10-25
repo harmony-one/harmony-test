@@ -16,12 +16,11 @@ $(go env GOPATH)/src/github.com/harmony-one/harmony-tests
 
 ## Requirements (dev testing - no docker)
 
-* python 3.6+ 
-* pip3
-* Requirements from 
-```bash
-make install
-```
+#### 1) Python 3.6+ 
+#### 2) Pip3
+#### 3) Python lib requirements from `requirements.txt`
+> You can install the libs it with the following command: `make install`
+#### 4) The [rosetta-cli](https://github.com/coinbase/rosetta-cli) installed & on path (`$PATH`)
 
 ## Build & run tests
 * To build the docker image locally, do:
@@ -41,14 +40,9 @@ make upload
 
 * To run the test (start localnet, test, and teardown) outside of the docker image (for dev testing), do:
 ```bash
-make run
-```
-> This will test whatever is in the main repo (following GO-PATH convention). 
-
-* If you already have a localnet running and want to run just the test suite, do:
-```bash
 make test
 ```
+> This will test whatever is in the main repo (following GO-PATH convention). 
 
 * To run the localnet tests, do:
 ```bash
