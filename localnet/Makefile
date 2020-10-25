@@ -6,8 +6,9 @@ help:
 	@echo "build-cached - build the docker image with cache"
 	@echo "upload-test - test the docker image before uploading to dockerhub"
 	@echo "upload - upload the docker image to dockerhub (require credentials)"
-	@echo "test - run the test suite"
-	@echo "run - run the localnet tests without docker"
+	@echo "rosetta-test-run - run the rosetta tests as it would run inside the docker container"
+	@echo "rpc-test-run - run the localnet rpc tests as it would run inside the docker container"
+	@echo "rpc-test-debug - run the rpc test suite on a running localnet"
 
 install:
 	python3 -m pip install -r requirements.txt
@@ -24,9 +25,12 @@ upload-test: build
 upload: build
 	docker push harmonyone/localnet-test
 
-run:
-	bash ./scripts/run.sh -n
+rosetta-test-run:
+	bash ./scripts/run.sh -r -k
 
-test:
-	python3 -u -m py.test -v -r s -s tests -x -n 8
+rpc-test-run:
+	bash ./scripts/run.sh -n -k
+
+rpc-test-debug:
+	python3 -u -m py.test -v -r s -s rpc_tests -x -n 8
 
