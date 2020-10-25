@@ -11,7 +11,7 @@ $(go env GOPATH)/src/github.com/harmony-one/harmony
 ```bash
 $(go env GOPATH)/src/github.com/harmony-one/harmony-tests
 ```
-* No extra transactions on the localnet are done prior to running the pytest in `./tests`
+* No extra transactions on the localnet are done prior to running the pytest in `./tests` or execution of the rosetta integration test.
 * The localnet faucet address is `one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur` 
 
 ## Requirements (dev testing - no docker)
