@@ -44,7 +44,7 @@ function build_and_start_localnet() {
     bash ./scripts/go_executable_build.sh -S
     BUILD=False
   fi
-  bash ./test/deploy.sh -B -D 60000 "$localnet_config" 2>&1 | tee "$localnet_log"
+  bash ./test/deploy.sh -e -B -D 60000 "$localnet_config" 2>&1 | tee "$localnet_log"
   popd
 }
 
