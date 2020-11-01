@@ -164,6 +164,7 @@ function wait_for_epoch() {
 }
 
 function wait_for_staking_epoch() {
+  sleep 5  # Ensure RPC server has booted...
   staking_epoch=$(curl --silent --location --request POST "localhost:9500" \
     --header "Content-Type: application/json" \
     --data '{"jsonrpc":"2.0","method":"hmyv2_getNodeMetadata","params":[],"id":1}' | jq '.result["chain-config"]["staking-epoch"]')
