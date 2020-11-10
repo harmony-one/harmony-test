@@ -89,7 +89,8 @@ function rosetta_tests() {
   echo -e "\n=== \e[38;5;0;48;5;255mSTARTING ROSETTA API TESTS\e[0m ===\n"
   build_and_start_localnet || exit 1 &
   sleep 30
-  wait_for_staking_epoch 300 # Timeout at ~900 seconds
+  # WARNING: Assumtion is that EPOCH 2 can process ALL test transaction types...
+  wait_for_epoch 2 300 # Timeout at ~900 seconds
 
   echo "Starting test suite..."
   sleep 3
@@ -161,14 +162,6 @@ function wait_for_epoch() {
     sleep 3
     i=$((i + 1))
   done
-}
-
-function wait_for_staking_epoch() {
-  sleep 5  # Ensure RPC server has booted...
-  staking_epoch=$(curl --silent --location --request POST "localhost:9500" \
-    --header "Content-Type: application/json" \
-    --data '{"jsonrpc":"2.0","method":"hmyv2_getNodeMetadata","params":[],"id":1}' | jq '.result["chain-config"]["staking-epoch"]')
-  wait_for_epoch "$staking_epoch" "$1"
 }
 
 trap stop SIGINT SIGTERM EXIT
