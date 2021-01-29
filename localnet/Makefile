@@ -23,7 +23,7 @@ build-cached:
 upload-test: build
 	bash ./scripts/release_test.sh
 
-upload: build
+upload: 
 	docker push harmonyone/localnet-test
 
 test:
