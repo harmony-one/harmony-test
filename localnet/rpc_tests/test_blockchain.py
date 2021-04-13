@@ -206,6 +206,9 @@ def test_get_latest_chain_headers():
             "miner": "0x6911b75b2560be9a8f71164a33086be4511fc99a",
             "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
             "number": "0xab",
+            "sha3Uncles":
+            '0x0000000000000000000000000000000000000000000000000000000000000000',
+            "nonce": '0x0000000000000000',
             "parentHash": "0x9afbaa3db3c2f5393b7b765aa48091c7a6cc3c3fdf19fb88f8ee2c88e257988d",
             "receiptsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
             "shardID": 0,
@@ -224,6 +227,9 @@ def test_get_latest_chain_headers():
             "miner": "0xd06193871db8d5bc92dead4780e3624038174e88",
             "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
             "number": "0xa7",
+            "sha3Uncles":
+            '0x0000000000000000000000000000000000000000000000000000000000000000',
+            "nonce": '0x0000000000000000',
             "parentHash": "0x336990a12d8697c5f9247790261aa1bdea33aed37031d09664680b86779f08a6",
             "receiptsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
             "shardID": 1,
