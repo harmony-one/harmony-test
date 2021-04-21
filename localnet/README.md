@@ -15,12 +15,20 @@ $(go env GOPATH)/src/github.com/harmony-one/harmony-test
 * The localnet faucet address is `one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur` 
 
 ## Requirements (dev testing - no docker)
+* Go
+* jq
+* Python 3.6+
+* Pip3
+* Python lib requirements from `requirements.txt`
+> You can install the libs with the following command: `make install`
+* The [rosetta-cli](https://github.com/coinbase/rosetta-cli) installed & on path (`$PATH`)
 
-#### 1) Python 3.6+ 
-#### 2) Pip3
-#### 3) Python lib requirements from `requirements.txt`
-> You can install the libs it with the following command: `make install`
-#### 4) The [rosetta-cli](https://github.com/coinbase/rosetta-cli) installed & on path (`$PATH`)
+## Create a python venv
+> This step is **optional** but *recommended* to not pollute your local Python installation.
+```
+ python3 -m venv .venv
+ source .venv/bin/activate
+```
 
 ## Build & run tests
 * To build the docker image locally, do:
@@ -44,10 +52,12 @@ make test
 ```
 > This will test whatever is in the main repo (following GO-PATH convention). 
 
-* To run the localnet tests, do:
+* To run the localnet tests with docker using your local harmony repository, do:
 ```bash
-docker run -it -v "$(go env GOPATH)/src/github.com/harmony-one/harmony:/go/src/github.com/harmony-one/harmony" harmonyone/localnet
+make HARMONY_PATH=$(go env GOPATH)/src/github.com/harmony-one/harmony test-docker
 ```
+>NOTE: An alternative to passsing HARMONY_PATH as a make parameter is export the HARMONY_PATH env.
+
 > This will test whatever is in the main repo (following GO-PATH convention).
 
 ## Release
