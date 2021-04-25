@@ -346,7 +346,7 @@
                 "output_path": "transfer.confirmation_depth"
               },
               {
-                "input": "[{\"operation_identifier\":{\"index\":0},\"type\":\"CreateValidator\",\"status\":\"\",\"account\":{{sender.account_identifier}},\"amount\":{\"value\":\"-100\",\"currency\":{\"symbol\":\"ONE\",\"decimals\":18}},\"Metadata\":{\"validatorAddress\":\"one1pdv9lrdwl0rg5vglh4xtyrv3wjk3wsqket7zxy\",\"commissionRate\":100000000000000000,\"maxCommissionRate\":900000000000000000,\"maxChangeRate\":50000000000000000,\"minSelfDelegation\":10,\"maxTotalDelegation\":3000,\"amount\":100,\"name\":\"Alice\",\"website\":\"alice.harmony.one\",\"identity\":\"alice\",\"securityContact\":\"Bob\",\"details\":\"Don't mess with me!!!\"}}]",
+                "input": "[{\"operation_identifier\":{\"index\":0},\"type\":\"CreateValidator\",\"status\":\"\",\"account\":{{sender.account_identifier}},\"amount\":{\"value\":\"-30000000000000000000000\",\"currency\":{\"symbol\":\"ONE\",\"decimals\":18}},\"Metadata\":{\"validatorAddress\":{{sender.account_identifier.address}},\"commissionRate\":100000000000000000,\"maxCommissionRate\":900000000000000000,\"maxChangeRate\":50000000000000000,\"minSelfDelegation\":20000,\"maxTotalDelegation\":50000,\"amount\":30000,\"name\":\"Alice\",\"website\":\"alice.harmony.one\",\"identity\":\"alice\",\"securityContact\":\"Bob\",\"details\":\"Don't mess with me!!!\"}}]",
                 "type": "set_variable",
                 "output_path": "transfer.operations"
               },
