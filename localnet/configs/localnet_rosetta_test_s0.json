@@ -341,6 +341,11 @@
                 "output_path": "recipient"
               },
               {
+                "input": "{{sender.account_identifier.address}}",
+                "type": "set_variable",
+                "output_path": "validator_address"
+              },
+              {
                 "input": "\"1\"",
                 "type": "set_variable",
                 "output_path": "create_validator.confirmation_depth"
@@ -391,7 +396,7 @@
                 "output_path": "delegate.confirmation_depth"
               },
               {
-                "input": "[{\"operation_identifier\":{\"index\":0},\"type\":\"Delegate\",\"status\":\"\",\"account\":{{sender.account_identifier}},\"amount\":{\"value\":\"0\",\"currency\":{\"symbol\":\"ONE\",\"decimals\":18}},\"Metadata\":{\"validatorAddress\":{{sender.account_identifier.address}},\"delegatorAddress\":{{sender.account_identifier.address}},\"amount\":10}}]",
+                "input": "[{\"operation_identifier\":{\"index\":0},\"type\":\"Delegate\",\"status\":\"\",\"account\":{{sender.account_identifier}},\"amount\":{\"value\":\"-1000000000000000000000\",\"currency\":{\"symbol\":\"ONE\",\"decimals\":18}},\"Metadata\":{\"validatorAddress\":{{validator_address}},\"delegatorAddress\":{{sender.account_identifier.address}},\"amount\":1000}}]",
                 "type": "set_variable",
                 "output_path": "delegate.operations"
               },
