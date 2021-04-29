@@ -401,7 +401,7 @@
                 "output_path": "edit_validator.confirmation_depth"
               },
               {
-                "input": "[{\"operation_identifier\":{\"index\":0},\"type\":\"EditValidator\",\"status\":\"\",\"account\":{{validator_account_identifier}},\"amount\":{\"value\":\"0\",\"currency\":{\"symbol\":\"ONE\",\"decimals\":18}},\"Metadata\":{\"validatorAddress\":{{validator_address}},\"commissionRate\":100000000000000000,\"minSelfDelegation\":10,\"maxTotalDelegation\":3000,\"name\":\"Alice\",\"website\":\"alice.harmony.one\",\"identity\":\"alice\",\"securityContact\":\"Bob\",\"details\":\"Don't mess with me!!!\"}}]",
+                "input": "[{\"operation_identifier\":{\"index\":0},\"type\":\"EditValidator\",\"status\":\"\",\"account\":{{validator_account_identifier}},\"amount\":{\"value\":\"0\",\"currency\":{\"symbol\":\"ONE\",\"decimals\":18}},\"Metadata\":{\"validatorAddress\":{{validator_address}},\"commissionRate\":100000000000000000,\"minSelfDelegation\":20000,\"maxTotalDelegation\":50000,\"name\":\"Alice\",\"website\":\"alice.harmony.one\",\"identity\":\"alice\",\"securityContact\":\"Bob\",\"details\":\"Don't mess with me!!!\"}}]",
                 "type": "set_variable",
                 "output_path": "edit_validator.operations"
               },
