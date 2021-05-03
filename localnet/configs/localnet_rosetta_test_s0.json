@@ -326,7 +326,7 @@
                 "output_path": "currency"
               },
               {
-                "input": "{\"minimum_balance\":{\"value\": \"20000000000000000\", \"currency\": {{currency}}}}",
+                "input": "{\"minimum_balance\":{\"value\": \"200000000000000000\", \"currency\": {{currency}}}}",
                 "type": "find_balance",
                 "output_path": "sender"
               },
@@ -381,7 +381,7 @@
                 "output_path": "currency"
               },
               {
-                "input": "{\"minimum_balance\":{\"value\": \"20000000000000000\", \"currency\": {{currency}}}}",
+                "input": "{\"minimum_balance\":{\"value\": \"200000000000000000\", \"currency\": {{currency}}}}",
                 "type": "find_balance",
                 "output_path": "sender"
               },
@@ -426,7 +426,7 @@
                 "output_path": "currency"
               },
               {
-                "input": "{\"minimum_balance\":{\"value\": \"20000000000000000\", \"currency\": {{currency}}}}",
+                "input": "{\"minimum_balance\":{\"value\": \"200000000000000000\", \"currency\": {{currency}}}}",
                 "type": "find_balance",
                 "output_path": "sender"
               },
