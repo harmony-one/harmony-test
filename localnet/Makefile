@@ -31,11 +31,7 @@ test:
 	bash ./scripts/run.sh -k
 
 test-docker:
-ifndef HARMONY_PATH
-	@echo ERROR: Please set HARMONY_PATH environment variable.
-else
-	docker run --name harmony-tests --rm -it -v "${HARMONY_PATH}":/go/src/github.com/harmony-one/harmony harmonyone/localnet-test
-endif
+	docker run --name harmony-tests --rm -it -v "$(shell go env GOPATH)"/src/github.com/harmony-one/harmony:/go/src/github.com/harmony-one/harmony harmonyone/localnet-test
 
 rosetta-test-run:
 	bash ./scripts/run.sh -r -k
