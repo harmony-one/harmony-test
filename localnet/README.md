@@ -54,9 +54,8 @@ make test
 
 * To run the localnet tests with docker using your local harmony repository, do:
 ```bash
-make HARMONY_PATH=$(go env GOPATH)/src/github.com/harmony-one/harmony test-docker
+make test-docker
 ```
->NOTE: An alternative to passsing HARMONY_PATH as a make parameter is export the HARMONY_PATH env.
 
 > This will test whatever is in the main repo (following GO-PATH convention).
 
