@@ -307,13 +307,165 @@
             ]
           }
         ]
+      },
+      {
+        "name": "staking",
+        "concurrency": 1,
+        "scenarios": [
+          {
+            "name": "create_validator",
+            "actions": [
+              {
+                "input": "{\"network\":\"Testnet\", \"blockchain\":\"Harmony\", \"sub_network_identifier\":{\"network\":\"shard 0\", \"metadata\":{\"is_beacon\": true}}}",
+                "type": "set_variable",
+                "output_path": "create_validator.network"
+              },
+              {
+                "input": "{\"symbol\":\"ONE\", \"decimals\":18}",
+                "type": "set_variable",
+                "output_path": "currency"
+              },
+              {
+                "input": "{\"minimum_balance\":{\"value\": \"200000000000000000\", \"currency\": {{currency}}}}",
+                "type": "find_balance",
+                "output_path": "sender"
+              },
+              {
+                "input": "\"20000000000000000\"",
+                "type": "set_variable",
+                "output_path": "max_fee"
+              },
+              {
+                "input": "{\"not_account_identifier\":[{{sender.account_identifier}}], \"minimum_balance\":{\"value\": \"0\", \"currency\": {{currency}}}, \"create_limit\": 100, \"create_probability\": 50}",
+                "type": "find_balance",
+                "output_path": "recipient"
+              },
+              {
+                "input": "{{sender.account_identifier.address}}",
+                "type": "set_variable",
+                "output_path": "validator_address"
+              },
+              {
+                "input": "{{sender.account_identifier}}",
+                "type": "set_variable",
+                "output_path": "validator_account_identifier"
+              },
+              {
+                "input": "\"1\"",
+                "type": "set_variable",
+                "output_path": "create_validator.confirmation_depth"
+              },
+              {
+                "input": "[{\"operation_identifier\":{\"index\":0},\"type\":\"CreateValidator\",\"status\":\"\",\"account\":{{sender.account_identifier}},\"amount\":{\"value\":\"-30000000000000000000000\",\"currency\":{\"symbol\":\"ONE\",\"decimals\":18}},\"Metadata\":{\"validatorAddress\":{{sender.account_identifier.address}},\"commissionRate\":100000000000000000,\"maxCommissionRate\":900000000000000000,\"maxChangeRate\":50000000000000000,\"minSelfDelegation\":20000,\"maxTotalDelegation\":50000,\"amount\":30000,\"name\":\"Alice\",\"website\":\"alice.harmony.one\",\"identity\":\"alice\",\"securityContact\":\"Bob\",\"details\":\"Don't mess with me!!!\"}}]",
+                "type": "set_variable",
+                "output_path": "create_validator.operations"
+              },
+              {
+                "input": "{\"from_shard\":0,\"to_shard\":0,\"slot_pub_keys\":[\"0x30b2c38b1316da91e068ac3bd8751c0901ef6c02a1d58bc712104918302c6ed03d5894671d0c816dad2b4d303320f202\"],\"slot_key_sigs\":[\"0x68f800b6adf657b674903e04708060912b893b7c7b500788808247550ab3e186e56a44ebf3ca488f8ed1a42f6cef3a04bd5d2b2b7eb5a767848d3135b362e668ce6bba42c7b9d5666d8e3a83be707b5708e722c58939fe9b07c170f3b7062414\"]}",
+                "type": "set_variable",
+                "output_path": "create_validator.preprocess_metadata"
+              }
+            ]
+          },
+          {
+            "name": "edit_validator",
+            "actions": [
+              {
+                "input": "{\"network\":\"Testnet\", \"blockchain\":\"Harmony\", \"sub_network_identifier\":{\"network\":\"shard 0\", \"metadata\":{\"is_beacon\": true}}}",
+                "type": "set_variable",
+                "output_path": "edit_validator.network"
+              },
+              {
+                "input": "{\"symbol\":\"ONE\", \"decimals\":18}",
+                "type": "set_variable",
+                "output_path": "currency"
+              },
+              {
+                "input": "{\"minimum_balance\":{\"value\": \"200000000000000000\", \"currency\": {{currency}}}}",
+                "type": "find_balance",
+                "output_path": "sender"
+              },
+              {
+                "input": "\"20000000000000000\"",
+                "type": "set_variable",
+                "output_path": "max_fee"
+              },
+              {
+                "input": "{\"not_account_identifier\":[{{sender.account_identifier}}], \"minimum_balance\":{\"value\": \"0\", \"currency\": {{currency}}}, \"create_limit\": 100, \"create_probability\": 50}",
+                "type": "find_balance",
+                "output_path": "recipient"
+              },
+              {
+                "input": "\"1\"",
+                "type": "set_variable",
+                "output_path": "edit_validator.confirmation_depth"
+              },
+              {
+                "input": "[{\"operation_identifier\":{\"index\":0},\"type\":\"EditValidator\",\"status\":\"\",\"account\":{{validator_account_identifier}},\"amount\":{\"value\":\"0\",\"currency\":{\"symbol\":\"ONE\",\"decimals\":18}},\"Metadata\":{\"validatorAddress\":{{validator_address}},\"commissionRate\":100000000000000000,\"minSelfDelegation\":20000,\"maxTotalDelegation\":50000,\"name\":\"Alice\",\"website\":\"alice.harmony.one\",\"identity\":\"alice\",\"securityContact\":\"Bob\",\"details\":\"Don't mess with me!!!\"}}]",
+                "type": "set_variable",
+                "output_path": "edit_validator.operations"
+              },
+              {
+                "input": "{\"from_shard\":0,\"to_shard\":0,\"slot_pub_key_to_add\":\"0x30b2c38b1316da91e068ac3bd8751c0901ef6c02a1d58bc712104918302c6ed03d5894671d0c816dad2b4d303320f202\",\"slot_pub_key_to_remove\":\"0x30b2c38b1316da91e068ac3bd8751c0901ef6c02a1d58bc712104918302c6ed03d5894671d0c816dad2b4d303320f202\",\"slot_key_to_add_sig\":\"0x68f800b6adf657b674903e04708060912b893b7c7b500788808247550ab3e186e56a44ebf3ca488f8ed1a42f6cef3a04bd5d2b2b7eb5a767848d3135b362e668ce6bba42c7b9d5666d8e3a83be707b5708e722c58939fe9b07c170f3b7062414\"}",
+                "type": "set_variable",
+                "output_path": "edit_validator.preprocess_metadata"
+              }
+            ]
+          },
+          {
+            "name": "delegate",
+            "actions": [
+              {
+                "input": "{\"network\":\"Testnet\", \"blockchain\":\"Harmony\", \"sub_network_identifier\":{\"network\":\"shard 0\", \"metadata\":{\"is_beacon\": true}}}",
+                "type": "set_variable",
+                "output_path": "delegate.network"
+              },
+              {
+                "input": "{\"symbol\":\"ONE\", \"decimals\":18}",
+                "type": "set_variable",
+                "output_path": "currency"
+              },
+              {
+                "input": "{\"minimum_balance\":{\"value\": \"200000000000000000\", \"currency\": {{currency}}}}",
+                "type": "find_balance",
+                "output_path": "sender"
+              },
+              {
+                "input": "\"20000000000000000\"",
+                "type": "set_variable",
+                "output_path": "max_fee"
+              },
+              {
+                "input": "{\"not_account_identifier\":[{{sender.account_identifier}}], \"minimum_balance\":{\"value\": \"0\", \"currency\": {{currency}}}, \"create_limit\": 100, \"create_probability\": 50}",
+                "type": "find_balance",
+                "output_path": "recipient"
+              },
+              {
+                "input": "\"1\"",
+                "type": "set_variable",
+                "output_path": "delegate.confirmation_depth"
+              },
+              {
+                "input": "[{\"operation_identifier\":{\"index\":0},\"type\":\"Delegate\",\"status\":\"\",\"account\":{{sender.account_identifier}},\"amount\":{\"value\":\"-1000000000000000000000\",\"currency\":{\"symbol\":\"ONE\",\"decimals\":18}},\"Metadata\":{\"validatorAddress\":{{validator_address}},\"delegatorAddress\":{{sender.account_identifier.address}},\"amount\":1000}}]",
+                "type": "set_variable",
+                "output_path": "delegate.operations"
+              },
+              {
+                "input": "{\"from_shard\":0,\"to_shard\":0}",
+                "type": "set_variable",
+                "output_path": "delegate.preprocess_metadata"
+              }
+            ]
+          }
+        ]
       }
     ],
     "end_conditions": {
       "create_account": 1,
       "transfer": 1,
       "cross_shard_transfer": 1,
-      "contract_creation": 1
+      "contract_creation": 1,
+      "staking": 1
     }
   }
 }
