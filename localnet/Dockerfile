@@ -4,6 +4,8 @@ WORKDIR $GOPATH/src/github.com/harmony-one
 
 SHELL ["/bin/bash", "-c"]
 
+RUN go mod download
+
 RUN apt update && apt upgrade -y && apt update -y && apt install unzip \
 libgmp-dev libssl-dev curl git jq make gcc g++ bash sudo python3 python3-pip -y
 
