@@ -57,7 +57,7 @@ function go_tests() {
     bash ./scripts/go_executable_build.sh -S
     BUILD=False
   fi
-  bash ./scripts/travis_checker.sh || error=1
+  bash ./scripts/travis_go_checker.sh || error=1
   echo -e "\n=== \e[38;5;0;48;5;255mFINISHED GO TESTS\e[0m ===\n"
   if ((error == 1)); then
     echo "FAILED GO TESTS"
