@@ -76,7 +76,7 @@ function rpc_tests() {
   echo "Starting test suite..."
   sleep 3
   # Use 4 or less threads, high thread count can lead to burst RPC calls, which can lead to some RPC calls being rejected.
-  cd "$DIR/../" && python3 -u -m py.test -v -r s -s rpc_tests -x -n 4 || error=1
+  cd "$DIR/../" && python3 -u -m py.test -v -r s -s rpc_tests -x  || error=1 #-n 4
   echo -e "\n=== \e[38;5;0;48;5;255mFINISHED RPC TESTS\e[0m ===\n"
   if ((error == 1)); then
     echo "FAILED RPC TESTS"
