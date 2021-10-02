@@ -332,7 +332,6 @@ def send_and_confirm_transaction(tx_data, timeout=tx_timeout):
     start_time = time.time()
     while time.time() - start_time <= timeout:
         tx_response = get_transaction(tx_data["hash"], tx_data["from-shard"])
-        print(f"send_and_confirm_transaction: {tx_response}")
         if tx_response is not None:
             if tx_response['blockNumber'] is not None:
                 return tx_response
