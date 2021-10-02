@@ -30,8 +30,8 @@ _is_staking_era = False
 
 # Endpoints sorted by shard
 endpoints = [
-    "http://localhost:9599/",  # shard 0
-    "http://localhost:9598/",  # shard 1
+    "http://localhost:9598/",  # shard 0
+    "http://localhost:9596/",  # shard 1
 ]
 
 # ORDER MATERS: tx n cannot be sent without tx n-1 being sent first due to nonce
@@ -332,8 +332,10 @@ def send_and_confirm_transaction(tx_data, timeout=tx_timeout):
     start_time = time.time()
     while time.time() - start_time <= timeout:
         tx_response = get_transaction(tx_data["hash"], tx_data["from-shard"])
+        print(f"send_and_confirm_transaction: {tx_response}")
         if tx_response is not None:
-            return tx_response
+            if tx_response['blockNumber'] is not None:
+                return tx_response
         time.sleep(random.uniform(0.2, 0.5))  # Random to stop burst spam of RPC calls.
     raise AssertionError("Could not confirm transactions on-chain.")
 
@@ -360,7 +362,8 @@ def send_and_confirm_staking_transaction(tx_data, timeout=tx_timeout * 2):
     while time.time() - start_time <= timeout:
         tx_response = get_staking_transaction(tx_data["hash"])
         if tx_response is not None:
-            return tx_response
+            if tx_response['blockNumber'] is not None:
+                return tx_response
         time.sleep(random.uniform(0.2, 0.5))  # Random to stop burst spam of RPC calls.
     raise AssertionError("Could not confirm staking transaction on-chain.")
 

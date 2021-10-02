@@ -44,7 +44,10 @@ def pytest_sessionstart(session):
         sent_txs = []
         for tx in initial_funding:
             tx_response = get_transaction(tx["hash"], tx["from-shard"])
-            sent_txs.append(tx_response is not None)
+            if (tx_response is not None):
+                sent_txs.append(tx_response['blockNumber'] is not None)
+            else:
+                sent_txs.append(tx_response is not None)
         if all(sent_txs):
             return
     raise AssertionError("Could not confirm initial transactions on-chain.")
