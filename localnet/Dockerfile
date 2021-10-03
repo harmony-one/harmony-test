@@ -12,7 +12,7 @@ RUN git clone https://github.com/harmony-one/harmony.git \
     && git clone https://github.com/harmony-one/mcl.git
 
 # Build to fetch all dependencies for faster test builds
-RUN cd harmony && go get github.com/pborman/uuid && go get github.com/rjeczalik/notify \
+RUN cd harmony && go mod tidy && go get github.com/pborman/uuid && go get github.com/rjeczalik/notify \
     && go get github.com/cespare/cp && go get github.com/libp2p/go-libp2p-crypto && go get github.com/kr/pretty \
     && go get github.com/kr/text && go get gopkg.in/check.v1 && bash scripts/install_build_tools.sh && make
 RUN rm -rf harmony
