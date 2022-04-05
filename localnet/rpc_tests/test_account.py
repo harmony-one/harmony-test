@@ -42,7 +42,7 @@ def account_test_tx():
         "to-shard": 0,
         "hash": "0xad262f6e399bd15e4cf3bc1717a481db6b595ace025bb1803021602067b43bbc",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf86e80843b9aca008252088080948154e933c6cdcba536b04e1fa03c1de1bb6ad8f7893635c9adc5dea000008028a0642d2d1a6b4e1049fccc23431bcd27fa19f249c27657ffca3653950b50bbde7aa06c8cc31c0fdeb6e1c80fc1a69d721de29a9830edff23b5af561d240c1df96179",
+        "signed-raw-tx": "0xf86f808506fc23ac008252088080948154e933c6cdcba536b04e1fa03c1de1bb6ad8f7893635c9adc5dea000008028a086f785f5893efe3ff12b3fdaa0e52ae6a7b5b6897edb15f177836df355cbf2dea0648149e5feccfff1418e8cd6ac55bb9f26423f95344e558d917b25d4b7ac88df",
     }
 
     in_initially_funded = False
