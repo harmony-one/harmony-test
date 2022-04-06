@@ -122,8 +122,8 @@ def test_get_transactions_history_v1():
                 "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
                 "timestamp": "0x5f0d84e2",
                 "gas": "0x5208",
-                "gasPrice": "0x3b9aca00",
-                "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
+                "gasPrice": "0x6fc23ac00",
+                "hash": "0x3759ab736798efe609bd1eb69145616ccc57baea99a9abab4e259e935f488bc5",
                 "input": "0x",
                 "nonce": "0x0",
                 "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -140,7 +140,7 @@ def test_get_transactions_history_v1():
 
     reference_response_short = {
         "transactions": [
-            "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
+            "0x3759ab736798efe609bd1eb69145616ccc57baea99a9abab4e259e935f488bc5",
         ]
     }
 
@@ -184,8 +184,8 @@ def test_get_transactions_history_v2():
                 "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
                 "timestamp": 1594721506,
                 "gas": 21000,
-                "gasPrice": 1000000000,
-                "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
+                "gasPrice": 30000000000,
+                "hash": "0x3759ab736798efe609bd1eb69145616ccc57baea99a9abab4e259e935f488bc5",
                 "input": "0x",
                 "nonce": 0,
                 "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -202,7 +202,7 @@ def test_get_transactions_history_v2():
 
     reference_response_short = {
         "transactions": [
-            "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
+            "0x3759ab736798efe609bd1eb69145616ccc57baea99a9abab4e259e935f488bc5",
         ]
     }
 

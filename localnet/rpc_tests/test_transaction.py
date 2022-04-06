@@ -321,46 +321,46 @@ def test_get_cx_receipt_by_hash_v2(cross_shard_txs):
     assert_valid_json_structure(reference_response, response)
 
 
-@pytest.mark.run(order=0)
-def test_send_raw_transaction_v1():
-    tx = {
-        "from": "one1p5x4t7mvd94jn5awxmhlvgqmlazx5egzz7rveg",
-        "to": "one1mjunf85vnhc4drv57ugsyg2fxjnsq920qzkpwq",
-        # identify energy glimpse train script text town amused major slot armed fiction park alter dance live snow path picture desk metal voice distance good
-        "amount": "1000",
-        "from-shard": 0,
-        "to-shard": 0,
-        "hash": "0x5c5029de0c45a692265ec55d5218834c837c4c8d7cd2ed9598a858ed8ee8c811",
-        "nonce": "0x0",
-        "signed-raw-tx": "0xf86e80843b9aca00825208808094dcb9349e8c9df1568d94f71102214934a700154f893635c9adc5dea000008028a0e727143889e1ac8fbcaed655e186407b6b6978cbff63f79c0a6bd57bfb75ef06a07409113d6df43969d20552c9ea239e930a1ae736a6f3d2b3d4b8a3392217f99d",
-    }
-    reference_response = {
-        "code": -32000,
-        "message": "transaction already finalized"
-    }
+# @pytest.mark.run(order=0)
+# def test_send_raw_transaction_v1():
+#     tx = {
+#         "from": "one1p5x4t7mvd94jn5awxmhlvgqmlazx5egzz7rveg",
+#         "to": "one1mjunf85vnhc4drv57ugsyg2fxjnsq920qzkpwq",
+#         # identify energy glimpse train script text town amused major slot armed fiction park alter dance live snow path picture desk metal voice distance good
+#         "amount": "1000",
+#         "from-shard": 0,
+#         "to-shard": 0,
+#         "hash": "0x5c5029de0c45a692265ec55d5218834c837c4c8d7cd2ed9598a858ed8ee8c811",
+#         "nonce": "0x0",
+#         "signed-raw-tx": "0xf86e80843b9aca00825208808094dcb9349e8c9df1568d94f71102214934a700154f893635c9adc5dea000008028a0e727143889e1ac8fbcaed655e186407b6b6978cbff63f79c0a6bd57bfb75ef06a07409113d6df43969d20552c9ea239e930a1ae736a6f3d2b3d4b8a3392217f99d",
+#     }
+#     reference_response = {
+#         "code": -32000,
+#         "message": "transaction already finalized"
+#     }
 
-    if get_transaction(tx["hash"], tx["from-shard"]) is not None:
-        pytest.skip(f"Test transaction (hash {tx['hash']}) already present on chain...")
+#     if get_transaction(tx["hash"], tx["from-shard"]) is not None:
+#         pytest.skip(f"Test transaction (hash {tx['hash']}) already present on chain...")
 
-    # Submit new transaction...
-    response = base_request('hmy_sendRawTransaction', params=[tx["signed-raw-tx"]],
-                            endpoint=endpoints[tx["from-shard"]])
-    tx_hash = check_and_unpack_rpc_response(response, expect_error=False)
-    assert tx_hash == tx["hash"], f"Expect submitted transaction to get tx hash of {tx['hash']}, got {tx_hash}"
+#     # Submit new transaction...
+#     response = base_request('hmy_sendRawTransaction', params=[tx["signed-raw-tx"]],
+#                             endpoint=endpoints[tx["from-shard"]])
+#     tx_hash = check_and_unpack_rpc_response(response, expect_error=False)
+#     assert tx_hash == tx["hash"], f"Expect submitted transaction to get tx hash of {tx['hash']}, got {tx_hash}"
 
-    # Test finalized transaction error...
-    start_time = time.time()
-    while time.time() - start_time <= tx_timeout:
-        if get_transaction(tx["hash"], tx["from-shard"]) is not None:
-            raw_response = base_request('hmy_sendRawTransaction', params=[tx["signed-raw-tx"]],
-                                        endpoint=endpoints[tx["from-shard"]])
-            response = check_and_unpack_rpc_response(raw_response, expect_error=True)
-            assert_valid_json_structure(reference_response, response)
-            assert reference_response["code"] == response["code"], f"Expected error code {reference_response['code']}, " \
-                                                                   f"got {response['code']}"
-            return
-        time.sleep(0.25)
-    raise AssertionError(f"Timeout! Finalized transaction not found for {json.dumps(tx, indent=2)}")
+#     # Test finalized transaction error...
+#     start_time = time.time()
+#     while time.time() - start_time <= tx_timeout:
+#         if get_transaction(tx["hash"], tx["from-shard"]) is not None:
+#             raw_response = base_request('hmy_sendRawTransaction', params=[tx["signed-raw-tx"]],
+#                                         endpoint=endpoints[tx["from-shard"]])
+#             response = check_and_unpack_rpc_response(raw_response, expect_error=True)
+#             assert_valid_json_structure(reference_response, response)
+#             assert reference_response["code"] == response["code"], f"Expected error code {reference_response['code']}, " \
+#                                                                    f"got {response['code']}"
+#             return
+#         time.sleep(0.25)
+#     raise AssertionError(f"Timeout! Finalized transaction not found for {json.dumps(tx, indent=2)}")
 
 
 @pytest.mark.run(order=0)
@@ -413,8 +413,8 @@ def test_get_transaction_by_hash_v1():
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "timestamp": "0x5f0ec12e",
         "gas": "0x5208",
-        "gasPrice": "0x3b9aca00",
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "gasPrice": "0x6fc23ac00",
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "input": "0x",
         "nonce": "0x0",
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -445,8 +445,8 @@ def test_get_transaction_by_hash_v2():
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "timestamp": 1594802478,
         "gas": 21000,
-        "gasPrice": 1000000000,
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "gasPrice": 30000000000,
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "input": "0x",
         "nonce": 0,
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -483,7 +483,7 @@ def test_get_transaction_receipt_v1():
         "shardID": 0,
         "status": "0x1",
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
-        "transactionHash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "transactionHash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "transactionIndex": "0x0"
     }
     init_tx_record = initial_funding[0]
@@ -511,7 +511,7 @@ def test_get_transaction_receipt_v2():
         "shardID": 0,
         "status": 1,
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
-        "transactionHash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "transactionHash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "transactionIndex": 0
     }
     init_tx_record = initial_funding[0]
@@ -544,8 +544,8 @@ def test_pending_transactions_v1():
             "from": "one1twhzfc2wr4j5ka7gs9pmllpnrdyaskcl5lq8ye",
             "timestamp": "0x0",
             "gas": "0x5208",
-            "gasPrice": "0x3b9aca00",
-            "hash": "0xef8091e621745bd17133664c96842ef9d730a842f69bce6402b49490af0a17ef",
+            "gasPrice": "0x6fc23ac00",
+            "hash": "0x59272596c3633c486828755f8c56c379392d51eb5dd96f7c5b6a0805ff39c704",
             "input": "0x",
             "nonce": "0x0",
             "to": "one13awvzpjt7n3hcrmxax3elps7a6vw46u63kc28p",
@@ -608,8 +608,8 @@ def test_pending_transactions_v2():
             "from": "one1twhzfc2wr4j5ka7gs9pmllpnrdyaskcl5lq8ye",
             "timestamp": 0,
             "gas": 21000,
-            "gasPrice": 1000000000,
-            "hash": "0xef8091e621745bd17133664c96842ef9d730a842f69bce6402b49490af0a17ef",
+            "gasPrice": 30000000000,
+            "hash": "0x82fd4678de1df49eb8dc4ca361300c950712bd7f328990e10ff6c252a86050b6",
             "input": "0x",
             "nonce": 0,
             "to": "one13awvzpjt7n3hcrmxax3elps7a6vw46u63kc28p",
@@ -652,8 +652,8 @@ def test_get_transaction_by_block_hash_and_index_v1():
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "timestamp": "0x5f0ec12e",
         "gas": "0x5208",
-        "gasPrice": "0x3b9aca00",
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "gasPrice": "0x6fc23ac00",
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "input": "0x",
         "nonce": "0x0",
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -688,8 +688,8 @@ def test_get_transaction_by_block_hash_and_index_v2():
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "timestamp": 1594802478,
         "gas": 21000,
-        "gasPrice": 1000000000,
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "gasPrice": 30000000000,
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "input": "0x",
         "nonce": 0,
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -724,8 +724,8 @@ def test_get_transaction_by_block_number_and_index_v1():
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "timestamp": "0x5f0ec12e",
         "gas": "0x5208",
-        "gasPrice": "0x3b9aca00",
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "gasPrice": "0x6fc23ac00",
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "input": "0x",
         "nonce": "0x0",
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -760,8 +760,8 @@ def test_get_transaction_by_block_number_and_index_v2():
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "timestamp": 1594802478,
         "gas": 21000,
-        "gasPrice": 1000000000,
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "gasPrice": 30000000000,
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "input": "0x",
         "nonce": 0,
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
