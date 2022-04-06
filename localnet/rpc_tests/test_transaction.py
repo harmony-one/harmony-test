@@ -59,7 +59,7 @@ def cross_shard_txs():
         "amount": "1000",
         "from-shard": 0,
         "to-shard": 1,
-        "hash": "0xc0a84ec15fc3391089f20fa6b9cc90c654eb8dd2f6815297de89eef38ce4fe2b",
+        "hash": "0x9dae9c8e2c8abc8eebab1f7731f5c28cacf2ced913f4e4d49d000f74df0edca2",
         "nonce": "0x0",
         "signed-raw-tx": "0xf86f808506fc23ac008252088001945d5f0e515d3714ff3118d1378dbb2f36f7face43893635c9adc5dea000008027a0a45a914e5072d383158f790c34019c2ea2e60a1826cf2c95fa758b8a7168e52fa04ee2ac08ae98d0c9644feffdbc9b036d2be617cb7f92104ca7274eb9f102c9a7",
     }
@@ -70,7 +70,7 @@ def cross_shard_txs():
         "amount": "500",
         "from-shard": 1,
         "to-shard": 0,
-        "hash": "0x819b0d7902134dadd07851edba0e8694e60c1aee057a96d2ceb4a9118cee0298",
+        "hash": "0x30e6cb1f8889d115512b1b5963aaefa66e180f350ed78c504d24b7ea224ac123",
         "nonce": "0x0",
         "signed-raw-tx": "0xf86f808506fc23ac0082520801809407e496c4334c9c33ebffd35f0d5af805dc72e8a1891b1ae4d6e2ef5000008027a093992f9dc99fa49f48afca645e41affa23efbdc2035da784524eda018fe3ead6a017471c901f17b9d467bf0a4ec1871870a6592d6e573148dd5091a8c979656ad3",
     }
@@ -129,7 +129,7 @@ def test_get_current_transaction_error_sink():
         "amount": "1000000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0xa07018dace53fca04a1fe6bd70e6ef7d95520d8da5758f85ab70125faa2dabfd",
+        "hash": "0x2f3be62d06027ec35369680329b2796cd811a902f2fe5cd67d761e962a3639a4",
         "nonce": "0x0",
         "signed-raw-tx": "0xf870808506fc23ac008252088080947267589266bdda31ca6d68303f57913a460c7ae08ad3c21bcecceda10000008028a06fb1e5a03bf27f68d48b79cb12dfefcdefcaa72113f80bf3a9ccc7f4614bcfa3a018ba6c8c1e7bba73352ba966b28e5327ba253f70bc6032cab2d5a0ce12f3bd6f",
     }
@@ -206,7 +206,7 @@ def test_get_pending_cx_receipts():
         "amount": "1000",
         "from-shard": 0,
         "to-shard": 1,
-        "hash": "0x0988bcaecba9cc731245ee7ae9595d1202448413bc6e517b4c0c8da9abb1e479",
+        "hash": "0x33e4c0a582f87731a474332ca712b20f322afd0221aa3f4a287c985afab52476",
         "nonce": "0x0",
         "signed-raw-tx": "0xf86f808506fc23ac008252088001946c229e90234ff52f11bad85c99e245c3fb2ddd9b893635c9adc5dea000008027a0978e0924045ba31ea891da261895f3d2840e687f0fd5df35208df2358bac69e7a05d588e2d823b65773537337d434affd0374c1331cd96841ff1513ee55504a8d1",
     }
@@ -372,7 +372,7 @@ def test_send_raw_transaction_v2():
         "amount": "1000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x99919613fce4bbc9f4a068373bbb67b3f7e5ce34a7a1eef866a32284ec70261a",
+        "hash": "0x73e2aa48841b6d87eb6d7a4f6fc0e4253e1c806fdacd420b4d100f718e9dcd62",
         "nonce": "0x0",
         "signed-raw-tx": "0xf86f808506fc23ac00825208808094acb30b991ea21a3a3447823c9daa1263bd09ce0d893635c9adc5dea000008028a02607a24abff19534b98b0a6e365ff56f7db2449e793ce6e241263154b7527d81a02db39163c82772ab5b5276f096a39ab0ed5608f187e0b3be0273024a98c5a205",
     }
@@ -533,7 +533,7 @@ def test_pending_transactions_v1():
         "amount": "1000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0xef8091e621745bd17133664c96842ef9d730a842f69bce6402b49490af0a17ef",
+        "hash": "0x59272596c3633c486828755f8c56c379392d51eb5dd96f7c5b6a0805ff39c704",
         "nonce": "0x0",
         "signed-raw-tx": "0xf86f808506fc23ac008252088080948f5cc1064bf4e37c0f66e9a39f861eee98eaeb9a893635c9adc5dea000008028a044385f2ccbc98d0ff8dfb4e5109334aed1e1d2e6aca327e07afc18d33e9cc236a060aa69ecddc755ed3ecf1cb2d59819b1d546241b448b71f64c4e32236d36c1cd",
     }
@@ -597,7 +597,7 @@ def test_pending_transactions_v2():
         "amount": "1000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x78324d91e69bdb14f4d0948bbad4ffc8bf309d4cf3e49c4c9a6871d02910c234",
+        "hash": "0x82fd4678de1df49eb8dc4ca361300c950712bd7f328990e10ff6c252a86050b6",
         "nonce": "0x0",
         "signed-raw-tx": "0xf86f808506fc23ac00825208808094162f2bee06b43bbf9b8cf5e362de9dcf064d79f3893635c9adc5dea000008028a07a3dd13017fe6468b087fd3aec0cb2b6896fb4f78e3aa985172c39b3cd9db27aa068e6a91e4918342ee725d9e1cc29f6849b690df04bfde13145c8dd65f475b1f0",
     }
