@@ -87,9 +87,9 @@ def s0_validator():
         "max-total-delegation": 10000000,
         "amount": 10000,
         "pub-bls-key": "4f41a37a3a8d0695dd6edcc58142c6b7d98e74da5c90e79b587b3b960b6a4f5e048e6d8b8a000d77a478d44cd640270c",
-        "hash": "0xf80460f1ad041a0a0e841da717fc5b7959b1a7e9a0ce9a25cd70c0ce40d5ff26",
+        "hash": "0xb1bffd62607b111afe507fb84c1cf498d39fbb201eea3064d4027375faef5c25",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf9015780f90106947946f5ce1eeb290965deef936cd9154c22173efeda8474657374857465737430847465737484746573748474657374ddc988016345785d8a0000c9880c7d713b49da0000c887b1a2bc2ec500008a021e19e0c9bab24000008b084595161401484a000000f1b04f41a37a3a8d0695dd6edcc58142c6b7d98e74da5c90e79b587b3b960b6a4f5e048e6d8b8a000d77a478d44cd640270cf862b8606e1204740c90329827178361b635109e515a2334d970f44f29f3a98ff10bb351d8dd7fa03ceadcbe3e53be7b1bd0940c1e1fc58d2725e4bacf06831974edaf3291dfd5a0aa1e81c8a078e7e5e6cb9e58c750d6005afdd7b1548823804039a2118a021e19e0c9bab240000080843b9aca00835121c427a02348daabe696c4370379b9102dd85da6d4fed52f0f511ff0448a21c001ee75a7a01a67f9f40e0de02b50d5d7295f200fea7f950c1b59aa7efa8d225294c4fdbc5e"
+        "signed-raw-tx": "0xf9015880f90106947946f5ce1eeb290965deef936cd9154c22173efeda8474657374857465737430847465737484746573748474657374ddc988016345785d8a0000c9880c7d713b49da0000c887b1a2bc2ec500008a021e19e0c9bab24000008b084595161401484a000000f1b04f41a37a3a8d0695dd6edcc58142c6b7d98e74da5c90e79b587b3b960b6a4f5e048e6d8b8a000d77a478d44cd640270cf862b8606e1204740c90329827178361b635109e515a2334d970f44f29f3a98ff10bb351d8dd7fa03ceadcbe3e53be7b1bd0940c1e1fc58d2725e4bacf06831974edaf3291dfd5a0aa1e81c8a078e7e5e6cb9e58c750d6005afdd7b1548823804039a2118a021e19e0c9bab2400000808506fc23ac008350eefc28a0d19c875dffdfe925c8d57565f4fc46a310a251788b9964f989261e2ced71b539a06a60122a3860779bc754682e32df2529ef9af2ff5570ae3255e4a3cb8f2ff9d2"
     }
 
     in_initially_funded = False
@@ -134,9 +134,9 @@ def s1_validator():
         "amount": 10000,
         #"pub-bls-key": "5e2f14abeadf0e759beb1286ed6095d9d1b2d64ad394316991161c6f95237710e0a4beda8adeaefde4844ab4c4b2bf98",
         "pub-bls-key": "5e2f14abeadf0e759beb1286ed6095d9d1b2d64ad394316991161c6f95237710e0a4beda8adeaefde4844ab4c4b2bf98",
-        "hash": "0x37743ed5a112e54134d610b18284ab8967c926a2d53eaf23ba836431cf9bd96a",
+        "hash": "0xd0dd7ef72bbb1ba79b1f91d2f209513cf76b42f2466789352e9cadeed82a154f",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf9015780f90106949ec87071cf2aaa9842a32db7aabc3f6881944ad5da8474657374857465737431847465737484746573748474657374ddc988016345785d8a0000c9880c7d713b49da0000c887b1a2bc2ec500008a021e19e0c9bab24000008b084595161401484a000000f1b05e2f14abeadf0e759beb1286ed6095d9d1b2d64ad394316991161c6f95237710e0a4beda8adeaefde4844ab4c4b2bf98f862b860e8bc184c4d5779ab7ab9fb8902b157b1257b1c4fa7e39649b2d900f0415f3aec0701f89e6840d42854559620627e871862b7b5075fad456fb43bc9eb5811c5b305d1d82838332623b109fbc033fd144387bb402e3bd1626a640b58d0b3ae66098a021e19e0c9bab240000080843b9aca008351220427a0d9d4bfabdc1dd7c63c951e0353d0fdee583e9cf55dcd0253aa6eb2d1066ccb2aa0202841a6ebc536d04ca7ae2ea1d83d4d2c5d1ef1af879202613b60ee2304b27b"
+        "signed-raw-tx": "0xf9015880f90106949ec87071cf2aaa9842a32db7aabc3f6881944ad5da8474657374857465737431847465737484746573748474657374ddc988016345785d8a0000c9880c7d713b49da0000c887b1a2bc2ec500008a021e19e0c9bab24000008b084595161401484a000000f1b05e2f14abeadf0e759beb1286ed6095d9d1b2d64ad394316991161c6f95237710e0a4beda8adeaefde4844ab4c4b2bf98f862b860e8bc184c4d5779ab7ab9fb8902b157b1257b1c4fa7e39649b2d900f0415f3aec0701f89e6840d42854559620627e871862b7b5075fad456fb43bc9eb5811c5b305d1d82838332623b109fbc033fd144387bb402e3bd1626a640b58d0b3ae66098a021e19e0c9bab2400000808506fc23ac008350ef0828a057e236df9dfc3159b1555f21107de424b60adc684b7ded1f35ba29bcce348e4aa04b47a7f2edc43abec69dd5881841cf8d9caaf14e0d54a4823575169008efba75"
     }
 
     in_initially_funded = False
@@ -169,9 +169,9 @@ def test_delegation(s1_validator):
         "delegator-addr": "one1v895jcvudcktswcmg2sldvmxvtvvdj2wuxj3hx",
         # web topple now acid repeat inspire tomato inside nominee reflect latin salmon garbage negative liberty win royal faith hammer lawsuit west toddler payment coffee
         "amount": 10000,
-        "hash": "0x832e5af2305167d5d9a891c51eafc6510c89bbc76c01818e4ce02de0fc8c854e",
+        "hash": "0x8384d8fc133fdb18bfdfda7b16e8bb1eb6105d9bd7f6ddfc1bb255e3edabae3c",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf88302f59461cb49619c6e2cb83b1b42a1f6b36662d8c6c94e949ec87071cf2aaa9842a32db7aabc3f6881944ad58a021e19e0c9bab240000080843b9aca00825fe027a0d8912da6a925af17701a2600df60e90fa4a61858b51758a03f57ac9d2797dc0ca004313c6865bde8704594be44d3ebbadfa6420922eef73d38ffba8ec42d8d3550"
+        "signed-raw-tx": "0xf88502f59461cb49619c6e2cb83b1b42a1f6b36662d8c6c94e949ec87071cf2aaa9842a32db7aabc3f6881944ad58a021e19e0c9bab2400000808506fc23ac00835121c427a03740ff6392841c59735b1ed68375da7b5289ff3c4fa78a72e4fc6abaa0b4eb6ca03f63e66bc7aacc19df97c68581e66396d134288f938561531d092204e2422ca9"
     }
 
     assert stx["validator-addr"] == s1_validator["validator-addr"], f"Sanity check: Expected validator address " \
@@ -209,9 +209,9 @@ def test_undelegation(s1_validator):
         "delegator-addr": "one1v895jcvudcktswcmg2sldvmxvtvvdj2wuxj3hx",
         # web topple now acid repeat inspire tomato inside nominee reflect latin salmon garbage negative liberty win royal faith hammer lawsuit west toddler payment coffee
         "amount": 10000,
-        "hash": "0x79d27d042c157a4c1cdcbe931155515bfdd78d3162be79d348bab33113d8e08e",
+        "hash": "0x75eb9a347ddf18ea1fb28fbc0c79c20ad8cae6a8702af16d517ff93b79254151",
         "nonce": "0x1",
-        "signed-raw-tx": "0xf88203f49461cb49619c6e2cb83b1b42a1f6b36662d8c6c94e949ec87071cf2aaa9842a32db7aabc3f6881944ad5891b1ae4d6e2ef50000001843b9aca00825f9c28a0d12eb6e84a48356e079319642902b5c203806cba6960a3da2b5c43cf8021f510a00a73e7315c3ef773995eb3ebac033ab6c6b60b032f294af944f161d8e9ca2d4e"
+        "signed-raw-tx": "0xf88503f59461cb49619c6e2cb83b1b42a1f6b36662d8c6c94e949ec87071cf2aaa9842a32db7aabc3f6881944ad58a021e19e0c9bab2400000018506fc23ac00835121c427a007e67bb2e26c5981c9fe065a37727d02d69d5c5013086c5ec166205bf3912555a05376e9cef058146ac81328f435c0a5921e068ae60be085ab062d78acf145a59d"
     }
 
     assert stx["validator-addr"] == s1_validator["validator-addr"], f"Sanity check: Expected validator address " \
@@ -280,7 +280,7 @@ def test_get_transaction_receipt_v1(s0_validator):
         "status": "0x1",
         "transactionHash": "0xf80460f1ad041a0a0e841da717fc5b7959b1a7e9a0ce9a25cd70c0ce40d5ff26",
         "transactionIndex": "0x0",
-        "type": 0
+        "type": "0x0"
     }
 
     raw_response = base_request("hmy_getTransactionReceipt",
@@ -967,8 +967,12 @@ def test_get_median_raw_stake_snapshot(s0_validator):
     curr_epoch = blockchain.get_latest_header(endpoint=endpoints[0])["epoch"]
     val_0_info = staking.get_validator_information(s0_validator["validator-addr"], endpoint=endpoints[0])
     s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"], 16)
+    print(staking_epoch)
+    print(s0_creation_epoch)
+
 
     while curr_epoch <= s0_creation_epoch or curr_epoch < staking_epoch:
+        print ("epoch", curr_epoch)
         time.sleep(random.uniform(0.5, 1.5))  # Random to stop burst spam of RPC calls.
         curr_epoch = blockchain.get_latest_header(endpoint=endpoints[beacon_shard_id])["epoch"]
 
@@ -978,19 +982,23 @@ def test_get_median_raw_stake_snapshot(s0_validator):
     while prev_block_epoch != curr_epoch:
         time.sleep(random.uniform(0.5, 1.5))  # Random to stop burst spam of RPC calls.
         curr_block = blockchain.get_latest_header(endpoint=endpoints[0])["blockNumber"]
+        print("block", curr_block)
         prev_block_epoch = int(blockchain.get_block_by_number(curr_block - 1)["epoch"], 16)
 
     # Check v1
     raw_response = base_request("hmy_getMedianRawStakeSnapshot", params=[], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
+    print(raw_response)
     found_s0_winner, found_s0_candidate = False, False
     for val in response["epos-slot-winners"]:
+        print(val)
         if val["slot-owner"] == s0_validator["validator-addr"]:
             found_s0_winner = True
             break
     assert found_s0_winner, f"Expected validator {s0_validator['validator-addr']} to win election"
     for val in response["epos-slot-candidates"]:
+        print(val)
         if val["validator"] == s0_validator["validator-addr"]:
             found_s0_candidate = True
             break
@@ -1298,10 +1306,10 @@ def test_pending_staking_transactions_v1():
         "min-self-delegation": 10000,
         "max-total-delegation": 10000000,
         "amount": 10000,
-        "pub-bls-key": "8596e18ce463e4d5faa62d669dd959101ca408f757489bc9bdb2f95c2cc7a521b4eeb6d55ff2befd8b220fce6939b408",
-        "hash": "0xf16668d7e39f01fd15c40e515ece370af1c80f7588bffd7c53932768a0ebba2e",
+        "pub-bls-key": "1ffbdd82dca92a42330d3b119ea007de74c81d446c3b396dd9e1ba1f9fa95a43125cd16c4f79dd1d505a5eb6a22e7c8a",
+        "hash": "0x65ba63687dbb65efd6f31af14dccc21faa6e5df04e64a73d406f107bd5268818",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf9015780f90106948b0bbad37a258a0def082034f8f3047b9ae2fd30da8474657374857465737432847465737484746573748474657374ddc988016345785d8a0000c9880c7d713b49da0000c887b1a2bc2ec500008a021e19e0c9bab24000008b084595161401484a000000f1b08596e18ce463e4d5faa62d669dd959101ca408f757489bc9bdb2f95c2cc7a521b4eeb6d55ff2befd8b220fce6939b408f862b860cc0dbe1c9ba4f352e44420af0bfa9019b604d46b9afb38eebf599e89c9da76101852426bcc3845075fe7f460f639e308b738ef904036fee9c95bfc8888d6eeabd5365d005f20f76fbbe165b4bc1452bb5f50dd91a8422c6d9a94bc846f3754968a021e19e0c9bab240000080843b9aca008351220427a02eeadff25df33d13eb95288006435e06a65ad979bf24b9cbd151c696df5b84e3a016e9fa32ddad438936ba2ac837cc8ac102aeec519198fa4516cfac7032df313c"
+        "signed-raw-tx": "0xf9015880f90106948b0bbad37a258a0def082034f8f3047b9ae2fd30da8474657374857465737431847465737484746573748474657374ddc988016345785d8a0000c9880c7d713b49da0000c887b1a2bc2ec500008a021e19e0c9bab24000008b084595161401484a000000f1b01ffbdd82dca92a42330d3b119ea007de74c81d446c3b396dd9e1ba1f9fa95a43125cd16c4f79dd1d505a5eb6a22e7c8af862b8603ee56bf8d64e4472b4273a4c10e12d498e8a0ac01df613e44ccf7c211bbed865fc192c93b8f23a3b67f352153921e304380503169a47746ba61ea9a720dad734b07ecc997e6e0cabecba00c5a73f43b3773ec2b51f67023102aedd2deff1048a8a021e19e0c9bab2400000808506fc23ac008350ef0827a06db0690595f52da9bfb56efada688f036131c2e0e402a97e894057665cce9d79a078ca1a7f414db879145f9921e61349f7ace7d9b6d2f0ede5a29635b03af4ed01"
     }
     reference_response = [
         {
@@ -1333,7 +1341,7 @@ def test_pending_staking_transactions_v1():
         "name": "test",
         "securityContact": "test",
         "slotPubKeys": [
-            "8596e18ce463e4d5faa62d669dd959101ca408f757489bc9bdb2f95c2cc7a521b4eeb6d55ff2befd8b220fce6939b408"
+            "1ffbdd82dca92a42330d3b119ea007de74c81d446c3b396dd9e1ba1f9fa95a43125cd16c4f79dd1d505a5eb6a22e7c8a"
         ],
         "validatorAddress": "one13v9m45m6yk9qmmcgyq603ucy0wdw9lfsxzsj9d",
         "website": "test"
@@ -1384,10 +1392,10 @@ def test_pending_staking_transactions_v2():
         "min-self-delegation": 10000,
         "max-total-delegation": 10000000,
         "amount": 10000,
-        "pub-bls-key": "29cdd2ea5ef25bfee0bbc649065ceb2d0e19cc25f42541154eca69c0ff923971e20352fbfeeac5d17f8f6c6fc5871e88",
-        "hash": "0x6e54fc7102daa31372027912b7f441ab9b9acafb9fa93b72dc9380321bacdbe2",
+        "pub-bls-key": "5a18d4aa3e6aff4835f07588ae66be19684476d38799f63e54c6b5732fad1e86dce7458b1c295404fb54a0d61e50bb97",
+        "hash": "0x28116f87be9be8dea7bb0b26f5a8deb31ab96c91e5d8e3ce3d8dc780d08e4b87",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf9015780f90106948ef8092bc9c36854246cf384ce778145ace6385fda8474657374857465737433847465737484746573748474657374ddc988016345785d8a0000c9880c7d713b49da0000c887b1a2bc2ec500008a021e19e0c9bab24000008b084595161401484a000000f1b029cdd2ea5ef25bfee0bbc649065ceb2d0e19cc25f42541154eca69c0ff923971e20352fbfeeac5d17f8f6c6fc5871e88f862b860413befdd8895ade3cadaf121cac888f47b73c0986a38dda3198f3821532278b992e413009c014bef52c59264d7b2eb13054377146a540751b3c3c6c5a21a2c7fac9639ef72d613167315df1ea6455cde42e53157d4b7cac0b3c8975e5d5eb2828a021e19e0c9bab240000080843b9aca008351220427a0e03993350ed72c70198bbb9b0c962eba1ba08c6c46f66c50a878f84970120941a0421342afa7dd527edadfb8fc0b3b80c41ba3fcd390cc2ff95bc18b89c58850ca"
+        "signed-raw-tx": "0xf9015880f90106948ef8092bc9c36854246cf384ce778145ace6385fda8474657374857465737433847465737484746573748474657374ddc988016345785d8a0000c9880c7d713b49da0000c887b1a2bc2ec500008a021e19e0c9bab24000008b084595161401484a000000f1b05a18d4aa3e6aff4835f07588ae66be19684476d38799f63e54c6b5732fad1e86dce7458b1c295404fb54a0d61e50bb97f862b8607eee5f5d8e07fdf53f700281fb290c378ffca5167d1c8443fd1f42408e51af1f70e3f910361da2d88a64a612afa0ae00c6fbe396333e449d32120f2702bb29032e07d81c57ed5b0722eaa9bcce9cabf6eaf22ce513676fcf5d2d06a6998f4a0e8a021e19e0c9bab2400000808506fc23ac008350ef0828a08bc729219637ca0ff3286289484830b0a91428da80de43b2d8e3c0330346ff04a031aed5e2b812a9c689d7bc75abd53effb36f38cc356bcf061465dd8f545288de"
     }
     reference_response = [
         {
@@ -1419,7 +1427,7 @@ def test_pending_staking_transactions_v2():
         "name": "test",
         "securityContact": "test",
         "slotPubKeys": [
-            "29cdd2ea5ef25bfee0bbc649065ceb2d0e19cc25f42541154eca69c0ff923971e20352fbfeeac5d17f8f6c6fc5871e88"
+            "5a18d4aa3e6aff4835f07588ae66be19684476d38799f63e54c6b5732fad1e86dce7458b1c295404fb54a0d61e50bb97"
         ],
         "validatorAddress": "one13muqj27fcd59gfrv7wzvuaupgkkwvwzlxun0ce",
         "website": "test"
