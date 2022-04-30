@@ -967,12 +967,9 @@ def test_get_median_raw_stake_snapshot(s0_validator):
     curr_epoch = blockchain.get_latest_header(endpoint=endpoints[0])["epoch"]
     val_0_info = staking.get_validator_information(s0_validator["validator-addr"], endpoint=endpoints[0])
     s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"], 16)
-    print(staking_epoch)
-    print(s0_creation_epoch)
 
 
     while curr_epoch <= s0_creation_epoch or curr_epoch < staking_epoch:
-        print ("epoch", curr_epoch)
         time.sleep(random.uniform(0.5, 1.5))  # Random to stop burst spam of RPC calls.
         curr_epoch = blockchain.get_latest_header(endpoint=endpoints[beacon_shard_id])["epoch"]
 
@@ -982,23 +979,19 @@ def test_get_median_raw_stake_snapshot(s0_validator):
     while prev_block_epoch != curr_epoch:
         time.sleep(random.uniform(0.5, 1.5))  # Random to stop burst spam of RPC calls.
         curr_block = blockchain.get_latest_header(endpoint=endpoints[0])["blockNumber"]
-        print("block", curr_block)
         prev_block_epoch = int(blockchain.get_block_by_number(curr_block - 1)["epoch"], 16)
 
     # Check v1
     raw_response = base_request("hmy_getMedianRawStakeSnapshot", params=[], endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
-    print(raw_response)
     found_s0_winner, found_s0_candidate = False, False
     for val in response["epos-slot-winners"]:
-        print(val)
         if val["slot-owner"] == s0_validator["validator-addr"]:
             found_s0_winner = True
             break
     assert found_s0_winner, f"Expected validator {s0_validator['validator-addr']} to win election"
     for val in response["epos-slot-candidates"]:
-        print(val)
         if val["validator"] == s0_validator["validator-addr"]:
             found_s0_candidate = True
             break
@@ -1248,7 +1241,7 @@ def test_get_validators_v1(s0_validator, s1_validator):
         if val["address"] == s1_validator["validator-addr"]:
             found_s1 = True
     assert found_s0 and found_s1, f"Expected to find validator information for " \
-                                  f"{s0_validator['validator-addr']} and {s0_validator['validator-addr']}"
+                                  f"{s0_validator['validator-addr']} and {s1_validator['validator-addr']}"
 
 
 @txs.staking
@@ -1296,7 +1289,7 @@ def test_pending_staking_transactions_v1():
         "validator-addr": "one13v9m45m6yk9qmmcgyq603ucy0wdw9lfsxzsj9d",
         "delegator-addr": "one13v9m45m6yk9qmmcgyq603ucy0wdw9lfsxzsj9d",
         "name": "test",
-        "identity": "test1",
+        "identity": "test2",
         "website": "test",
         "security-contact": "test",
         "details": "test",
@@ -1307,9 +1300,9 @@ def test_pending_staking_transactions_v1():
         "max-total-delegation": 10000000,
         "amount": 10000,
         "pub-bls-key": "1ffbdd82dca92a42330d3b119ea007de74c81d446c3b396dd9e1ba1f9fa95a43125cd16c4f79dd1d505a5eb6a22e7c8a",
-        "hash": "0x65ba63687dbb65efd6f31af14dccc21faa6e5df04e64a73d406f107bd5268818",
+        "hash": "0x27e40b843f12f216e301e9d03d5691cda04fd152ca739e3bfece2aa66c508bb8",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf9015880f90106948b0bbad37a258a0def082034f8f3047b9ae2fd30da8474657374857465737431847465737484746573748474657374ddc988016345785d8a0000c9880c7d713b49da0000c887b1a2bc2ec500008a021e19e0c9bab24000008b084595161401484a000000f1b01ffbdd82dca92a42330d3b119ea007de74c81d446c3b396dd9e1ba1f9fa95a43125cd16c4f79dd1d505a5eb6a22e7c8af862b8603ee56bf8d64e4472b4273a4c10e12d498e8a0ac01df613e44ccf7c211bbed865fc192c93b8f23a3b67f352153921e304380503169a47746ba61ea9a720dad734b07ecc997e6e0cabecba00c5a73f43b3773ec2b51f67023102aedd2deff1048a8a021e19e0c9bab2400000808506fc23ac008350ef0827a06db0690595f52da9bfb56efada688f036131c2e0e402a97e894057665cce9d79a078ca1a7f414db879145f9921e61349f7ace7d9b6d2f0ede5a29635b03af4ed01"
+        "signed-raw-tx": "0xf9015880f90106948b0bbad37a258a0def082034f8f3047b9ae2fd30da8474657374857465737432847465737484746573748474657374ddc988016345785d8a0000c9880c7d713b49da0000c887b1a2bc2ec500008a021e19e0c9bab24000008b084595161401484a000000f1b01ffbdd82dca92a42330d3b119ea007de74c81d446c3b396dd9e1ba1f9fa95a43125cd16c4f79dd1d505a5eb6a22e7c8af862b8603ee56bf8d64e4472b4273a4c10e12d498e8a0ac01df613e44ccf7c211bbed865fc192c93b8f23a3b67f352153921e304380503169a47746ba61ea9a720dad734b07ecc997e6e0cabecba00c5a73f43b3773ec2b51f67023102aedd2deff1048a8a021e19e0c9bab2400000808506fc23ac008350ef0828a0c10e91884acbb4ce01d4fd960c69287e9d60a6e8dbca13fe4e74a2557c8eca99a02648d27fd5162dfb5d76b6f87c0743960b1634141f98806fc3f0f43035244edc"
     }
     reference_response = [
         {
