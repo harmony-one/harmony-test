@@ -30,6 +30,7 @@
     "bootstrap_balances": "",
     "interesting_accounts": "",
     "reconciliation_disabled": false,
+    "inactive_discrepancy_search_disabled": false,
     "balance_tracking_disabled": false,
     "coin_tracking_disabled": false,
     "end_conditions": {
