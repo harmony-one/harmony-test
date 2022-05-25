@@ -43,7 +43,7 @@
     "results_output_file": ""
   },
   "construction": {
-    "offline_url": "http://localhost:9798",
+    "offline_url": "http://localhost:9796",
     "max_offline_connections": 1,
     "stale_depth": 0,
     "broadcast_limit": 0,
