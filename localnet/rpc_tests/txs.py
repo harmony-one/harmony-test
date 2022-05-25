@@ -100,14 +100,14 @@ initial_funding = [
     {
         # Used by: `test_send_raw_transaction_v1`
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
-        "to": "one1p5x4t7mvd94jn5awxmhlvgqmlazx5egzz7rveg",
-        # mushroom penalty pulse blouse horror into color call grace observe famous bridge consider universe uncle horror people tank useless alley uncover emotion next ke
+        "to": "one1pvkjamc0q96s6z62qzz6e09k2qrqqdj34ylxvd",
+        # satisfy spend chaos twice sort obvious mercy prize slow divert addict section love inflict claim turn elbow pet flock cigar social spoil turn ensure
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0xd2fd9cf17e26d2f7f3e817a8f270bc13e5f45ae035c7cff38523b9120f45a660",
+        "hash": "0x7ed85da44ed014ea73f1196985643b92ce2577488a5910a92e209c543ead82f8",
         "nonce": "0x5",
-        "signed-raw-tx": "0xf870058506fc23ac008252088080940d0d55fb6c696b29d3ae36eff6201bff446a65028a152d02c7e14af68000008027a033303db8221812580976713fa99ec8bdbc2a35c35147b52e56f486830e5809a5a021810b7f799afce363b98345c0491114fbddd8093d35dacc03a0a74d92369709",
+        "signed-raw-tx": "0xf870058506fc23ac008252088080940b2d2eef0f01750d0b4a0085acbcb650060036518a152d02c7e14af68000008027a055c5b550d01e0ce9ba338f8d9cf190dd813ac7a8184e332e10eb1ffce8973243a030bf6f289ba3fa13415d0bd601abdb94630986efb59f9ce19d6c0a1e49d11502",
     },
     {
         # Used by: `test_send_raw_transaction_v2`

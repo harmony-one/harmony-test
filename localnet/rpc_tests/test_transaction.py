@@ -321,46 +321,46 @@ def test_get_cx_receipt_by_hash_v2(cross_shard_txs):
     assert_valid_json_structure(reference_response, response)
 
 
-# @pytest.mark.run(order=0)
-# def test_send_raw_transaction_v1():
-#     tx = {
-#         "from": "one1p5x4t7mvd94jn5awxmhlvgqmlazx5egzz7rveg",
-#         "to": "one1mjunf85vnhc4drv57ugsyg2fxjnsq920qzkpwq",
-#         # identify energy glimpse train script text town amused major slot armed fiction park alter dance live snow path picture desk metal voice distance good
-#         "amount": "1000",
-#         "from-shard": 0,
-#         "to-shard": 0,
-#         "hash": "0x5c5029de0c45a692265ec55d5218834c837c4c8d7cd2ed9598a858ed8ee8c811",
-#         "nonce": "0x0",
-#         "signed-raw-tx": "0xf86e80843b9aca00825208808094dcb9349e8c9df1568d94f71102214934a700154f893635c9adc5dea000008028a0e727143889e1ac8fbcaed655e186407b6b6978cbff63f79c0a6bd57bfb75ef06a07409113d6df43969d20552c9ea239e930a1ae736a6f3d2b3d4b8a3392217f99d",
-#     }
-#     reference_response = {
-#         "code": -32000,
-#         "message": "transaction already finalized"
-#     }
+@pytest.mark.run(order=0)
+def test_send_raw_transaction_v1():
+    tx = {
+        "from": "one1pvkjamc0q96s6z62qzz6e09k2qrqqdj34ylxvd",
+        "to": "one1mjunf85vnhc4drv57ugsyg2fxjnsq920qzkpwq",
+        # identify energy glimpse train script text town amused major slot armed fiction park alter dance live snow path picture desk metal voice distance good
+        "amount": "1000",
+        "from-shard": 0,
+        "to-shard": 0,
+        "hash": "0x5e1ecefd00a7ce07ad1b307ac6da86544c68815eed4b5c605f151e538d2b416c",
+        "nonce": "0x0",
+        "signed-raw-tx": "0xf86f808506fc23ac00825208808094dcb9349e8c9df1568d94f71102214934a700154f893635c9adc5dea000008028a0c4214018d34fe9d2021c9bdc9a05247de4d55a304ef4d5a7c5fefea629008697a03edf9fc15552602015dbd1091dd71db17efb0a52d664aeb639cb373dbe20e81f",
+    }
+    reference_response = {
+        "code": -32000,
+        "message": "transaction already finalized"
+    }
 
-#     if get_transaction(tx["hash"], tx["from-shard"]) is not None:
-#         pytest.skip(f"Test transaction (hash {tx['hash']}) already present on chain...")
+    if get_transaction(tx["hash"], tx["from-shard"]) is not None:
+        pytest.skip(f"Test transaction (hash {tx['hash']}) already present on chain...")
 
-#     # Submit new transaction...
-#     response = base_request('hmy_sendRawTransaction', params=[tx["signed-raw-tx"]],
-#                             endpoint=endpoints[tx["from-shard"]])
-#     tx_hash = check_and_unpack_rpc_response(response, expect_error=False)
-#     assert tx_hash == tx["hash"], f"Expect submitted transaction to get tx hash of {tx['hash']}, got {tx_hash}"
+    # Submit new transaction...
+    response = base_request('hmy_sendRawTransaction', params=[tx["signed-raw-tx"]],
+                            endpoint=endpoints[tx["from-shard"]])
+    tx_hash = check_and_unpack_rpc_response(response, expect_error=False)
+    assert tx_hash == tx["hash"], f"Expect submitted transaction to get tx hash of {tx['hash']}, got {tx_hash}"
 
-#     # Test finalized transaction error...
-#     start_time = time.time()
-#     while time.time() - start_time <= tx_timeout:
-#         if get_transaction(tx["hash"], tx["from-shard"]) is not None:
-#             raw_response = base_request('hmy_sendRawTransaction', params=[tx["signed-raw-tx"]],
-#                                         endpoint=endpoints[tx["from-shard"]])
-#             response = check_and_unpack_rpc_response(raw_response, expect_error=True)
-#             assert_valid_json_structure(reference_response, response)
-#             assert reference_response["code"] == response["code"], f"Expected error code {reference_response['code']}, " \
-#                                                                    f"got {response['code']}"
-#             return
-#         time.sleep(0.25)
-#     raise AssertionError(f"Timeout! Finalized transaction not found for {json.dumps(tx, indent=2)}")
+    # Test finalized transaction error...
+    start_time = time.time()
+    while time.time() - start_time <= tx_timeout:
+        if get_transaction(tx["hash"], tx["from-shard"]) is not None:
+            raw_response = base_request('hmy_sendRawTransaction', params=[tx["signed-raw-tx"]],
+                                        endpoint=endpoints[tx["from-shard"]])
+            response = check_and_unpack_rpc_response(raw_response, expect_error=True)
+            assert_valid_json_structure(reference_response, response)
+            assert reference_response["code"] == response["code"], f"Expected error code {reference_response['code']}, " \
+                                                                   f"got {response['code']}"
+            return
+        time.sleep(0.25)
+    raise AssertionError(f"Timeout! Finalized transaction not found for {json.dumps(tx, indent=2)}")
 
 
 @pytest.mark.run(order=0)
