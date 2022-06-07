@@ -235,10 +235,10 @@ def test_get_pending_cx_receipts():
                 ]
             },
             "header": {
-                "shard-id": 1,
-                "block-header-hash": "0x2e0295f760bc69cdf840576636f61602f8b13ea5172562837c10a9b6f5fa711e",
-                "block-number": 35,
-                "view-id": 35,
+                "shardID": 1,
+                "hash": "0x2e0295f760bc69cdf840576636f61602f8b13ea5172562837c10a9b6f5fa711e",
+                "number": "0x23",
+                "viewID": 35,
                 "epoch": 5
             },
             "commitSig": "G7oQCfiRJjl8s1i7B2xxPWZefCW5muiqyNY0PwcNOFt2QQkRC95ongKIGuIKCLMAVkDpkZRdC7B0cUoe3tKceT6/9++sxcwPRQ2NBWA/u6Gkl6UneKs4Xzhpuez2MoOG",
