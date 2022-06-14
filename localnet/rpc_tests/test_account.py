@@ -40,9 +40,9 @@ def account_test_tx():
         "amount": "1000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0xad262f6e399bd15e4cf3bc1717a481db6b595ace025bb1803021602067b43bbc",
+        "hash": "0x3759ab736798efe609bd1eb69145616ccc57baea99a9abab4e259e935f488bc5",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf86e80843b9aca008252088080948154e933c6cdcba536b04e1fa03c1de1bb6ad8f7893635c9adc5dea000008028a0642d2d1a6b4e1049fccc23431bcd27fa19f249c27657ffca3653950b50bbde7aa06c8cc31c0fdeb6e1c80fc1a69d721de29a9830edff23b5af561d240c1df96179",
+        "signed-raw-tx": "0xf86f808506fc23ac008252088080948154e933c6cdcba536b04e1fa03c1de1bb6ad8f7893635c9adc5dea000008028a086f785f5893efe3ff12b3fdaa0e52ae6a7b5b6897edb15f177836df355cbf2dea0648149e5feccfff1418e8cd6ac55bb9f26423f95344e558d917b25d4b7ac88df",
     }
 
     in_initially_funded = False
@@ -122,8 +122,8 @@ def test_get_transactions_history_v1():
                 "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
                 "timestamp": "0x5f0d84e2",
                 "gas": "0x5208",
-                "gasPrice": "0x3b9aca00",
-                "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+                "gasPrice": "0x6fc23ac00",
+                "hash": "0x3759ab736798efe609bd1eb69145616ccc57baea99a9abab4e259e935f488bc5",
                 "input": "0x",
                 "nonce": "0x0",
                 "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -140,7 +140,7 @@ def test_get_transactions_history_v1():
 
     reference_response_short = {
         "transactions": [
-            "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+            "0x3759ab736798efe609bd1eb69145616ccc57baea99a9abab4e259e935f488bc5",
         ]
     }
 
@@ -184,8 +184,8 @@ def test_get_transactions_history_v2():
                 "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
                 "timestamp": 1594721506,
                 "gas": 21000,
-                "gasPrice": 1000000000,
-                "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+                "gasPrice": 30000000000,
+                "hash": "0x3759ab736798efe609bd1eb69145616ccc57baea99a9abab4e259e935f488bc5",
                 "input": "0x",
                 "nonce": 0,
                 "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -202,7 +202,7 @@ def test_get_transactions_history_v2():
 
     reference_response_short = {
         "transactions": [
-            "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+            "0x3759ab736798efe609bd1eb69145616ccc57baea99a9abab4e259e935f488bc5",
         ]
     }
 

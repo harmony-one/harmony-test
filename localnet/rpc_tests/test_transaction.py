@@ -59,9 +59,9 @@ def cross_shard_txs():
         "amount": "1000",
         "from-shard": 0,
         "to-shard": 1,
-        "hash": "0xc0a84ec15fc3391089f20fa6b9cc90c654eb8dd2f6815297de89eef38ce4fe2b",
+        "hash": "0x9dae9c8e2c8abc8eebab1f7731f5c28cacf2ced913f4e4d49d000f74df0edca2",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf86e80843b9aca008252088001945d5f0e515d3714ff3118d1378dbb2f36f7face43893635c9adc5dea000008027a03b38081f3ece7725f0a7ed2e6892ec58fb906add07682b0deb3ecc1fab6643d7a050b56eef0037a135b48a2da72a93fd4ce3f32cb1e52ec01e1ab70c8888d9f10a",
+        "signed-raw-tx": "0xf86f808506fc23ac008252088001945d5f0e515d3714ff3118d1378dbb2f36f7face43893635c9adc5dea000008027a0a45a914e5072d383158f790c34019c2ea2e60a1826cf2c95fa758b8a7168e52fa04ee2ac08ae98d0c9644feffdbc9b036d2be617cb7f92104ca7274eb9f102c9a7",
     }
     s1_test_tx = {
         "from": "one1t40su52axu207vgc6ymcmwe0xmml4njrskk2vf",
@@ -70,9 +70,9 @@ def cross_shard_txs():
         "amount": "500",
         "from-shard": 1,
         "to-shard": 0,
-        "hash": "0x819b0d7902134dadd07851edba0e8694e60c1aee057a96d2ceb4a9118cee0298",
+        "hash": "0x30e6cb1f8889d115512b1b5963aaefa66e180f350ed78c504d24b7ea224ac123",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf86e80843b9aca0082520801809407e496c4334c9c33ebffd35f0d5af805dc72e8a1891b1ae4d6e2ef5000008027a06650086393f005a04ca83fb59e228e8ebd642bc293d3698bfc46dc0ee5d872cda00cfca823a0bc32abe40a133345427b81d5382bbe0c4333227c1912dcddd89e99",
+        "signed-raw-tx": "0xf86f808506fc23ac0082520801809407e496c4334c9c33ebffd35f0d5af805dc72e8a1891b1ae4d6e2ef5000008027a093992f9dc99fa49f48afca645e41affa23efbdc2035da784524eda018fe3ead6a017471c901f17b9d467bf0a4ec1871870a6592d6e573148dd5091a8c979656ad3",
     }
     txs = [None, None]  # s0 -> s1 is element 0, s1 -> s0 is element 1
 
@@ -129,9 +129,9 @@ def test_get_current_transaction_error_sink():
         "amount": "1000000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0xa07018dace53fca04a1fe6bd70e6ef7d95520d8da5758f85ab70125faa2dabfd",
+        "hash": "0x2f3be62d06027ec35369680329b2796cd811a902f2fe5cd67d761e962a3639a4",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf86f80843b9aca008252088080947267589266bdda31ca6d68303f57913a460c7ae08ad3c21bcecceda10000008027a0376ba8084723c3a98a11c3b950ad55d3ba26bddac1def84abd0b6fab2299ea73a06db20ea7930d0a3beeb342973406fd8e11a59e500a70f26bf2e43f11579c36ab",
+        "signed-raw-tx": "0xf870808506fc23ac008252088080947267589266bdda31ca6d68303f57913a460c7ae08ad3c21bcecceda10000008028a06fb1e5a03bf27f68d48b79cb12dfefcdefcaa72113f80bf3a9ccc7f4614bcfa3a018ba6c8c1e7bba73352ba966b28e5327ba253f70bc6032cab2d5a0ce12f3bd6f",
     }
     reference_response = [
         {
@@ -206,9 +206,9 @@ def test_get_pending_cx_receipts():
         "amount": "1000",
         "from-shard": 0,
         "to-shard": 1,
-        "hash": "0x0988bcaecba9cc731245ee7ae9595d1202448413bc6e517b4c0c8da9abb1e479",
+        "hash": "0x33e4c0a582f87731a474332ca712b20f322afd0221aa3f4a287c985afab52476",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf86e80843b9aca008252088001946c229e90234ff52f11bad85c99e245c3fb2ddd9b893635c9adc5dea000008027a0fc7e0c3790b7c507749f4286e5b6cc59357129586fc48a326442c27886e0236ba0587c72684d05fad0c1c2111d55d810bc086cd5adf129806a89a019b539b19d26",
+        "signed-raw-tx": "0xf86f808506fc23ac008252088001946c229e90234ff52f11bad85c99e245c3fb2ddd9b893635c9adc5dea000008027a0978e0924045ba31ea891da261895f3d2840e687f0fd5df35208df2358bac69e7a05d588e2d823b65773537337d434affd0374c1331cd96841ff1513ee55504a8d1",
     }
     reference_response = [
         {
@@ -235,10 +235,10 @@ def test_get_pending_cx_receipts():
                 ]
             },
             "header": {
-                "shard-id": 1,
-                "block-header-hash": "0x2e0295f760bc69cdf840576636f61602f8b13ea5172562837c10a9b6f5fa711e",
-                "block-number": 35,
-                "view-id": 35,
+                "shardID": 1,
+                "hash": "0x2e0295f760bc69cdf840576636f61602f8b13ea5172562837c10a9b6f5fa711e",
+                "number": "0x23",
+                "viewID": 35,
                 "epoch": 5
             },
             "commitSig": "G7oQCfiRJjl8s1i7B2xxPWZefCW5muiqyNY0PwcNOFt2QQkRC95ongKIGuIKCLMAVkDpkZRdC7B0cUoe3tKceT6/9++sxcwPRQ2NBWA/u6Gkl6UneKs4Xzhpuez2MoOG",
@@ -324,15 +324,15 @@ def test_get_cx_receipt_by_hash_v2(cross_shard_txs):
 @pytest.mark.run(order=0)
 def test_send_raw_transaction_v1():
     tx = {
-        "from": "one1p5x4t7mvd94jn5awxmhlvgqmlazx5egzz7rveg",
+        "from": "one1pvkjamc0q96s6z62qzz6e09k2qrqqdj34ylxvd",
         "to": "one1mjunf85vnhc4drv57ugsyg2fxjnsq920qzkpwq",
         # identify energy glimpse train script text town amused major slot armed fiction park alter dance live snow path picture desk metal voice distance good
         "amount": "1000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x5c5029de0c45a692265ec55d5218834c837c4c8d7cd2ed9598a858ed8ee8c811",
+        "hash": "0x5e1ecefd00a7ce07ad1b307ac6da86544c68815eed4b5c605f151e538d2b416c",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf86e80843b9aca00825208808094dcb9349e8c9df1568d94f71102214934a700154f893635c9adc5dea000008028a0e727143889e1ac8fbcaed655e186407b6b6978cbff63f79c0a6bd57bfb75ef06a07409113d6df43969d20552c9ea239e930a1ae736a6f3d2b3d4b8a3392217f99d",
+        "signed-raw-tx": "0xf86f808506fc23ac00825208808094dcb9349e8c9df1568d94f71102214934a700154f893635c9adc5dea000008028a0c4214018d34fe9d2021c9bdc9a05247de4d55a304ef4d5a7c5fefea629008697a03edf9fc15552602015dbd1091dd71db17efb0a52d664aeb639cb373dbe20e81f",
     }
     reference_response = {
         "code": -32000,
@@ -372,9 +372,9 @@ def test_send_raw_transaction_v2():
         "amount": "1000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x99919613fce4bbc9f4a068373bbb67b3f7e5ce34a7a1eef866a32284ec70261a",
+        "hash": "0x73e2aa48841b6d87eb6d7a4f6fc0e4253e1c806fdacd420b4d100f718e9dcd62",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf86e80843b9aca00825208808094acb30b991ea21a3a3447823c9daa1263bd09ce0d893635c9adc5dea000008028a03ab9d7562ca97f7a57ccca3b691f5b7b8e75a2f0f4d38109bb818da5199d62cda02cb8180d0fed4cfe03d25f3458c7d11c91185273b6ae5e902d1debe998326997",
+        "signed-raw-tx": "0xf86f808506fc23ac00825208808094acb30b991ea21a3a3447823c9daa1263bd09ce0d893635c9adc5dea000008028a02607a24abff19534b98b0a6e365ff56f7db2449e793ce6e241263154b7527d81a02db39163c82772ab5b5276f096a39ab0ed5608f187e0b3be0273024a98c5a205",
     }
     reference_response = {
         "code": -32000,
@@ -413,8 +413,8 @@ def test_get_transaction_by_hash_v1():
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "timestamp": "0x5f0ec12e",
         "gas": "0x5208",
-        "gasPrice": "0x3b9aca00",
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "gasPrice": "0x6fc23ac00",
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "input": "0x",
         "nonce": "0x0",
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -445,8 +445,8 @@ def test_get_transaction_by_hash_v2():
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "timestamp": 1594802478,
         "gas": 21000,
-        "gasPrice": 1000000000,
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "gasPrice": 30000000000,
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "input": "0x",
         "nonce": 0,
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -483,7 +483,7 @@ def test_get_transaction_receipt_v1():
         "shardID": 0,
         "status": "0x1",
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
-        "transactionHash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "transactionHash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "transactionIndex": "0x0"
     }
     init_tx_record = initial_funding[0]
@@ -511,7 +511,7 @@ def test_get_transaction_receipt_v2():
         "shardID": 0,
         "status": 1,
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
-        "transactionHash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "transactionHash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "transactionIndex": 0
     }
     init_tx_record = initial_funding[0]
@@ -533,9 +533,9 @@ def test_pending_transactions_v1():
         "amount": "1000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0xef8091e621745bd17133664c96842ef9d730a842f69bce6402b49490af0a17ef",
+        "hash": "0x59272596c3633c486828755f8c56c379392d51eb5dd96f7c5b6a0805ff39c704",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf86e80843b9aca008252088080948f5cc1064bf4e37c0f66e9a39f861eee98eaeb9a893635c9adc5dea000008028a0e876d901525a8799a8eb3ea03e2c1a43129c2ff3136ec10f6345f2899bab5026a05c4f1e659b9d371c2e9994aee240b966e36b6dd609747d42c9d9c9f23371d808",
+        "signed-raw-tx": "0xf86f808506fc23ac008252088080948f5cc1064bf4e37c0f66e9a39f861eee98eaeb9a893635c9adc5dea000008028a044385f2ccbc98d0ff8dfb4e5109334aed1e1d2e6aca327e07afc18d33e9cc236a060aa69ecddc755ed3ecf1cb2d59819b1d546241b448b71f64c4e32236d36c1cd",
     }
     reference_response = [
         {
@@ -544,8 +544,8 @@ def test_pending_transactions_v1():
             "from": "one1twhzfc2wr4j5ka7gs9pmllpnrdyaskcl5lq8ye",
             "timestamp": "0x0",
             "gas": "0x5208",
-            "gasPrice": "0x3b9aca00",
-            "hash": "0xef8091e621745bd17133664c96842ef9d730a842f69bce6402b49490af0a17ef",
+            "gasPrice": "0x6fc23ac00",
+            "hash": "0x59272596c3633c486828755f8c56c379392d51eb5dd96f7c5b6a0805ff39c704",
             "input": "0x",
             "nonce": "0x0",
             "to": "one13awvzpjt7n3hcrmxax3elps7a6vw46u63kc28p",
@@ -597,9 +597,9 @@ def test_pending_transactions_v2():
         "amount": "1000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x78324d91e69bdb14f4d0948bbad4ffc8bf309d4cf3e49c4c9a6871d02910c234",
+        "hash": "0x82fd4678de1df49eb8dc4ca361300c950712bd7f328990e10ff6c252a86050b6",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf86e80843b9aca00825208808094162f2bee06b43bbf9b8cf5e362de9dcf064d79f3893635c9adc5dea000008028a0c6f2f65ce9dca19c50a81c3ccde8a466d3b1646d22a17184050f88bc28ea935fa0746c8b2c911bea6dce4505f2965b9ed0a4a1d04dc362395bc2ea41bd7b88fab5",
+        "signed-raw-tx": "0xf86f808506fc23ac00825208808094162f2bee06b43bbf9b8cf5e362de9dcf064d79f3893635c9adc5dea000008028a07a3dd13017fe6468b087fd3aec0cb2b6896fb4f78e3aa985172c39b3cd9db27aa068e6a91e4918342ee725d9e1cc29f6849b690df04bfde13145c8dd65f475b1f0",
     }
     reference_response = [
         {
@@ -608,8 +608,8 @@ def test_pending_transactions_v2():
             "from": "one1twhzfc2wr4j5ka7gs9pmllpnrdyaskcl5lq8ye",
             "timestamp": 0,
             "gas": 21000,
-            "gasPrice": 1000000000,
-            "hash": "0xef8091e621745bd17133664c96842ef9d730a842f69bce6402b49490af0a17ef",
+            "gasPrice": 30000000000,
+            "hash": "0x82fd4678de1df49eb8dc4ca361300c950712bd7f328990e10ff6c252a86050b6",
             "input": "0x",
             "nonce": 0,
             "to": "one13awvzpjt7n3hcrmxax3elps7a6vw46u63kc28p",
@@ -652,8 +652,8 @@ def test_get_transaction_by_block_hash_and_index_v1():
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "timestamp": "0x5f0ec12e",
         "gas": "0x5208",
-        "gasPrice": "0x3b9aca00",
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "gasPrice": "0x6fc23ac00",
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "input": "0x",
         "nonce": "0x0",
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -688,8 +688,8 @@ def test_get_transaction_by_block_hash_and_index_v2():
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "timestamp": 1594802478,
         "gas": 21000,
-        "gasPrice": 1000000000,
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "gasPrice": 30000000000,
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "input": "0x",
         "nonce": 0,
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -724,8 +724,8 @@ def test_get_transaction_by_block_number_and_index_v1():
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "timestamp": "0x5f0ec12e",
         "gas": "0x5208",
-        "gasPrice": "0x3b9aca00",
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "gasPrice": "0x6fc23ac00",
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "input": "0x",
         "nonce": "0x0",
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",
@@ -760,8 +760,8 @@ def test_get_transaction_by_block_number_and_index_v2():
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "timestamp": 1594802478,
         "gas": 21000,
-        "gasPrice": 1000000000,
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "gasPrice": 30000000000,
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "input": "0x",
         "nonce": 0,
         "to": "one1v92y4v2x4q27vzydf8zq62zu9g0jl6z0lx2c8q",

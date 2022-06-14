@@ -45,9 +45,9 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x5718a2fda967f051611ccfaf2230dc544c9bdd388f5759a42b2fb0847fc8d759",
+        "hash": "0x4553da3a01770e4048862c39dd8f2996eacf990cf40932a358405239fe3650fc",
         "nonce": "0x0",
-        "signed-raw-tx": "0xf86f80843b9aca0082520880809461544ab146a815e6088d49c40d285c2a1f2fe84f8a152d02c7e14af68000008028a076b6130bc018cedb9f8891343fd8982e0d7f923d57ea5250b8bfec9129d4ae22a00fbc01c988d72235b4c71b21ce033d4fc5f82c96710b84685de0578cff075a0a",
+        "signed-raw-tx": "0xf870808506fc23ac0082520880809461544ab146a815e6088d49c40d285c2a1f2fe84f8a152d02c7e14af68000008028a0dd11189f8c54cf363145d1c877b49748e4c98f5a799cb712b76adac3966651f0a05a764e87c0f056bace46d1f410bea6c9267dbfe713abaa4b3bd05389456dd3c0",
     },
     {
         # Used by: `cross_shard_txs`
@@ -57,9 +57,9 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x28c17c0a2736ba16930ad274e3ecbebea930e82553c7755e0b94c7d7cd1fd6f2",
+        "hash": "0x5dbef17541f1c375c692104419821aefeba47e62b1a28044abfef7f4a467cdd4",
         "nonce": "0x1",
-        "signed-raw-tx": "0xf86f01843b9aca00825208808094e655406a5679ad16aef509b832e7d5533004bb9f8a152d02c7e14af68000008028a0c50737adb507870c2b6f3d9966f096526761730c6b80bd702c114e24aa094ac1a063c0463619123dbe7541687fba70952dab62ba639199750b04cd8902ccb6d615",
+        "signed-raw-tx": "0xf870018506fc23ac00825208808094e655406a5679ad16aef509b832e7d5533004bb9f8a152d02c7e14af68000008027a0298a98ab57c51f5544632f283e452d1158b4565c6d3cd8ad667ec6ea6a4de0b7a046ea90929a047862deda016845bce6711e8e82f59133230fa511024283b74916",
     },
     {
         # Used by: `test_get_pending_cx_receipts`
@@ -69,9 +69,9 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x6bc3acc3b349edac6d3f563e78990a4566192d6fdab93814ea29ae9157d4085b",
+        "hash": "0x3d93962349fcd0e57fdfd17e94550dbd15ba75e8f2c1151a41b5535936e49abb",
         "nonce": "0x2",
-        "signed-raw-tx": "0xf86f02843b9aca008252088080942feb745d97abd24fb4c914e6fec610f3688b3dbb8a152d02c7e14af68000008027a0abfa0480b878ca798a17e88251109761ed1d281f1da92faa21b6e456ad558774a016b460ec602b08f06a2845478269b1014b5491bdc0993988ca39f689b2405992",
+        "signed-raw-tx": "0xf870028506fc23ac008252088080942feb745d97abd24fb4c914e6fec610f3688b3dbb8a152d02c7e14af68000008028a0084e402becab9df1ad57a8ff508dc6b64601839d385d6993ebc92e06f364184fa01500d6dbb3add350b89ff3957869af85eafa3bf29527b31f5ebe82db601c2d7e",
     },
     {
         # Used by: `test_pending_transactions_v1`
@@ -81,9 +81,9 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0xdcd7870635acd3fb1e962c76f2e3cddbeb421238fcf702e3d1fa42ca6de434b2",
+        "hash": "0x6e5125487d2b41024aa8d8e9b37a85e1f8acb48aa422cc849477cbc3142db2ff",
         "nonce": "0x3",
-        "signed-raw-tx": "0xf86f03843b9aca008252088080945bae24e14e1d654b77c88143bffc331b49d85b1f8a152d02c7e14af68000008027a0356e6bfd8718c7102f0d94fdb8be1cba090daf44c71086f9817de3b264cb54c2a052c8781691dce63997ca4f765adec7b351a9a23a80a97bcf238ccbdf8a71f71f",
+        "signed-raw-tx": "0xf870038506fc23ac008252088080945bae24e14e1d654b77c88143bffc331b49d85b1f8a152d02c7e14af68000008028a0d665a57bb8783ac9830b870726315e49faea916aa1ca66b4725db8fef6c06592a077717c9ecad6270917f90513b4673815cc6e84774f04adac84369d7821658e3b",
     },
     {
         # Used by: `test_pending_transactions_v2`
@@ -93,21 +93,21 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0xa8a678243fffcfc16ff8f35315094aafc029175b962ec595f7c71efce4a47c8a",
+        "hash": "0x7b5f795ca3ffbc05c6b79b52158f1dfafe8821e2f30f4a1939f22d6e347aadbb",
         "nonce": "0x4",
-        "signed-raw-tx": "0xf86f04843b9aca00825208808094e53c3fb2803a9b99775972be5bb49eea22d74dd48a152d02c7e14af68000008028a0d2f061075852ee5b2572b18e8879d5656e8660113d88f2b806961b25312e5ae1a078004b6b332f09b1a53c3cbad6fd427fa57b0b368ae2126e458b9622d1668edf",
+        "signed-raw-tx": "0xf870048506fc23ac00825208808094e53c3fb2803a9b99775972be5bb49eea22d74dd48a152d02c7e14af68000008027a044e33249ea5bcce6ac423bde73b78460df1cd91a1ce23c3396a987430edaa09fa0527b2650234543300d71190516481331a7a07c31fdebf039e4c439d145671cf2",
     },
     {
         # Used by: `test_send_raw_transaction_v1`
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
-        "to": "one1p5x4t7mvd94jn5awxmhlvgqmlazx5egzz7rveg",
-        # mushroom penalty pulse blouse horror into color call grace observe famous bridge consider universe uncle horror people tank useless alley uncover emotion next ke
+        "to": "one1pvkjamc0q96s6z62qzz6e09k2qrqqdj34ylxvd",
+        # satisfy spend chaos twice sort obvious mercy prize slow divert addict section love inflict claim turn elbow pet flock cigar social spoil turn ensure
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x1d0d4111d9f5d2d28e85d5ebd1460944e8d328df45a2bbfae1de309c3a6cf632",
+        "hash": "0x7ed85da44ed014ea73f1196985643b92ce2577488a5910a92e209c543ead82f8",
         "nonce": "0x5",
-        "signed-raw-tx": "0xf86f05843b9aca008252088080940d0d55fb6c696b29d3ae36eff6201bff446a65028a152d02c7e14af68000008027a06dee240ff456073c11fd093e24ba29eda88e00cd710c05d83c855cce1aff47a2a06bf74d512215a2ec02fb5034a1e344901706387e72ce08b5a37a2f434717f859",
+        "signed-raw-tx": "0xf870058506fc23ac008252088080940b2d2eef0f01750d0b4a0085acbcb650060036518a152d02c7e14af68000008027a055c5b550d01e0ce9ba338f8d9cf190dd813ac7a8184e332e10eb1ffce8973243a030bf6f289ba3fa13415d0bd601abdb94630986efb59f9ce19d6c0a1e49d11502",
     },
     {
         # Used by: `test_send_raw_transaction_v2`
@@ -117,9 +117,9 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x855e230866377e00a56ae6958c8acfe6f0d19f8e71a0c323d92794aeda5c6bc8",
+        "hash": "0xeaaedd017b3e2efedbe7d05f38a9ee5d7950547f73c997b08e5b2e6a694b1285",
         "nonce": "0x6",
-        "signed-raw-tx": "0xf86f06843b9aca008252088080948ff9af553195936502f09a138532f84c7ca704788a152d02c7e14af68000008028a01a4c6dbc9177cf9057de09d4f654950a38aba83e98502d59b478f899b196c4aaa00652c34a53082aee876713954ce70a21288c3727c29fb9c729ce10f19d106370",
+        "signed-raw-tx": "0xf870068506fc23ac008252088080948ff9af553195936502f09a138532f84c7ca704788a152d02c7e14af68000008028a068a8211bdb8ae6ea7f85f140b37cfaa4e0a76e634bee673ac6e35d91b66700bea0795136404d542a1e40d16a924caaf1faee6243736b21f1ea7b4e3d6fb350f472",
     },
     {
         # Used by: `test_get_current_transaction_error_sink`
@@ -129,9 +129,9 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x718a7299e1591bd2eb7bea7de6efc044de3d1a6ce2d96e85b17f892f118d2455",
+        "hash": "0x242ffd4bfbd34857dc36c59b7370bd9b50d7aef07a29555bc99483ac7feb378d",
         "nonce": "0x7",
-        "signed-raw-tx": "0xf86f07843b9aca00825208808094e4a12857776c3d434dd0790cf61fea1b081d7ba38a152d02c7e14af68000008028a0cdb715640768dbdbaa06b98ca8c346717b3c753a2ad70de81330f52cd6a1cbc1a05ced9fe853996e05216783fdab83ca91b6010605ad68d0153596b0fc35e8c40b",
+        "signed-raw-tx": "0xf870078506fc23ac00825208808094e4a12857776c3d434dd0790cf61fea1b081d7ba38a152d02c7e14af68000008028a0f09f48a6b86b0966de74f5ac242ab727332d9fad99ef0403fb22547770c3f3e5a078885614410f66af51b306090cfce7deeed59363dd40f758b5592e6a74f642a1",
     },
     {
         # Used by: `deployed_contract`
@@ -141,9 +141,9 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x6674d1223fdff897d74b3483da2086f8370da747e93b6f6c32fe59f518c2b777",
+        "hash": "0x078fa8486683e5c04e820dde99c8280af0848788df313ee20cc1e474bdcac821",
         "nonce": "0x8",
-        "signed-raw-tx": "0xf86f08843b9aca00825208808094a69d631e2a5be669f41ab9bae25711e37730884d8a152d02c7e14af68000008027a03f1c0d190eec991d407848227cc0f4f75ba157f187f539dfa6050dd1cfa253a4a00cbc0eb6f81f3a0049db90496c62598d267c5c82b203ab12e969e49012d32be8",
+        "signed-raw-tx": "0xf870088506fc23ac00825208808094a69d631e2a5be669f41ab9bae25711e37730884d8a152d02c7e14af68000008027a01af975303e964b88bf2158a8fdc00fee0244322a301d33ef3117798979f9c255a01a14d5aff8b9e2f4eaff1ee3761467e35e55ab10993118ab6454a8b1235be413",
     },
     {
         # Used by: `s0_validator`
@@ -153,9 +153,9 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x5def784f5b9a8683e7c98b202a0e2ed303f84224900f95775d92be54e1bcb504",
+        "hash": "0x4a069bf42191da42f2955f045e4c304904073476c7bf8f7d1cf6bf7b9a2eb995",
         "nonce": "0x9",
-        "signed-raw-tx": "0xf86f09843b9aca008252088080947946f5ce1eeb290965deef936cd9154c22173efe8a152d02c7e14af68000008027a0c991fab63ede6b83f7872020ac54fa9ba900cce8aa6b0dc07dbca1bfb840c97da029795861de7c6d839ce54903f960e3326f03a84c90deed384f7dcfc8d9703a16",
+        "signed-raw-tx": "0xf870098506fc23ac008252088080947946f5ce1eeb290965deef936cd9154c22173efe8a152d02c7e14af68000008028a0aa679ee9c7bc4741d55c9724f248f23d0a5a79c9f5bf960c6a07a3436d1234f4a063771c21dab504eb15f44efcfa97090ba072171e71b6df77a35ea84bc2b2302f",
     },
     {
         # Used by: `s1_validator`
@@ -165,9 +165,9 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0xf66f6cb67ad9e1622ca77d50ec52a25be37bcd601606d7530711e58aca891245",
+        "hash": "0x3ddcd1524386b985ed6ec4f0e02e6fcc4ad5180d1fffaa847c7ff95fd0c82029",
         "nonce": "0xa",
-        "signed-raw-tx": "0xf86f0a843b9aca008252088080949ec87071cf2aaa9842a32db7aabc3f6881944ad58a152d02c7e14af68000008027a0efa56eae2e0457010ad57e46cf4332158e670aadee8586c586f74047fb6e4211a038827d2e57a50ca7b311c06d90426ddad659d68e598342f94a1b430f2adb39da",
+        "signed-raw-tx": "0xf8700a8506fc23ac008252088080949ec87071cf2aaa9842a32db7aabc3f6881944ad58a152d02c7e14af68000008027a075ffd26368005e0140659406472e875e22f3cef76f715a2e61d8fe3fd06de5d0a0407b1e42f8c876021a686399dcb1ac10baea0c87bd341463e95e8625cab559a9",
     },
     {
         # Used by: `test_delegation` & `test_undelegation`
@@ -177,9 +177,9 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0xb6d3a97d472a5b0259de0cd3ad0d41c6cc7e7b98ee0c314c29d09261a92e2354",
+        "hash": "0x48e942756c73070587af4d0b5191ca0b75438ea11da0157f950777cc1c711e03",
         "nonce": "0xb",
-        "signed-raw-tx": "0xf86f0b843b9aca0082520880809461cb49619c6e2cb83b1b42a1f6b36662d8c6c94e8a152d02c7e14af68000008028a00e1b96e61e8bb4c4bad89ed40d6cc43fcf003251fa5e9ed1cdf63e2a38ca110ca0675a1964ad3c32a2946f9bc86984b8910f81f752e2ef0ef9b1eb4cf9aec1032d",
+        "signed-raw-tx": "0xf8700b8506fc23ac0082520880809461cb49619c6e2cb83b1b42a1f6b36662d8c6c94e8a152d02c7e14af68000008027a031b487574472555b53591ee048d6036cf0cce14ebff7d5d1376371b337024d61a04dcc0298761d73c93a655954897b59e2ce2e78c35859c4fe24abdb6304ddf83a",
     },
     {
         # Used by: `test_pending_staking_transactions_v1`
@@ -189,9 +189,9 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0x85c7de662be7bbf0fd3be0bf8d0c5f910c4fd8d54ff8bc023725d09a9769fd6e",
+        "hash": "0x789a25e28c73dafcc5105205a629c297730d4da2cf95a5437d349d72d036d1e5",
         "nonce": "0xc",
-        "signed-raw-tx": "0xf86f0c843b9aca008252088080948b0bbad37a258a0def082034f8f3047b9ae2fd308a152d02c7e14af68000008027a073fc972cfce2875a6ed11b9db264f4ceaf5ef87a073955f08af18d1d6c2a914ba07bcea61a65ad903a42ba06e369eedd784049b789058279c2b13a5c9065df2a76",
+        "signed-raw-tx": "0xf8700c8506fc23ac008252088080948b0bbad37a258a0def082034f8f3047b9ae2fd308a152d02c7e14af68000008027a04d8d18da12f99299421a10dd5b610e6fbd1247f5f3e5f20f0778ac1fde664f02a05835c5ca12d0629553783356663617de7686b11e3614bf117d308213149c5b31",
     },
     {
         # Used by: `test_pending_staking_transactions_v2`
@@ -201,9 +201,9 @@ initial_funding = [
         "amount": "100000",
         "from-shard": 0,
         "to-shard": 0,
-        "hash": "0xffe73340c5a6e411c74fb29875dcb84df3d9c36fbbdb16cd3c47a3399ff8b0b9",
+        "hash": "0x9971b136f9678f456e97ce0db8d912208b7d811f3b76a5cc52c88d444f005ff6",
         "nonce": "0xd",
-        "signed-raw-tx": "0xf86f0d843b9aca008252088080948ef8092bc9c36854246cf384ce778145ace6385f8a152d02c7e14af68000008027a0269c69eef2be5633b297a93efa20bf6bf0e56c8dc9eb869a4af6864fcfc28c75a0188df392c87d1552cff6f54736cf6811efed7ea3464db4c0618de1bce6163be6",
+        "signed-raw-tx": "0xf8700d8506fc23ac008252088080948ef8092bc9c36854246cf384ce778145ace6385f8a152d02c7e14af68000008028a062b0acdaebb337d29b2fea7fdc6da31a13011c011405a975aa1220c84757635ea03e1ea73564a792ce05717ac783bbb9fc593e077b8e6bbe8e82b661817dd3e99d",
     },
 ]
 
