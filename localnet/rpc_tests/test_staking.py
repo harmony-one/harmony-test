@@ -933,6 +933,7 @@ def test_get_current_utility_metrics(s0_validator):
 @txs.staking
 @flaky(max_runs=6, rerun_filter=rerun_delay_filter(delay=8))
 @pytest.mark.run(after="test_get_validator_information")
+@pytest.skip("This test is flaky and needs to be fixed")
 def test_get_median_raw_stake_snapshot(s0_validator):
     """
     Note that v1 & v2 have the same responses.
