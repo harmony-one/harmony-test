@@ -23,7 +23,7 @@ from utils import (
     is_valid_json_rpc
 )
 
-tx_timeout = 20  # In seconds
+tx_timeout = 50  # In seconds
 beacon_shard_id = 0
 _is_cross_shard_era = False
 _is_staking_era = False
