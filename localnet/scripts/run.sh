@@ -95,6 +95,8 @@ function rosetta_tests() {
   echo "Starting test suite..."
   sleep 3
   # Run tests sequentially for clear error tracing
+  pwd
+  echo "dir: $DIR/../configs/localnet_rosetta_test_s0.json"
   rosetta-cli check:construction --configuration-file "$DIR/../configs/localnet_rosetta_test_s0.json" || error=1
   rosetta-cli check:data --configuration-file "$DIR/../configs/localnet_rosetta_test_s0.json" || error=1
   rosetta-cli check:construction --configuration-file "$DIR/../configs/localnet_rosetta_test_s1.json" || error=1
