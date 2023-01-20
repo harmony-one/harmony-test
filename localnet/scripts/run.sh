@@ -92,19 +92,19 @@ function rosetta_tests() {
   # WARNING: Assumtion is that EPOCH 2 can process ALL test transaction types...
   wait_for_epoch 2 300 # Timeout at ~900 seconds
 
-  echo "Starting test suite..."
+  echo "Starting Rosetta test suite, in quiet mode"
   sleep 3
   # Run tests sequentially for clear error tracing
   pwd
   echo "dir: $DIR/../configs/localnet_rosetta_test_s0.json"
   echo "[ROSETTA] check:construction s0"
-  rosetta-cli check:construction --configuration-file "$DIR/../configs/localnet_rosetta_test_s0.json" || error=1
+  rosetta-cli check:construction --configuration-file "$DIR/../configs/localnet_rosetta_test_s0.json" > /dev/null 2>1 || error=1
   echo "[ROSETTA] check:data s0"
-  rosetta-cli check:data --configuration-file "$DIR/../configs/localnet_rosetta_test_s0.json" || error=1
+  rosetta-cli check:data --configuration-file "$DIR/../configs/localnet_rosetta_test_s0.json" > /dev/null 2>1 || error=1
   echo "[ROSETTA] check:construction s1"
-  rosetta-cli check:construction --configuration-file "$DIR/../configs/localnet_rosetta_test_s1.json" || error=1
+  rosetta-cli check:construction --configuration-file "$DIR/../configs/localnet_rosetta_test_s1.json" > /dev/null 2>1 || error=1
   echo "[ROSETTA] check:data s1"
-  rosetta-cli check:data --configuration-file "$DIR/../configs/localnet_rosetta_test_s1.json" || error=1
+  rosetta-cli check:data --configuration-file "$DIR/../configs/localnet_rosetta_test_s1.json" > /dev/null 2>1 || error=1
   echo -e "\n=== \e[38;5;0;48;5;255mFINISHED ROSETTA API TESTS\e[0m ===\n"
   if ((error == 1)); then
     echo "FAILED ROSETTA TESTS"
