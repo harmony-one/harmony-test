@@ -11,6 +11,12 @@ RUN git clone https://github.com/harmony-one/harmony.git > /dev/null 2>1 \
     && git clone https://github.com/harmony-one/bls.git > /dev/null 2>1 \
     && git clone https://github.com/harmony-one/mcl.git > /dev/null 2>1
 
+# Fix complaints about Docker / root / user ownership for Golang "VCS stamping"
+# https://github.com/golang/go/blob/3900ba4baf0e3b309a55b5ac4dd25f709df09772/src/cmd/go/internal/vcs/vcs.go
+RUN git config --global --add safe.directory $GOPATH/src/github.com/harmony-one/harmony > /dev/null 2>1 \
+    && git config --global --add safe.directory $GOPATH/src/github.com/harmony-one/bls > /dev/null 2>1 \
+    && git config --global --add safe.directory $GOPATH/src/github.com/harmony-one/mcl > /dev/null 2>1
+
 # Build to fetch all dependencies for faster test builds
 RUN cd harmony > /dev/null 2>1 && go mod tidy > /dev/null 2>1 && go get github.com/pborman/uuid > /dev/null 2>1 && go get github.com/rjeczalik/notify > /dev/null 2>1 \
     && go get github.com/cespare/cp > /dev/null 2>1 && go get github.com/libp2p/go-libp2p-crypto > /dev/null 2>1 && go get github.com/kr/pretty > /dev/null 2>1 \
