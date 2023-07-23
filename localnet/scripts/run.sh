@@ -70,8 +70,9 @@ function go_tests() {
 function rpc_tests() {
   echo -e "\n=== \e[38;5;0;48;5;255mSTARTING RPC TESTS\e[0m ===\n"
   build_and_start_localnet || exit 1 &
-  sleep 20
-  wait_for_localnet_boot 100 # Timeout at ~300 seconds
+  sleep 30
+  # WARNING: Assumtion is that EPOCH 2 can process ALL test transaction types...
+  wait_for_epoch 2 300 # Timeout at ~900 seconds
 
   echo "Starting test suite..."
   sleep 3
@@ -136,7 +137,9 @@ function wait_for_localnet_boot() {
     result=$(curl --silent --location --request POST "localhost:9500" \
       --header "Content-Type: application/json" \
       --data '{"jsonrpc":"2.0","method":"hmy_blockNumber","params":[],"id":1}' | jq '.result')
-    if [ "$result" = "\"0x0\"" ]; then
+    if [ $((result>0)) -eq 1 ]; then
+      valid=true
+    else 
       echo "Waiting for localnet to boot..."
       if ((i > timeout)); then
         echo "TIMEOUT REACHED"
@@ -144,12 +147,9 @@ function wait_for_localnet_boot() {
       fi
       sleep 3
       i=$((i + 1))
-    else
-      valid=true
     fi
   done
 
-  sleep 15  # Give some slack to ensure localnet is booted...
   echo "Localnet booted."
 }
 
