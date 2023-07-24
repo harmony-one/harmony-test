@@ -137,7 +137,7 @@ function wait_for_localnet_boot() {
     result=$(curl --silent --location --request POST "localhost:9500" \
       --header "Content-Type: application/json" \
       --data '{"jsonrpc":"2.0","method":"hmy_blockNumber","params":[],"id":1}' | jq '.result')
-    if [ $((result>0)) -eq 1 ]; then
+    if ((result>0)); then
       valid=true
     else 
       echo "Waiting for localnet to boot..."
