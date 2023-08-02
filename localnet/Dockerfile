@@ -43,8 +43,7 @@ COPY rpc_tests rpc_tests
 COPY configs configs
 COPY requirements.txt requirements.txt
 
-# Since we are running as root in Docker, `--break-system-packages` is required
-RUN python3 -m pip install -r requirements.txt --break-system-packages > /dev/null 2>1 && rm requirements.txt
+RUN python3 -m pip install -r requirements.txt > /dev/null 2>1 && rm requirements.txt
 RUN chmod +x $GOPATH/src/github.com/harmony-one/harmony-test/localnet/scripts/run.sh
 
 WORKDIR $GOPATH/src/github.com/harmony-one/harmony
