@@ -6,11 +6,11 @@ SHELL ["/bin/bash", "-c"]
 
 # These are split into multiple lines to allow debugging the error message that I cannot reproduce locally
 # The command `xxx` returned a non-zero code: 100
-RUN apt clean > /dev/null 2>1
-RUN apt update > /dev/null 2>1
-RUN apt upgrade -y > /dev/null 2>1
-RUN apt update -y > /dev/null 2>1
-RUN apt install -y unzip libgmp-dev libssl-dev curl git jq make gcc g++ bash sudo python3 python3-pip > /dev/null 2>1
+RUN apt clean
+RUN apt update
+RUN apt upgrade -y
+RUN apt update -y
+RUN apt install -y unzip libgmp-dev libssl-dev curl git jq make gcc g++ bash sudo python3 python3-pip
 
 RUN git clone https://github.com/harmony-one/harmony.git > /dev/null 2>1 \
     && git clone https://github.com/harmony-one/bls.git > /dev/null 2>1 \
@@ -43,8 +43,7 @@ COPY rpc_tests rpc_tests
 COPY configs configs
 COPY requirements.txt requirements.txt
 
-# Since we are running as root in Docker, `--break-system-packages` is required
-RUN python3 -m pip install -r requirements.txt --break-system-packages > /dev/null 2>1 && rm requirements.txt
+RUN python3 -m pip install -r requirements.txt > /dev/null 2>1 && rm requirements.txt
 RUN chmod +x $GOPATH/src/github.com/harmony-one/harmony-test/localnet/scripts/run.sh
 
 WORKDIR $GOPATH/src/github.com/harmony-one/harmony
