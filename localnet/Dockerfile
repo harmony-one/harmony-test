@@ -30,6 +30,7 @@ RUN git config --global --add safe.directory $GOPATH/src/github.com/harmony-one/
 
 RUN pwd
 WORKDIR $GOPATH/src/github.com/harmony-one/harmony
+RUN git checkout feature/go1.21
 RUN pwd
 RUN go mod tidy
 RUN go get github.com/pborman/uuid
@@ -40,7 +41,7 @@ RUN go get github.com/kr/pretty
 RUN go get github.com/kr/text
 RUN go get gopkg.in/check.v1
 RUN bash scripts/install_build_tools.sh
-RUN make
+#RUN #make
 WORKDIR $GOPATH/src/github.com/harmony-one
 RUN rm -rf harmony
 
