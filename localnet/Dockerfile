@@ -23,9 +23,21 @@ RUN git config --global --add safe.directory $GOPATH/src/github.com/harmony-one/
     && git config --global --add safe.directory $GOPATH/src/github.com/harmony-one/mcl > /dev/null 2>1
 
 # Build to fetch all dependencies for faster test builds
-RUN cd harmony > /dev/null 2>1 && go mod tidy > /dev/null 2>1 && go get github.com/pborman/uuid > /dev/null 2>1 && go get github.com/rjeczalik/notify > /dev/null 2>1 \
-    && go get github.com/cespare/cp > /dev/null 2>1 && go get github.com/libp2p/go-libp2p-crypto > /dev/null 2>1 && go get github.com/kr/pretty > /dev/null 2>1 \
-    && go get github.com/kr/text > /dev/null 2>1 && go get gopkg.in/check.v1 > /dev/null 2>1 && bash scripts/install_build_tools.sh > /dev/null 2>1 && make > /dev/null 2>1
+#RUN cd harmony > /dev/null 2>1 && go mod tidy > /dev/null 2>1 && go get github.com/pborman/uuid > /dev/null 2>1 && go get github.com/rjeczalik/notify > /dev/null 2>1 \
+#    && go get github.com/cespare/cp > /dev/null 2>1 && go get github.com/libp2p/go-libp2p-crypto > /dev/null 2>1 && go get github.com/kr/pretty > /dev/null 2>1 \
+#    && go get github.com/kr/text > /dev/null 2>1 && go get gopkg.in/check.v1 > /dev/null 2>1 && bash scripts/install_build_tools.sh > /dev/null 2>1 && make > /dev/null 2>1
+
+RUN cd harmony
+RUN cd go mod tidy
+RUN go get github.com/pborman/uuid
+RUN go get github.com/rjeczalik/notify
+RUN go get github.com/cespare/cp
+RUN go get github.com/libp2p/go-libp2p-crypto
+RUN go get github.com/kr/pretty
+RUN go get github.com/kr/text
+RUN go get gopkg.in/check.v1
+RUN bash scripts/install_build_tools.sh
+RUN make
 RUN rm -rf harmony
 
 # Install testing tools
