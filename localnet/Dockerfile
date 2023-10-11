@@ -12,9 +12,9 @@ RUN apt upgrade -y > /dev/null 2>1
 RUN apt update -y > /dev/null 2>1
 RUN apt install -y unzip libgmp-dev libssl-dev curl git jq make gcc g++ bash sudo python3 python3-pip > /dev/null 2>1
 
-RUN git clone https://github.com/harmony-one/harmony.git > /dev/null 2>1 \
-    && git clone https://github.com/harmony-one/bls.git > /dev/null 2>1 \
-    && git clone https://github.com/harmony-one/mcl.git > /dev/null 2>1
+RUN git clone https://github.com/harmony-one/harmony.git
+RUN git clone https://github.com/harmony-one/bls.git
+RUN git clone https://github.com/harmony-one/mcl.git
 
 # Fix complaints about Docker / root / user ownership for Golang "VCS stamping"
 # https://github.com/golang/go/blob/3900ba4baf0e3b309a55b5ac4dd25f709df09772/src/cmd/go/internal/vcs/vcs.go
