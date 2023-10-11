@@ -12,7 +12,7 @@ RUN apt upgrade -y > /dev/null 2>1
 RUN apt update -y > /dev/null 2>1
 RUN apt install -y unzip libgmp-dev libssl-dev curl git jq make gcc g++ bash sudo python3 python3-pip > /dev/null 2>1
 
-RUN git clone https://github.com/harmony-one/harmony.git
+RUN git clone https://github.com/harmony-one/harmony.git --branch feature/go1.21
 RUN git clone https://github.com/harmony-one/bls.git
 RUN git clone https://github.com/harmony-one/mcl.git
 
@@ -41,7 +41,7 @@ RUN go get github.com/kr/pretty
 RUN go get github.com/kr/text
 RUN go get gopkg.in/check.v1
 RUN bash scripts/install_build_tools.sh
-#RUN #make
+RUN make
 WORKDIR $GOPATH/src/github.com/harmony-one
 RUN rm -rf harmony
 
