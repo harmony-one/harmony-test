@@ -28,12 +28,9 @@ RUN git config --global --add safe.directory $GOPATH/src/github.com/harmony-one/
 #    && go get github.com/kr/text > /dev/null 2>1 && go get gopkg.in/check.v1 > /dev/null 2>1 && bash scripts/install_build_tools.sh > /dev/null 2>1 && make > /dev/null 2>1
 
 
-RUN ls -la
 RUN pwd
-RUN cd harmony
-RUN ls -la
-RUN cd harmony
-RUN ls -la
+WORKDIR $GOPATH/src/github.com/harmony-one/harmony
+RUN pwd
 RUN go mod tidy
 RUN go get github.com/pborman/uuid
 RUN go get github.com/rjeczalik/notify
@@ -44,6 +41,7 @@ RUN go get github.com/kr/text
 RUN go get gopkg.in/check.v1
 RUN bash scripts/install_build_tools.sh
 RUN make
+WORKDIR $GOPATH/src/github.com/harmony-one
 RUN rm -rf harmony
 
 # Install testing tools
