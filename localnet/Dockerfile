@@ -12,7 +12,7 @@ RUN apt upgrade -y > /dev/null 2>1
 RUN apt update -y > /dev/null 2>1
 RUN apt install -y unzip libgmp-dev libssl-dev curl git jq make gcc g++ bash sudo python3 python3-pip > /dev/null 2>1
 
-RUN git clone https://github.com/harmony-one/harmony.git --branch feature/go1.21
+RUN git clone https://github.com/harmony-one/harmony.git --branch feature/go1.20
 RUN git clone https://github.com/harmony-one/bls.git
 RUN git clone https://github.com/harmony-one/mcl.git
 
