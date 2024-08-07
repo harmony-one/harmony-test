@@ -1,4 +1,10 @@
+ARG MAIN_REPO_BRANCH=dev
+
 FROM golang:1.19
+
+ARG MAIN_REPO_BRANCH
+
+ENV BRANCH=${MAIN_REPO_BRANCH}
 
 WORKDIR $GOPATH/src/github.com/harmony-one
 
@@ -12,7 +18,7 @@ RUN apt upgrade -y > /dev/null 2>1
 RUN apt update -y > /dev/null 2>1
 RUN apt install -y unzip libgmp-dev libssl-dev curl git jq make gcc g++ bash sudo python3 python3-pip > /dev/null 2>1
 
-RUN git clone https://github.com/harmony-one/harmony.git > /dev/null 2>1 \
+RUN git clone --branch ${BRANCH} https://github.com/harmony-one/harmony.git > /dev/null 2>1 \
     && git clone https://github.com/harmony-one/bls.git > /dev/null 2>1 \
     && git clone https://github.com/harmony-one/mcl.git > /dev/null 2>1
 
