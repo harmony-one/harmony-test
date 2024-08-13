@@ -1,6 +1,6 @@
 ARG MAIN_REPO_BRANCH=dev
 
-FROM golang:1.19
+FROM golang:1.22
 
 ARG MAIN_REPO_BRANCH
 
