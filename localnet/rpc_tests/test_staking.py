@@ -280,7 +280,8 @@ def test_get_transaction_receipt_v1(s0_validator):
         "status": "0x1",
         "transactionHash": "0xf80460f1ad041a0a0e841da717fc5b7959b1a7e9a0ce9a25cd70c0ce40d5ff26",
         "transactionIndex": "0x0",
-        "type": "0x0"
+        "type": "0x0",
+        "effectiveGasPrice": "0x5121c4",
     }
 
     raw_response = base_request("hmy_getTransactionReceipt",
@@ -306,7 +307,8 @@ def test_get_transaction_receipt_v2(s0_validator):
         "status": 1,
         "transactionHash": "0xf80460f1ad041a0a0e841da717fc5b7959b1a7e9a0ce9a25cd70c0ce40d5ff26",
         "transactionIndex": 0,
-        "type": 0
+        "type": 0,
+        "effectiveGasPrice": 5317060,
     }
 
     raw_response = base_request("hmyv2_getTransactionReceipt",
