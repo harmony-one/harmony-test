@@ -371,6 +371,34 @@ def test_get_block_number_v2():
     assert isinstance(response, int)  # Must be an integer in base 10
 
 
+def test_get_last_sign_power_shard0_v1():
+    raw_response = base_request("hmy_getLastSigningPower",
+                                endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert isinstance(response, float) and response > 0.66
+
+
+def test_get_last_sign_power_shard0_v2():
+    raw_response = base_request("hmyv2_getLastSigningPower",
+                                endpoint=endpoints[0])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert isinstance(response, float) and response > 0.66
+
+
+def test_get_last_sign_power_shard1_v1():
+    raw_response = base_request("hmy_getLastSigningPower",
+                                endpoint=endpoints[1])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert isinstance(response, float) and response > 0.66
+
+
+def test_get_last_sign_power_shard1_v2():
+    raw_response = base_request("hmyv2_getLastSigningPower",
+                                endpoint=endpoints[1])
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert isinstance(response, float) and response > 0.66
+
+
 def test_get_epoch_v1():
     raw_response = base_request("hmy_getEpoch", endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
