@@ -363,6 +363,7 @@ def send_and_confirm_staking_transaction(tx_data, timeout=tx_timeout * 2):
         if tx_response is not None:
             if tx_response['blockNumber'] is not None:
                 return tx_response
+            assert tx_response['effectiveGasPrice'] is not None, "Could not find effectiveGasPrice fields in staking transaction."
         time.sleep(random.uniform(0.2, 0.5))  # Random to stop burst spam of RPC calls.
     raise AssertionError("Could not confirm staking transaction on-chain.")
 
