@@ -40,7 +40,8 @@ from utils import (
     assert_valid_json_structure,
     mutually_exclusive_test,
     rerun_delay_filter,
-    assert_no_null_in_list
+    assert_no_null_in_list,
+    is_valid_hex_string
 )
 
 _mutex_scope = "staking"
@@ -281,7 +282,7 @@ def test_get_transaction_receipt_v1(s0_validator):
         "transactionHash": "0xf80460f1ad041a0a0e841da717fc5b7959b1a7e9a0ce9a25cd70c0ce40d5ff26",
         "transactionIndex": "0x0",
         "type": "0x0",
-        "effectiveGasPrice": "0x5121c4",
+        "effectiveGasPrice": "0x6fc23ac00",
     }
 
     raw_response = base_request("hmy_getTransactionReceipt",
@@ -289,6 +290,8 @@ def test_get_transaction_receipt_v1(s0_validator):
                                 endpoint=endpoints[beacon_shard_id])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
+    assert response["effectiveGasPrice"] == reference_response["effectiveGasPrice"]
+    assert is_valid_hex_string(response["effectiveGasPrice"])
     assert response["transactionHash"] == s0_validator["hash"], f"Expected transaction {s0_validator['hash']}, " \
                                                                 f"got {response['transactionHash']}"
 
@@ -301,6 +304,7 @@ def test_get_transaction_receipt_v2(s0_validator):
         "contractAddress": None,
         "cumulativeGasUsed": 5317060,
         "gasUsed": 5317060,
+        "effectiveGasPrice": 30000000000,
         "logs": [],
         "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "sender": "one109r0tns7av5sjew7a7fkekg4fs3pw0h76pp45e",
@@ -308,7 +312,6 @@ def test_get_transaction_receipt_v2(s0_validator):
         "transactionHash": "0xf80460f1ad041a0a0e841da717fc5b7959b1a7e9a0ce9a25cd70c0ce40d5ff26",
         "transactionIndex": 0,
         "type": 0,
-        "effectiveGasPrice": 5317060,
     }
 
     raw_response = base_request("hmyv2_getTransactionReceipt",
@@ -316,6 +319,8 @@ def test_get_transaction_receipt_v2(s0_validator):
                                 endpoint=endpoints[beacon_shard_id])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
+    assert response["effectiveGasPrice"] == reference_response["effectiveGasPrice"]
+    assert isinstance(response["effectiveGasPrice"], int), f"The value {response['effectiveGasPrice']} is not an integer."
     assert response["transactionHash"] == s0_validator["hash"], f"Expected transaction {s0_validator['hash']}, " \
                                                                 f"got {response['transactionHash']}"
 
