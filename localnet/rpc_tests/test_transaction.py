@@ -37,7 +37,8 @@ from utils import (
     check_and_unpack_rpc_response,
     assert_valid_json_structure,
     mutually_exclusive_test,
-    rerun_delay_filter
+    rerun_delay_filter,
+    is_valid_hex_string
 )
 
 
@@ -476,6 +477,7 @@ def test_get_transaction_receipt_v1():
         "blockNumber": "0x4",
         "contractAddress": None,
         "cumulativeGasUsed": "0x5208",
+        "effectiveGasPrice": "0x6fc23ac00",
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "gasUsed": "0x5208",
         "logs": [],
@@ -493,9 +495,12 @@ def test_get_transaction_receipt_v1():
                                 endpoint=endpoints[init_tx_record["from-shard"]])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
+    assert response["effectiveGasPrice"] == reference_response["effectiveGasPrice"]
+    assert is_valid_hex_string(response["effectiveGasPrice"])
     assert response["transactionHash"] == init_tx_record["hash"], f"Expected transaction {init_tx_record['hash']}, " \
                                                                   f"got {response['transactionHash']}"
 
+# TODO: write test for eth_get_transaction_receipt
 
 @pytest.mark.run(order=0)
 def test_get_transaction_receipt_v2():
@@ -506,6 +511,7 @@ def test_get_transaction_receipt_v2():
         "cumulativeGasUsed": 21000,
         "from": "one1zksj3evekayy90xt4psrz8h6j2v3hla4qwz4ur",
         "gasUsed": 21000,
+        "effectiveGasPrice": 30000000000,
         "logs": [],
         "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
         "shardID": 0,
@@ -521,6 +527,8 @@ def test_get_transaction_receipt_v2():
                                 endpoint=endpoints[init_tx_record["from-shard"]])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert_valid_json_structure(reference_response, response)
+    assert response["effectiveGasPrice"] == reference_response["effectiveGasPrice"]
+    assert isinstance(response["effectiveGasPrice"], int), f"The value {response['effectiveGasPrice']} is not an integer."
     assert response["transactionHash"] == init_tx_record["hash"], f"Expected transaction {init_tx_record['hash']}, " \
                                                                   f"got {response['transactionHash']}"
 

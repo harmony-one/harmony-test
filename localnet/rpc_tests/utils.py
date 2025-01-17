@@ -18,6 +18,36 @@ from pyhmy import (
 _mutually_exclusive_locks = {}
 
 
+def is_valid_hex_string(s: str) -> bool:
+    """
+    Check if the given string is a valid hexadecimal string.
+
+    A valid hexadecimal string is defined as a string that can be converted
+    to an integer using base 16. Strings with the "0x" prefix are also supported.
+
+    Args:
+        s (str): The string to validate.
+
+    Returns:
+        bool: True if the string is a valid hexadecimal string, False otherwise.
+
+    Examples:
+        >>> is_valid_hex_string("0x1A3F")
+        True
+        >>> is_valid_hex_string("123")
+        True
+        >>> is_valid_hex_string("0xXYZ")
+        False
+        >>> is_valid_hex_string("0x")
+        False
+    """
+    try:
+        int(s, 16)
+        return True
+    except ValueError:
+        return False
+
+
 def is_valid_json_rpc(response):
     """
     Checks if the given `response` is a valid JSON RPC 2.0 response.
