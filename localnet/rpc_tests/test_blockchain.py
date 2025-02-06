@@ -449,8 +449,8 @@ def test_get_block_transaction_count_by_number_v1():
 def test_get_block_transaction_count_by_number_v2():
     init_tx_record = initial_funding[0]
     init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
-
-    raw_response = base_request("hmyv2_getBlockTransactionCountByNumber", params=[int(init_tx["blockNumber"], 16)],
+    raw_response = base_request("hmyv2_getBlockTransactionCountByNumber",
+                                params=[int(init_tx["blockNumber"])],
                                 endpoint=endpoints[0])
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
     assert isinstance(response, int)
@@ -594,7 +594,7 @@ def test_get_blocks_v1():
 
     init_tx_record = initial_funding[0]
     init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
-    start_blk, end_blk = hex(max(0, int(init_tx["blockNumber"], 16) - 2)), init_tx["blockNumber"]
+    start_blk, end_blk = hex(max(0, int(init_tx["blockNumber"]) - 2)), init_tx["blockNumber"]
     raw_response = base_request("hmy_getBlocks",
                                 params=[start_blk, end_blk, {
                                     "fullTx": True,
@@ -605,7 +605,7 @@ def test_get_blocks_v1():
     for blk in response:
         assert_valid_json_structure(reference_response_blk, blk)
     assert len(response[-1]["transactions"]) > 0, "Expected transaction on last block due to initial transactions"
-    start_num, end_num = int(start_blk, 16), int(end_blk, 16)
+    start_num, end_num = int(start_blk, 16), int(end_blk)
     for blk in response:
         blk_num = int(blk["number"], 16)
         assert start_num <= blk_num <= end_num, f"Got block number {blk_num}, which is not in range [{start_num},{end_num}]"
@@ -665,7 +665,7 @@ def test_get_blocks_v2():
 
     init_tx_record = initial_funding[0]
     init_tx = transaction.get_transaction_by_hash(init_tx_record["hash"], endpoints[init_tx_record["from-shard"]])
-    start_blk, end_blk = max(0, int(init_tx["blockNumber"], 16) - 2), int(init_tx["blockNumber"], 16)
+    start_blk, end_blk = max(0, int(init_tx["blockNumber"]) - 2), int(init_tx["blockNumber"])
     raw_response = base_request("hmyv2_getBlocks",
                                 params=[start_blk, end_blk, {
                                     "fullTx": True,

@@ -400,5 +400,5 @@ def assert_valid_test_from_address(address, shard, is_staking=False):
     assert account.is_valid_address(address), f"{address} is an invalid ONE address"
     if not account.get_balance(address, endpoint=endpoints[shard]) >= 1e18:
         raise AssertionError(f"Account {address} does not have at least 1 ONE on shard {shard}")
-    if not is_staking and account.get_transaction_count(address, endpoint=endpoints[shard]) != 0:
+    if not is_staking and account.get_transaction_count(address, block_num='latest', endpoint=endpoints[shard]) != 0:
         raise AssertionError(f"Account {address} has already sent a transaction, breaking the txs invariant")
