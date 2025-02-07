@@ -676,7 +676,7 @@ def test_get_transaction_by_block_hash_and_index_v1():
 
     init_tx_record = initial_funding[0]
     tx = get_transaction(init_tx_record["hash"], init_tx_record["from-shard"])
-    blk = blockchain.get_block_by_hash(tx["blockHash"], endpoint=endpoints[tx["shardID"]], include_full_tx=False)
+    blk = blockchain.get_block_by_hash(tx["blockHash"], endpoint=endpoints[tx["shardID"]], full_tx=False)
     index, blk_hash = blk["transactions"].index(init_tx_record["hash"]), tx["blockHash"]
 
     raw_response = base_request("hmy_getTransactionByBlockHashAndIndex",
@@ -712,7 +712,7 @@ def test_get_transaction_by_block_hash_and_index_v2():
 
     init_tx_record = initial_funding[0]
     tx = get_transaction(init_tx_record["hash"], init_tx_record["from-shard"])
-    blk = blockchain.get_block_by_hash(tx["blockHash"], endpoint=endpoints[tx["shardID"]], include_full_tx=False)
+    blk = blockchain.get_block_by_hash(tx["blockHash"], endpoint=endpoints[tx["shardID"]], full_tx=False)
     index, blk_hash = blk["transactions"].index(init_tx_record["hash"]), tx["blockHash"]
 
     raw_response = base_request("hmyv2_getTransactionByBlockHashAndIndex",
@@ -748,7 +748,7 @@ def test_get_transaction_by_block_number_and_index_v1():
 
     init_tx_record = initial_funding[0]
     tx = get_transaction(init_tx_record["hash"], init_tx_record["from-shard"])
-    blk = blockchain.get_block_by_hash(tx["blockHash"], endpoint=endpoints[tx["shardID"]], include_full_tx=False)
+    blk = blockchain.get_block_by_hash(tx["blockHash"], endpoint=endpoints[tx["shardID"]], full_tx=False)
     index, blk_num = blk["transactions"].index(init_tx_record["hash"]), tx["blockNumber"]
 
     raw_response = base_request("hmy_getTransactionByBlockNumberAndIndex",
@@ -784,7 +784,7 @@ def test_get_transaction_by_block_number_and_index_v2():
 
     init_tx_record = initial_funding[0]
     tx = get_transaction(init_tx_record["hash"], init_tx_record["from-shard"])
-    blk = blockchain.get_block_by_hash(tx["blockHash"], endpoint=endpoints[tx["shardID"]], include_full_tx=False)
+    blk = blockchain.get_block_by_hash(tx["blockHash"], endpoint=endpoints[tx["shardID"]], full_tx=False)
     index, blk_num = blk["transactions"].index(init_tx_record["hash"]), tx["blockNumber"]
 
     raw_response = base_request("hmyv2_getTransactionByBlockNumberAndIndex",

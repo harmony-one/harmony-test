@@ -739,8 +739,8 @@ def test_get_elected_validator_addresses(s0_validator, s1_validator):
     curr_epoch = blockchain.get_latest_header(endpoint=endpoints[beacon_shard_id])["epoch"]
     val_0_info = staking.get_validator_information(s0_validator["validator-addr"], endpoint=endpoints[beacon_shard_id])
     val_1_info = staking.get_validator_information(s1_validator["validator-addr"], endpoint=endpoints[beacon_shard_id])
-    s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"], 16)
-    s1_creation_epoch = int(blockchain.get_block_by_number(val_1_info["validator"]["creation-height"])["epoch"], 16)
+    s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"])
+    s1_creation_epoch = int(blockchain.get_block_by_number(val_1_info["validator"]["creation-height"])["epoch"])
 
     while curr_epoch <= s0_creation_epoch or curr_epoch <= s1_creation_epoch or curr_epoch < staking_epoch:
         time.sleep(random.uniform(0.5, 1.5))  # Random to stop burst spam of RPC calls.
@@ -1119,7 +1119,7 @@ def test_get_super_committees(s0_validator):
     staking_epoch = blockchain.get_staking_epoch(endpoints[beacon_shard_id])
     curr_epoch = blockchain.get_latest_header(endpoint=endpoints[beacon_shard_id])["epoch"]
     val_0_info = staking.get_validator_information(s0_validator["validator-addr"], endpoint=endpoints[beacon_shard_id])
-    s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"], 16)
+    s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"])
 
     while curr_epoch <= s0_creation_epoch or curr_epoch < staking_epoch:
         time.sleep(random.uniform(0.5, 1.5))  # Random to stop burst spam of RPC calls.
@@ -1193,7 +1193,7 @@ def test_get_validator_keys(s0_validator):
     staking_epoch = blockchain.get_staking_epoch(endpoints[beacon_shard_id])
     curr_epoch = blockchain.get_latest_header(endpoint=endpoints[0])["epoch"]
     val_0_info = staking.get_validator_information(s0_validator["validator-addr"], endpoint=endpoints[0])
-    s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"], 16)
+    s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"])
 
     while curr_epoch <= s0_creation_epoch or curr_epoch < staking_epoch:
         time.sleep(random.uniform(0.5, 1.5))  # Random to stop burst spam of RPC calls.

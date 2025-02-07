@@ -1,4 +1,4 @@
-pyhmy==20.5.16
+pyhmy==0.1.0
 pytest==6.2.5
 pytest-ordering==0.6
 pytest-xdist==1.33.0
