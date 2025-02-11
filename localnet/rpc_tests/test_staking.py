@@ -940,7 +940,7 @@ def test_get_current_utility_metrics(s0_validator):
 @txs.staking
 @flaky(max_runs=6, rerun_filter=rerun_delay_filter(delay=8))
 @pytest.mark.run(after="test_get_validator_information")
-@pytest.mark.skip(reason="This test is flaky and needs to be fixed")
+#@pytest.mark.skip(reason="This test is flaky and needs to be fixed")
 def test_get_median_raw_stake_snapshot(s0_validator):
     """
     Note that v1 & v2 have the same responses.
@@ -974,7 +974,7 @@ def test_get_median_raw_stake_snapshot(s0_validator):
     staking_epoch = blockchain.get_staking_epoch(endpoints[beacon_shard_id])
     curr_epoch = blockchain.get_latest_header(endpoint=endpoints[0])["epoch"]
     val_0_info = staking.get_validator_information(s0_validator["validator-addr"], endpoint=endpoints[0])
-    s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"], 16)
+    s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"])
 
 
     while curr_epoch <= s0_creation_epoch or curr_epoch < staking_epoch:
@@ -983,11 +983,11 @@ def test_get_median_raw_stake_snapshot(s0_validator):
 
     # First block of an epoch does not have correct snapshot, wait for next block.
     curr_block = blockchain.get_latest_header(endpoint=endpoints[0])["blockNumber"]
-    prev_block_epoch = int(blockchain.get_block_by_number(curr_block - 1)["epoch"], 16)
+    prev_block_epoch = int(blockchain.get_block_by_number(curr_block - 1)["epoch"])
     while prev_block_epoch != curr_epoch:
         time.sleep(random.uniform(0.5, 1.5))  # Random to stop burst spam of RPC calls.
         curr_block = blockchain.get_latest_header(endpoint=endpoints[0])["blockNumber"]
-        prev_block_epoch = int(blockchain.get_block_by_number(curr_block - 1)["epoch"], 16)
+        prev_block_epoch = int(blockchain.get_block_by_number(curr_block - 1)["epoch"])
 
     # Check v1
     raw_response = base_request("hmy_getMedianRawStakeSnapshot", params=[], endpoint=endpoints[0])
@@ -1216,7 +1216,7 @@ def test_get_validator_keys(s0_validator):
 
 @txs.staking
 @flaky(max_runs=6, rerun_filter=rerun_delay_filter(delay=8))
-@pytest.mark.skip(reason="This test is flaky and needs to be fixed")
+#@pytest.mark.skip(reason="This test is flaky and needs to be fixed")
 def test_get_validators_v1(s0_validator, s1_validator):
     reference_response = {
         "shardID": 0,
@@ -1232,8 +1232,8 @@ def test_get_validators_v1(s0_validator, s1_validator):
     curr_epoch = blockchain.get_latest_header(endpoint=endpoints[beacon_shard_id])["epoch"]
     val_0_info = staking.get_validator_information(s0_validator["validator-addr"], endpoint=endpoints[beacon_shard_id])
     val_1_info = staking.get_validator_information(s1_validator["validator-addr"], endpoint=endpoints[beacon_shard_id])
-    s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"], 16)
-    s1_creation_epoch = int(blockchain.get_block_by_number(val_1_info["validator"]["creation-height"])["epoch"], 16)
+    s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"])
+    s1_creation_epoch = int(blockchain.get_block_by_number(val_1_info["validator"]["creation-height"])["epoch"])
 
     while curr_epoch <= s0_creation_epoch or curr_epoch <= s1_creation_epoch or curr_epoch < staking_epoch:
         time.sleep(random.uniform(0.5, 1.5))  # Random to stop burst spam of RPC calls.
@@ -1255,7 +1255,7 @@ def test_get_validators_v1(s0_validator, s1_validator):
 
 @txs.staking
 @flaky(max_runs=6, rerun_filter=rerun_delay_filter(delay=8))
-@pytest.mark.skip(reason="This test is flaky and needs to be fixed")
+#@pytest.mark.skip(reason="This test is flaky and needs to be fixed")
 def test_get_validators_v2(s0_validator, s1_validator):
     reference_response = {
         "shardID": 0,
@@ -1271,8 +1271,8 @@ def test_get_validators_v2(s0_validator, s1_validator):
     curr_epoch = blockchain.get_latest_header(endpoint=endpoints[beacon_shard_id])["epoch"]
     val_0_info = staking.get_validator_information(s0_validator["validator-addr"], endpoint=endpoints[beacon_shard_id])
     val_1_info = staking.get_validator_information(s1_validator["validator-addr"], endpoint=endpoints[beacon_shard_id])
-    s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"], 16)
-    s1_creation_epoch = int(blockchain.get_block_by_number(val_1_info["validator"]["creation-height"])["epoch"], 16)
+    s0_creation_epoch = int(blockchain.get_block_by_number(val_0_info["validator"]["creation-height"])["epoch"])
+    s1_creation_epoch = int(blockchain.get_block_by_number(val_1_info["validator"]["creation-height"])["epoch"])
 
     while curr_epoch <= s0_creation_epoch or curr_epoch <= s1_creation_epoch or curr_epoch < staking_epoch:
         time.sleep(random.uniform(0.5, 1.5))  # Random to stop burst spam of RPC calls.

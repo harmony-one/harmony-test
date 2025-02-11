@@ -9,7 +9,7 @@
       }
     }
   },
-  "online_url": "http://localhost:9798",
+  "online_url": "http://localhost:9820",
   "http_timeout": 300,
   "max_retries": 0,
   "retry_elapsed_time": 5,
@@ -43,7 +43,7 @@
     "results_output_file": ""
   },
   "construction": {
-    "offline_url": "http://localhost:9798",
+    "offline_url": "http://localhost:9820",
     "max_offline_connections": 1,
     "stale_depth": 0,
     "broadcast_limit": 0,
