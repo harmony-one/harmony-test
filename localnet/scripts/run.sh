@@ -44,7 +44,7 @@ function build_and_start_localnet() {
     bash ./scripts/go_executable_build.sh -S
     BUILD=False
   fi
-  bash ./test/deploy.sh -e -B -D 60000 "$localnet_config" 2>&1 | tee "$localnet_log"
+  bash ./test/deploy.sh -e -B -D 60000 -E 64 -K 64 "$localnet_config" 2>&1 | tee "$localnet_log"
   popd
 }
 
@@ -139,7 +139,7 @@ function wait_for_localnet_boot() {
       --data '{"jsonrpc":"2.0","method":"hmy_blockNumber","params":[],"id":1}' | jq -r '.result')
     if ((result>0)); then
       valid=true
-    else 
+    else
       echo "Waiting for localnet to boot..."
       if ((i > timeout)); then
         echo "TIMEOUT REACHED"

@@ -30,8 +30,8 @@ _is_staking_era = False
 
 # Endpoints sorted by shard
 endpoints = [
-    "http://localhost:9598/",  # shard 0
-    "http://localhost:9596/",  # shard 1
+    "http://localhost:9620/",  # shard 0
+    "http://localhost:9622/",  # shard 1
 ]
 
 # ORDER MATERS: tx n cannot be sent without tx n-1 being sent first due to nonce
