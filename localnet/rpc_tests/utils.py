@@ -161,3 +161,39 @@ def mutually_exclusive_test(scope=""):
         return wrap
 
     return decorator
+
+
+def get_calldata_gas(bytecode: str) -> int:
+    """
+    Computes the calldata gas cost for the given EVM bytecode based on Ethereum's gas pricing model.
+
+    Ethereum charges:
+    - 16 gas per nonzero byte
+    - 4 gas per zero byte
+
+    :param bytecode: A string representing the EVM bytecode (with or without '0x' prefix).
+    :return: The total gas cost for calldata transmission.
+    """
+    # Remove '0x' prefix if present
+    if bytecode.startswith("0x"):
+        bytecode = bytecode[2:]
+
+    # Ensure valid bytecode length (must be even)
+    if len(bytecode) % 2 != 0:
+        raise ValueError(
+            f"Invalid bytecode length: {len(bytecode)} hex characters. "
+            "Bytecode must have an even number of hex characters."
+        )
+
+    # Convert bytecode to bytes
+    bytecode_bytes = bytes.fromhex(bytecode)
+
+    # Gas cost constants
+    GAS_COST_ZERO_BYTE = 4  # Gas cost per zero byte
+    GAS_COST_NONZERO_BYTE = 16  # Gas cost per nonzero byte
+
+    # Calculate calldata gas cost
+    calldata_gas_used = sum(GAS_COST_NONZERO_BYTE if byte != 0 
+                            else GAS_COST_ZERO_BYTE for byte in bytecode_bytes)
+
+    return calldata_gas_used
