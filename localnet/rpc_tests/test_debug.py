@@ -370,62 +370,69 @@ def test_debug_traceCall_state_override_different_simulated_call():
 
 def test_debug_traceCall_block_and_state_override():
     """
-    Tests `debug_traceCall` with both **block-level** and **state-level** overrides.
+    Test `debug_traceCall` with both block-level and state-level overrides.
 
-    **Test Overview:**
-    - This test executes a smart contract call while modifying both **block parameters**
-      and the **contract’s state** using `blockOverrides` and `stateOverrides`.
-    - It validates that gas consumption, execution logs, and return values behave as expected.
+    This test simulates a smart contract call while applying `blockOverrides` and `stateOverrides`
+    to alter the block context and contract/account state. It verifies that the call executes
+    correctly under these conditions and that the resulting gas usage and execution trace are accurate.
 
-    **Execution Steps:**
-    1. **Send a transaction** calling a smart contract (`main_smart_contract_call`).
-    2. **Override block parameters (`blockOverrides`)**, modifying:
-       - `difficulty`
-       - `gasLimit`
-       - `block number`
-       - `fee recipient`
-    3. **Override the contract state (`stateOverrides`)**, modifying:
-       - `balance`
-       - `nonce`
-       - `code` (overriding contract bytecode)
-    4. **Trace execution logs (`structLogs`)** to validate the opcode sequence.
-    5. **Compute gas usage**, including:
-       - **Calldata gas cost** (`get_calldata_gas()`).
-       - **Gas used during execution** (sum of `gasCost` in `structLogs`).
-    6. **Validate the return value** to ensure the overridden contract executes correctly.
+    **Test Purpose:**
+    - Ensure that overridden block metadata (e.g., block number, difficulty) is respected.
+    - Ensure that overridden account state (balance, nonce, code) is applied.
+    - Confirm that the call does not fail, produces correct return data, and logs the expected opcodes.
+    - Validate gas accounting under overridden conditions.
 
-    **Block Overrides:**
+    **Execution Flow:**
+    1. Define a minimal contract that returns `1` using inline bytecode.
+    2. Override the state for both the caller and callee accounts:
+       - Assign sufficient balance and nonce to the caller.
+       - Inject runtime bytecode into the callee.
+    3. Override block-level parameters, including:
+       - `difficulty`, `gasLimit`, `number`, and `feeRecipient`.
+    4. Perform a `debug_traceCall` and inspect:
+       - Return value
+       - Gas usage
+       - Opcode trace (`structLogs`)
+    5. Compute expected gas:
+       - `DEFAULT_GAS + calldata_gas + sum(structLogs[].gasCost)`
+    6. Validate that all assertions pass.
+
+    **Block Overrides Used:**
     - `difficulty`: `0x1234`
     - `gasLimit`: `0xF4240`
     - `number`: `0x1`
     - `feeRecipient`: `0xBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB`
 
-    **State Overrides:**
-    - Contract address: `0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF`
-    - `balance`: `0x8AC7230489E80000`
-    - `nonce`: `0x2`
-    - `code`: Uses `main_smart_contract_call` as the overridden contract code.
+    **State Overrides Used:**
+    - Contract: `0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF`
+      - `balance`: `0x8AC7230489E80000` (10 ONE)
+      - `nonce`: `0x2`
+      - `code`: Minimal contract returning `1`
+    - Caller: `0xEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE`
+      - `balance`: `0x8AC7230489E80000`
+      - `nonce`: `0x2`
 
     **Assertions:**
-    - The transaction **must not fail** (`failed` should be `False`).
-    - Execution logs (`structLogs`) **must be present**.
-    - **Gas consumption must match expected calculations**:
+    - The call does not fail (`failed` is `False`).
+    - Opcode trace (`structLogs`) is present and valid.
+    - Final gas usage is consistent with expectations:
       ```
-      response["gas"] == DEFAULT_GAS + calldata_gas_used + simulated_gas_used
+      gas == DEFAULT_GAS + calldata_gas + execution_gas
       ```
-    - The **expected return value** must be:
+    - Return value equals:
       ```
       0000000000000000000000000000000000000000000000000000000000000001
       ```
 
     **Why This Test?**
-    - Ensures that **block overrides modify transaction execution correctly**.
-    - Verifies that **contract state can be overridden properly** using `stateOverrides`.
-    - Confirms that gas calculations remain accurate under combined overrides.
+    - To confirm that block context (e.g., block number, fee recipient) affects execution.
+    - To validate that contract bytecode and account state can be overridden dynamically.
+    - To ensure gas accounting remains accurate with simultaneous overrides.
 
     **Returns:**
-    - None (raises assertion errors if test conditions are not met).
+    - None. Raises `AssertionError` if any condition fails.
     """
+
     reference_response = {
         "gas": 21154,
         "failed": False,
@@ -436,7 +443,7 @@ def test_debug_traceCall_block_and_state_override():
                 "op": "PUSH1",
                 "callerAddress": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
                 "contractAddress": "0xffffffffffffffffffffffffffffffffffffffff",
-                "gas": 9223372036854754671,
+                "gas": 999978864,
                 "gasCost": 3,
                 "depth": 1,
             },
@@ -445,7 +452,7 @@ def test_debug_traceCall_block_and_state_override():
                 "op": "PUSH1",
                 "callerAddress": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
                 "contractAddress": "0xffffffffffffffffffffffffffffffffffffffff",
-                "gas": 9223372036854754668,
+                "gas": 999978861,
                 "gasCost": 3,
                 "depth": 1,
             },
@@ -454,7 +461,7 @@ def test_debug_traceCall_block_and_state_override():
                 "op": "MSTORE",
                 "callerAddress": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
                 "contractAddress": "0xffffffffffffffffffffffffffffffffffffffff",
-                "gas": 9223372036854754665,
+                "gas": 999978858,
                 "gasCost": 6,
                 "depth": 1,
             },
@@ -463,7 +470,7 @@ def test_debug_traceCall_block_and_state_override():
                 "op": "PUSH1",
                 "callerAddress": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
                 "contractAddress": "0xffffffffffffffffffffffffffffffffffffffff",
-                "gas": 9223372036854754659,
+                "gas": 999978852,
                 "gasCost": 3,
                 "depth": 1,
             },
@@ -472,7 +479,7 @@ def test_debug_traceCall_block_and_state_override():
                 "op": "PUSH1",
                 "callerAddress": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
                 "contractAddress": "0xffffffffffffffffffffffffffffffffffffffff",
-                "gas": 9223372036854754656,
+                "gas": 999978849,
                 "gasCost": 3,
                 "depth": 1,
             },
@@ -481,13 +488,14 @@ def test_debug_traceCall_block_and_state_override():
                 "op": "RETURN",
                 "callerAddress": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
                 "contractAddress": "0xffffffffffffffffffffffffffffffffffffffff",
-                "gas": 9223372036854754653,
+                "gas": 999978846,
                 "gasCost": 0,
                 "depth": 1,
             },
         ],
     }
     main_smart_contract_call = "0x600160005260206000f3"
+    initial_gas = "0x3B9ACA00"
     raw_response = base_request(
         "debug_traceCall",
         params=[
@@ -495,6 +503,8 @@ def test_debug_traceCall_block_and_state_override():
                 "from": "0xEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
                 "to": "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
                 "data": main_smart_contract_call,
+                "gas": initial_gas,
+                "gasPrice": "0x174876",
             },
             "0x1",
             {
@@ -509,7 +519,11 @@ def test_debug_traceCall_block_and_state_override():
                         "balance": "0x8AC7230489E80000",
                         "nonce": "0x2",
                         "code": main_smart_contract_call,
-                    }
+                    },
+                    "0xEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE": {
+                        "balance": "0x8AC7230489E80000",
+                        "nonce": "0x2",
+                    },
                 },
             },
         ],
@@ -519,6 +533,8 @@ def test_debug_traceCall_block_and_state_override():
     assert_valid_json_structure(reference_response, response)
     calldata_gas_used = get_calldata_gas(main_smart_contract_call)
     simulated_gas_used = sum(log["gasCost"] for log in response["structLogs"])
+    final_gas = response["structLogs"][-1]["gas"]
+    assert response["gas"] + final_gas == int(initial_gas, 16)
     assert response["failed"] is False
     assert response["structLogs"]
     assert response["gas"] == DEFAULT_GAS + calldata_gas_used + simulated_gas_used
@@ -748,7 +764,7 @@ def test_debug_traceCall_override_faulty_data():
     Tests `debug_traceCall` with an **invalid `data` field format** in the request.
 
     **Test Overview:**
-    - This test provides a **malformed `data` field** (`"something_special"`) instead of a 
+    - This test provides a **malformed `data` field** (`"something_special"`) instead of a
       valid hexadecimal string prefixed with `0x`.
     - The Ethereum client expects `data` to be **a valid hex-encoded byte string** (EVM bytecode or calldata).
     - The RPC call should **fail with an error** due to the incorrect data format.
@@ -885,3 +901,68 @@ def test_debug_traceCall_override_faulty_override():
     assert response["failed"] is False
     assert not response["structLogs"]
     assert response["gas"] == DEFAULT_GAS + calldata_gas_used
+
+
+def test_debug_traceCall_override_sending_one_to_other_address():
+    """
+    Test `debug_traceCall` with state overrides simulating a simple ONE transfer.
+
+    This test simulates sending 1 ONE from one account to another using `debug_traceCall`,
+    with state overrides that assign sufficient balance to the sender and a zero balance
+    to the recipient. It expects the transaction to succeed with no gas used, since the
+    recipient is an EOA and no contract code is executed.
+
+    Steps:
+    - Define the expected reference response from the trace.
+    - Create the ONE transfer request with a value of 1 ONE (in wei).
+    - Override sender and receiver balances to control state.
+    - Use `callTracer` to simulate the execution trace.
+    - Validate that the result matches the expected structure and values.
+
+    Assertions:
+    - The trace result matches the expected reference structure.
+    - The value transferred is exactly 1 ONE.
+    - Gas used is 0, indicating no contract execution occurred.
+    """
+    reference_response = {
+        "type": "CALL",
+        "from": "0xaaaaaa0000000000000000000000000000000000",
+        "to": "0xdddddddddddddddddddddddddddddddddddddddd",
+        "value": "0xde0b6b3a7640000",
+        "gas": "0x0",
+        "gasUsed": "0x0",
+        "input": "0x",
+        "output": "0x",
+        "time": "10.911µs",
+    }
+
+    one_to_send = "0xde0b6b3a7640000"
+    raw_response = base_request(
+        "debug_traceCall",
+        params=[
+            {
+                "from": "0xaaaaaa0000000000000000000000000000000000",
+                "to": "0xdddddddddddddddddddddddddddddddddddddddd",
+                "value": one_to_send,
+                "gas": "0x5208",
+                "gasPrice": "0x174876e800",
+            },
+            "latest",
+            {
+                "stateOverrides": {
+                    "0xaaaaaa0000000000000000000000000000000000": {
+                        "balance": "0x1000000000000000000"
+                    },
+                    "0xdddddddddddddddddddddddddddddddddddddddd": {"balance": "0x0"},
+                },
+                "tracer": "callTracer",
+                "timeout": "5s",
+            },
+        ],
+        endpoint=debug_endpoints[0],
+    )
+    response = check_and_unpack_rpc_response(raw_response, expect_error=False)
+    assert_valid_json_structure(reference_response, response)
+    assert response["value"] == one_to_send
+    assert response["gas"] == "0x0"
+    assert response["gasUsed"] == "0x0"
