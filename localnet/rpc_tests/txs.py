@@ -34,6 +34,11 @@ endpoints = [
     "http://localhost:9622/",  # shard 1
 ]
 
+debug_endpoints = [
+    "http://localhost:9621/",  # shard 0
+    "http://localhost:9623/",  # shard 1
+]
+
 # ORDER MATERS: tx n cannot be sent without tx n-1 being sent first due to nonce
 # Only exception on invariant.
 initial_funding = [
