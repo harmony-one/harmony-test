@@ -43,8 +43,8 @@ RUN curl -L -o /go/bin/hmy https://harmony.one/hmycli > /dev/null 2>1 && chmod +
 
 WORKDIR $GOPATH/src/github.com/coinbase
 
-RUN git clone https://github.com/coinbase/rosetta-cli.git > /dev/null 2>1
-RUN cd rosetta-cli && make install > /dev/null 2>1
+RUN git clone https://github.com/coinbase/mesh-cli.git > /dev/null 2>1
+RUN cd mesh-cli && make install > /dev/null 2>1
 
 WORKDIR $GOPATH/src/github.com/harmony-one/harmony-test/localnet
 
