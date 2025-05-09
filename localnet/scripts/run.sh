@@ -3,6 +3,7 @@ set -e
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 harmony_dir="$(go env GOPATH)/src/github.com/harmony-one/harmony"
+pyhmy_dir="$(go env GOPATH)/src/github.com/harmony-one/pyhmy"
 localnet_config=$(realpath "$DIR/../configs/localnet_deploy.config")
 
 function stop() {
@@ -85,6 +86,25 @@ function rpc_tests() {
     echo "Passed RPC tests"
   fi
 }
+
+function pyhmy_tests() {
+  echo -e "\n=== \e[38;5;0;48;5;255mSTARTING PYHMY TESTS\e[0m ===\n"
+  build_and_start_localnet || exit 1 &
+  sleep 30
+  # WARNING: Assumtion is that EPOCH 2 can process ALL test transaction types...
+  wait_for_epoch 2 300 # Timeout at ~900 seconds
+
+  echo "Starting pyhmy test suite"
+  sleep 3
+  cd "${pyhmy_dir}" && make test || error=1
+  echo -e "\n=== \e[38;5;0;48;5;255mFINISHED PYHMY TESTS\e[0m ===\n"
+  if ((error == 1)); then
+    echo "FAILED PYHMY TESTS"
+  else
+    echo "Passed PYHMY tests"
+  fi
+}
+
 
 function rosetta_tests() {
   echo -e "\n=== \e[38;5;0;48;5;255mSTARTING ROSETTA API TESTS\e[0m ===\n"
@@ -182,21 +202,30 @@ KEEP=false
 GO=true
 RPC=true
 ROSETTA=true
+PYHMY=true
 
-while getopts "Bkgnr" option; do
+while getopts "Bkgnpr" option; do
   case ${option} in
   B) BUILD=false ;;
   k) KEEP=true ;;
-  g) RPC=false
+  g) PYHMY=false
+     RPC=false
      ROSETTA=false
   ;;
   n)
     GO=false
+    PYHMY=false
     ROSETTA=false
   ;;
   r)
     GO=false
+    PYHMY=false
     RPC=false
+  ;;
+  p)
+    GO=false
+    RPC=false
+    ROSETTA=false
   ;;
   *) echo "
 Integration tester for localnet
@@ -206,6 +235,7 @@ Option:      Help:
 -k           Keep localnet running after Node API tests are finished
 -g           ONLY run go tests & checks
 -n           ONLY run the RPC tests
+-p           ONLY run the pyhmy tests
 -r           ONLY run the rosetta API tests
 "
   exit 0
@@ -225,6 +255,10 @@ fi
 
 if [ "$ROSETTA" == "true" ]; then
   rosetta_tests
+fi
+
+if [ "$PYHMY" == "true" ]; then
+  pyhmy_tests
 fi
 
 exit "$error"
