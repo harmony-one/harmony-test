@@ -23,13 +23,15 @@ RUN apt install -y unzip libgmp-dev libssl-dev curl git jq make gcc g++ bash sud
 
 RUN git clone --branch ${BRANCH} https://github.com/${MAIN_REPO}/harmony.git > /dev/null 2>1 \
     && git clone https://github.com/harmony-one/bls.git > /dev/null 2>1 \
-    && git clone https://github.com/harmony-one/mcl.git > /dev/null 2>1
+    && git clone https://github.com/harmony-one/mcl.git > /dev/null 2>1 \
+    && git clone --branch fix_wait_for_elected_validators https://github.com/mur-me/pyhmy.git > /dev/null 2>1
 
 # Fix complaints about Docker / root / user ownership for Golang "VCS stamping"
 # https://github.com/golang/go/blob/3900ba4baf0e3b309a55b5ac4dd25f709df09772/src/cmd/go/internal/vcs/vcs.go
 RUN git config --global --add safe.directory $GOPATH/src/github.com/harmony-one/harmony > /dev/null 2>1 \
     && git config --global --add safe.directory $GOPATH/src/github.com/harmony-one/bls > /dev/null 2>1 \
-    && git config --global --add safe.directory $GOPATH/src/github.com/harmony-one/mcl > /dev/null 2>1
+    && git config --global --add safe.directory $GOPATH/src/github.com/harmony-one/mcl > /dev/null 2>1 \
+    && git config --global --add safe.directory $GOPATH/src/github.com/harmony-one/pyhmy > /dev/null 2>1
 
 # Build to fetch all dependencies for faster test builds
 RUN cd harmony > /dev/null 2>&1 \
@@ -54,8 +56,10 @@ COPY configs configs
 COPY requirements.txt requirements.txt
 
 # Since we are running as root in Docker, `--break-system-packages` is required
-RUN python3 -m pip install -r requirements.txt --break-system-packages > /dev/null 2>1 && rm requirements.txt
-RUN chmod +x $GOPATH/src/github.com/harmony-one/harmony-test/localnet/scripts/run.sh
+RUN python3 -m pip install -r requirements.txt --break-system-packages --no-cache-dir > /dev/null 2>&1 && rm requirements.txt
+WORKDIR $GOPATH/src/github.com/harmony-one/pyhmy
+RUN python3 -m pip install . --break-system-packages --no-cache-dir && \
+    chmod +x "$GOPATH"/src/github.com/harmony-one/harmony-test/localnet/scripts/run.sh
 
 WORKDIR $GOPATH/src/github.com/harmony-one/harmony
 ENTRYPOINT ["/go/src/github.com/harmony-one/harmony-test/localnet/scripts/run.sh"]
