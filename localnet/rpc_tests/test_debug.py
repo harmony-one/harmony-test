@@ -962,7 +962,6 @@ def test_debug_traceCall_override_sending_one_to_other_address():
         endpoint=debug_endpoints[0],
     )
     response = check_and_unpack_rpc_response(raw_response, expect_error=False)
-    print(response)
     assert_valid_json_structure(reference_response, response)
     assert response["value"] == one_to_send
     assert response["gas"] == "0x0"
