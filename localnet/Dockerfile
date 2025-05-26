@@ -15,23 +15,34 @@ SHELL ["/bin/bash", "-c"]
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# NOTE: This instruction is needed to understand which version user
+#   by the apt package
+# RUN apt-cache policy your_package
+
+# NOTE: we are not using the pinned versions here, because this is just testing
+#   image in the  CI, not  a production one, it will be easier to debug
+#   problematic package one version than constantly update dependencies
+#   Reference: https://github.com/harmony-one/harmony-test/issues/45
+# hadolint ignore=DL3008
 RUN apt-get clean > /dev/null 2>&1 && \
+    echo "Running apt-get update" && \
     apt-get update > /dev/null 2>&1 && \
+    echo "Running apt-get upgrade" && \
     apt-get upgrade -y > /dev/null 2>&1 && \
-    apt-get install -y --no-install-recommends \
-        bash=5.2.15-2+b7 \
-        curl=7.88.1-10+deb12u12 \
-        g++=4:12.2.0-3 \
-        gcc=4:12.2.0-3 \
-        git=1:2.39.5-0+deb12u2 \
-        jq=1.6-2.1 \
-        libgmp-dev=2:6.2.1+dfsg1-1.1 \
-        libssl-dev=3.0.15-1~deb12u1 \
-        make=4.3-4.1 \
-        python3=3.11.2-1+b1 \
-        python3-pip=23.0.1+dfsg-1 \
-        sudo=1.9.13p3-1+deb12u1 \
-        unzip=6.0-28 > /dev/null 2>&1 && \
+    echo "Installing bash" && apt-get install -y --no-install-recommends bash > /dev/null 2>&1 && \
+    echo "Installing curl" && apt-get install -y --no-install-recommends curl > /dev/null 2>&1 && \
+    echo "Installing g++" && apt-get install -y --no-install-recommends g++ > /dev/null 2>&1 && \
+    echo "Installing gcc" && apt-get install -y --no-install-recommends gcc > /dev/null 2>&1 && \
+    echo "Installing git" && apt-get install -y --no-install-recommends git > /dev/null 2>&1 && \
+    echo "Installing jq" && apt-get install -y --no-install-recommends jq > /dev/null 2>&1 && \
+    echo "Installing libgmp-dev" && apt-get install -y --no-install-recommends libgmp-dev > /dev/null 2>&1 && \
+    echo "Installing libssl-dev" && apt-get install -y --no-install-recommends libssl-dev > /dev/null 2>&1 && \
+    echo "Installing make" && apt-get install -y --no-install-recommends make > /dev/null 2>&1 && \
+    echo "Installing python3" && apt-get install -y --no-install-recommends python3 > /dev/null 2>&1 && \
+    echo "Installing python3-pip" && apt-get install -y --no-install-recommends python3-pip > /dev/null 2>&1 && \
+    echo "Installing sudo" && apt-get install -y --no-install-recommends sudo > /dev/null 2>&1 && \
+    echo "Installing unzip" && apt-get install -y --no-install-recommends unzip > /dev/null 2>&1 && \
+    echo "Cleaning up" && \
     apt-get clean > /dev/null 2>&1 && \
     rm -rf /var/lib/apt/lists/*
 
