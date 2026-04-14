@@ -363,7 +363,7 @@ def test_debug_traceCall_state_override_different_simulated_call():
     assert response["gas"] == DEFAULT_GAS + calldata_gas_used + simulated_gas_used
     assert (
         response["returnValue"]
-        == "0000000000000000000000000000000000000000000000000000000000000001"
+        == "0x0000000000000000000000000000000000000000000000000000000000000001"
         + "0000000000000000000000000000000000000000000000000000000000000002"
     )
 
@@ -540,7 +540,7 @@ def test_debug_traceCall_block_and_state_override():
     assert response["gas"] == DEFAULT_GAS + calldata_gas_used + simulated_gas_used
     assert (
         response["returnValue"]
-        == "0000000000000000000000000000000000000000000000000000000000000001"
+        == "0x0000000000000000000000000000000000000000000000000000000000000001"
     )
 
 
