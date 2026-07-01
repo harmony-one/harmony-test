@@ -1,13 +1,16 @@
 ARG MAIN_REPO_BRANCH=dev
 ARG MAIN_REPO_ORG=harmony-one
+ARG HMY_VERSION=v2026.0.0
 
 FROM golang:1.24.2
 
 ARG MAIN_REPO_BRANCH
 ARG MAIN_REPO_ORG
+ARG HMY_VERSION
 
 ENV BRANCH=${MAIN_REPO_BRANCH}
 ENV MAIN_REPO=${MAIN_REPO_ORG}
+ENV HMY_VERSION=${HMY_VERSION}
 
 WORKDIR "$GOPATH/src/github.com/harmony-one"
 
@@ -41,8 +44,17 @@ RUN git clone --depth=1 --single-branch https://github.com/harmony-one/pyhmy.git
 
 WORKDIR "$GOPATH/src/github.com/coinbase/mesh-cli"
 
-RUN curl -L -o /go/bin/hmy https://harmony.one/hmycli > /dev/null 2>&1 && \
-    chmod +x /go/bin/hmy > /dev/null 2>&1 && \
+# dpkg is only a Debian way to get the architecture, change it if you swich to alpine
+RUN set -euo pipefail && \
+    case "$(dpkg --print-architecture)" in \
+      amd64) HMY_ASSET="hmy-amd64" ;; \
+      arm64) HMY_ASSET="hmy-arm64" ;; \
+      *) echo "Unsupported architecture: ${TARGETARCH:-$(dpkg --print-architecture)}" >&2; exit 1 ;; \
+    esac && \
+    curl -fsSL \
+      -o /go/bin/hmy \
+      "https://github.com/harmony-one/go-sdk/releases/download/${HMY_VERSION}/${HMY_ASSET}" && \
+    chmod +x /go/bin/hmy && \
     git clone --depth=1 --single-branch https://github.com/coinbase/mesh-cli.git . > /dev/null 2>&1 && \
     make install > /dev/null 2>&1
 
