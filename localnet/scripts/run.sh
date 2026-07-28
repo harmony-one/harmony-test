@@ -40,11 +40,6 @@ function build_and_start_localnet() {
   rm -f "$harmony_dir/*.rlp"
   pushd "$(pwd)"
   cd "$harmony_dir"
-  if [ "$BUILD" == "true" ]; then
-    # Dynamic for faster build iterations
-    bash ./scripts/go_executable_build.sh -S
-    BUILD=False
-  fi
   bash ./test/deploy.sh -e -B -D 60000 -E 64 -K 64 "$localnet_config" 2>&1 | tee "$localnet_log"
   popd
 }
@@ -53,11 +48,6 @@ function go_tests() {
   echo -e "\n=== \e[38;5;0;48;5;255mSTARTING GO TESTS\e[0m ===\n"
   pushd "$(pwd)"
   cd "$harmony_dir"
-  if [ "$BUILD" == "true" ]; then
-    # Dynamic for faster build iterations
-    bash ./scripts/go_executable_build.sh -S
-    BUILD=False
-  fi
   bash ./scripts/travis_go_checker.sh || error=1
   echo -e "\n=== \e[38;5;0;48;5;255mFINISHED GO TESTS\e[0m ===\n"
   if ((error == 1)); then
@@ -197,7 +187,6 @@ function wait_for_epoch() {
 
 trap stop SIGINT SIGTERM EXIT
 
-BUILD=true
 KEEP=false
 GO=true
 RPC=true
@@ -206,7 +195,7 @@ PYHMY=true
 
 while getopts "Bkgnpr" option; do
   case ${option} in
-  B) BUILD=false ;;
+  B) : ;; # Backward-compatible no-op; callers already provide binaries.
   k) KEEP=true ;;
   g) PYHMY=false
      RPC=false
@@ -231,7 +220,7 @@ while getopts "Bkgnpr" option; do
 Integration tester for localnet
 
 Option:      Help:
--B           Do NOT build binray before testing
+-B           Deprecated no-op; tests always use prebuilt binaries
 -k           Keep localnet running after Node API tests are finished
 -g           ONLY run go tests & checks
 -n           ONLY run the RPC tests
